@@ -1,0 +1,1979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PrepXpert Test Series</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Nunito:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+<style>
+:root{--pri:#1a237e;--pri2:#283593;--acc:#ff6f00;--acc2:#ffa000;--ok:#1b5e20;--err:#b71c1c;--phy:#1565c0;--che:#6a1b9a;--mat:#1b5e20;--bio:#006064;--neet:#880e4f;--jee:#e65100;--jee2:#bf360c;--bg:#eef0f5;--card:#fff;--txt:#111827;--muted:#6b7280;--bdr:#e2e6f0;--ans:#1b5e20;--skp:#e65100;--mkd:#6a1b9a;--nv:#90a4ae;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden;}
+.hdr{background:linear-gradient(135deg,#0d1b6e,var(--pri),var(--pri2));color:#fff;padding:0 20px;height:58px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.3);}
+.logo{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;letter-spacing:.5px;}
+.logo span{color:var(--acc2);}
+.hdr-r{display:flex;align-items:center;gap:10px;}
+.timer{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.3);border-radius:8px;padding:5px 14px;font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;letter-spacing:2px;min-width:108px;text-align:center;display:none;}
+.timer.warn{background:rgba(255,111,0,.3);border-color:var(--acc2);animation:pulse 1s infinite;}
+.timer.crit{background:rgba(198,40,40,.4);border-color:#ef5350;animation:pulse .5s infinite;}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:'Nunito',sans-serif;transition:all .15s;}
+.btn-pri{background:var(--pri);color:#fff;}.btn-pri:hover{background:var(--pri2);transform:translateY(-1px);}
+.btn-acc{background:var(--acc);color:#fff;}
+.btn-ok{background:var(--ok);color:#fff;}
+.btn-err{background:var(--err);color:#fff;}
+.btn-neet{background:var(--neet);color:#fff;}
+.btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.4);}
+.btn-ghost:hover{background:rgba(255,255,255,.15);}
+.btn-out{background:transparent;color:var(--pri);border:1.5px solid var(--pri);}
+.btn-sm{padding:6px 13px;font-size:12px;}
+.scr{display:none;}
+.scr.on{display:flex;flex-direction:column;min-height:calc(100vh - 58px);}
+#hs{padding:0 0 40px;}
+.hero{padding:40px 28px 36px;position:relative;overflow:hidden;color:#fff;}
+.hero.pcm{background:linear-gradient(140deg,#0d1b6e 0%,var(--pri) 50%,var(--pri2) 100%);}
+.hero.pcb{background:linear-gradient(140deg,#004d40 0%,#006064 50%,#00838f 100%);}
+.hero.neet-hero{background:linear-gradient(140deg,#4a148c 0%,#880e4f 50%,#ad1457 100%);}
+.hero::after{content:'';position:absolute;right:-20px;top:-15px;font-family:'Rajdhani',sans-serif;font-size:130px;font-weight:700;color:rgba(255,255,255,.04);line-height:1;pointer-events:none;}
+.hero h1{font-family:'Rajdhani',sans-serif;font-size:32px;font-weight:700;margin-bottom:8px;line-height:1.2;}
+.hero p{color:rgba(255,255,255,.75);font-size:14px;max-width:520px;line-height:1.6;}
+.hero-chips{display:flex;gap:10px;margin-top:20px;flex-wrap:wrap;}
+.hchip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.2);border-radius:8px;padding:8px 14px;font-size:13px;}
+.hchip strong{display:block;font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;}
+.neet-chip{background:rgba(255,255,255,.15);border-color:rgba(255,192,203,.4);}
+.home-body{padding:24px 24px 0;max-width:1000px;margin:0 auto;width:100%;}
+.sec-ttl{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--pri);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.sec-ttl::before{content:'';width:4px;height:20px;background:var(--acc);border-radius:2px;}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-bottom:28px;}
+.tcard{background:var(--card);border-radius:14px;border:1px solid var(--bdr);padding:20px;cursor:pointer;transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden;}
+.tcard:hover:not(.locked){transform:translateY(-3px);box-shadow:0 10px 28px rgba(0,0,0,.12);}
+.tcard.locked{cursor:default;opacity:.8;}
+.tcard.neet-card{border-left:4px solid var(--neet);}
+.tbadge{position:absolute;top:12px;right:12px;font-size:10px;font-weight:700;letter-spacing:.5px;padding:3px 8px;border-radius:4px;}
+.tbadge.free{background:#e8f5e9;color:var(--ok);}
+.tbadge.paid{background:#fff3e0;color:var(--acc);}
+.tbadge.neet-badge{background:#fce4ec;color:var(--neet);}
+.tcard h3{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:var(--pri);margin-bottom:6px;padding-right:48px;}
+.tcard.neet-card h3{color:var(--neet);}
+.tcard p{font-size:12px;color:var(--muted);line-height:1.5;}
+.tmeta{display:flex;gap:12px;margin-top:10px;font-size:11px;color:var(--muted);}
+.sub-strip{display:flex;gap:10px;margin-bottom:24px;}
+.sub-chip{flex:1;background:var(--card);border-radius:10px;border:1px solid var(--bdr);padding:12px 14px;text-align:center;}
+.sub-chip .sv{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;}
+.sub-chip .sl{font-size:11px;color:var(--muted);}
+#inst-scr{padding:22px;max-width:800px;margin:0 auto;width:100%;}
+.icard{background:var(--card);border-radius:12px;border:1px solid var(--bdr);padding:22px 26px;margin-bottom:16px;}
+.icard h2{font-family:'Rajdhani',sans-serif;font-size:19px;font-weight:700;color:var(--pri);margin-bottom:14px;padding-bottom:10px;border-bottom:2px solid var(--bdr);}
+.mtable{width:100%;border-collapse:collapse;font-size:13px;}
+.mtable th,.mtable td{padding:9px 13px;border:1px solid var(--bdr);text-align:left;}
+.mtable th{background:#e8eaf6;color:var(--pri);font-weight:700;}
+.mtable tr:nth-child(even) td{background:#f8f9ff;}
+.neet-warning{background:#fce4ec;border:1.5px solid #f48fb1;border-radius:10px;padding:12px 16px;margin-bottom:12px;font-size:13px;color:var(--neet);line-height:1.7;}
+.neet-warning strong{font-family:'Rajdhani',sans-serif;font-size:15px;}
+.ilist{list-style:none;}
+.ilist li{padding:7px 0 7px 18px;border-bottom:1px solid var(--bdr);font-size:13px;position:relative;}
+.ilist li::before{content:'▸';position:absolute;left:0;color:var(--acc);font-size:11px;}
+.ilist li:last-child{border:none;}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.leg-item{display:flex;align-items:center;gap:8px;font-size:12px;}
+.qball{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;}
+#exam-scr{display:none;flex-direction:row;height:calc(100vh - 58px);overflow:hidden;min-height:0;}
+#exam-scr.on{display:flex;}
+.qpanel{flex:1;display:flex;flex-direction:column;background:var(--bg);min-height:0;}
+.stabs{display:flex;background:var(--card);border-bottom:1px solid var(--bdr);padding:0 14px;overflow-x:auto;flex-shrink:0;}
+.stab{padding:12px 20px;font-size:13px;font-weight:700;cursor:pointer;border-bottom:3px solid transparent;white-space:nowrap;color:var(--muted);transition:all .15s;user-select:none;}
+.stab.on[data-s="0"]{border-bottom-color:var(--phy);color:var(--phy);}
+.stab.on[data-s="1"]{border-bottom-color:var(--che);color:var(--che);}
+.stab.on[data-s="2"]{border-bottom-color:var(--mat);color:var(--mat);}
+.stab.on[data-s="2"].bio-tab,.stab.on[data-s="2"].neet-bio-tab{border-bottom-color:var(--neet);color:var(--neet);}
+.qcontent{flex:1;overflow-y:auto;padding:18px 22px;min-height:0;}
+.qhdr{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;}
+.qnum-badge{color:#fff;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;padding:4px 14px;border-radius:6px;}
+.qmrk-badge{font-size:12px;color:var(--muted);background:#f0f2f5;padding:4px 11px;border-radius:6px;border:1px solid var(--bdr);}
+.qmrk-badge.neet-marks{background:#fce4ec;color:var(--neet);border-color:#f48fb1;font-weight:700;}
+.qtxt{font-size:15px;line-height:1.75;color:var(--txt);margin-bottom:20px;padding:16px 20px;background:var(--card);border-radius:10px;border:1px solid var(--bdr);border-left:4px solid var(--pri);}
+.qtxt.neet-q{border-left-color:var(--neet);}
+.qimg{max-width:100%;max-height:280px;border-radius:8px;display:block;margin:12px auto 4px;border:1px solid var(--bdr);}
+.opts{display:flex;flex-direction:column;gap:9px;margin-bottom:20px;}
+.opt{display:flex;align-items:center;gap:12px;padding:13px 16px;background:var(--card);border:1.5px solid var(--bdr);border-radius:10px;cursor:pointer;transition:all .12s;font-size:14px;line-height:1.5;}
+.opt:hover{border-color:var(--pri);background:#f3f4ff;}
+.opt.sel{border-color:var(--pri);background:#e8eaf6;}
+.opt.sel .okey{background:var(--pri);color:#fff;}
+.okey{width:30px;height:30px;min-width:30px;border-radius:50%;background:#e8eaf6;color:var(--pri);font-weight:700;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .12s;}
+.neet-neg-warning{background:#fff8e1;border:1px solid #ffe082;border-radius:8px;padding:8px 14px;font-size:12px;color:#5d4037;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.qact{display:flex;gap:8px;padding:12px 20px;background:var(--card);border-top:1px solid var(--bdr);flex-shrink:0;flex-wrap:wrap;align-items:center;}
+.sb{width:270px;background:var(--card);border-left:1px solid var(--bdr);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;}
+.sbhdr{padding:12px 14px;border-bottom:1px solid var(--bdr);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:var(--pri);}
+.sbstats{padding:8px 11px;display:flex;gap:5px;border-bottom:1px solid var(--bdr);flex-wrap:wrap;}
+.sc{font-size:10px;padding:3px 7px;border-radius:4px;font-weight:700;}
+.sc.a{background:#e8f5e9;color:var(--ans);}
+.sc.s{background:#fff3e0;color:var(--skp);}
+.sc.n{background:#eceff1;color:#546e7a;}
+.sc.m{background:#f3e5f5;color:var(--mkd);}
+.sc.w{background:#ffebee;color:var(--err);}
+.qgc{flex:1;overflow-y:auto;padding:10px;}
+.slbl{font-size:10px;font-weight:700;letter-spacing:.8px;color:#fff;padding:3px 9px;border-radius:4px;margin-bottom:7px;margin-top:5px;display:inline-block;}
+.slbl.p{background:var(--phy);}
+.slbl.c{background:var(--che);}
+.slbl.m{background:var(--mat);}
+.slbl.b{background:var(--bio);}
+.slbl.nb{background:var(--neet);}
+.qgrd{display:grid;grid-template-columns:repeat(6,1fr);gap:4px;margin-bottom:8px;}
+.qbtn{width:34px;height:34px;border-radius:50%;border:none;font-size:10px;font-weight:700;cursor:pointer;background:var(--nv);color:#fff;transition:all .12s;display:flex;align-items:center;justify-content:center;}
+.qbtn:hover{transform:scale(1.15);}
+.qbtn.ans{background:var(--ans);}
+.qbtn.skp{background:var(--skp);}
+.qbtn.mkd{background:var(--mkd);}
+.qbtn.cur{background:var(--pri);box-shadow:0 0 0 2px var(--acc);}
+.sb-goto{display:flex;gap:6px;padding:10px 11px;border-top:1px solid var(--bdr);}
+.sb-goto input{flex:1;padding:6px 9px;border:1.5px solid var(--bdr);border-radius:6px;font-size:12px;font-family:'Nunito',sans-serif;outline:none;}
+.sb-goto input:focus{border-color:var(--pri);}
+.sb-sub{padding:12px;border-top:1px solid var(--bdr);}
+.ua-count{font-size:12px;color:var(--err);margin-bottom:9px;font-weight:700;}
+#result-scr{padding:22px;max-width:900px;margin:0 auto;width:100%;}
+.rhero{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;border-radius:16px;padding:28px;margin-bottom:22px;text-align:center;}
+.rhero.neet-result{background:linear-gradient(135deg,#4a148c,#880e4f);}
+.rhero h2{font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;margin-bottom:4px;}
+.rhero .tname{font-size:13px;color:rgba(255,255,255,.7);margin-bottom:20px;}
+.score-ring{width:130px;height:130px;border-radius:50%;border:5px solid rgba(255,255,255,.3);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 20px;background:rgba(255,255,255,.1);}
+.score-ring .sv{font-family:'Rajdhani',sans-serif;font-size:34px;font-weight:700;line-height:1;}
+.score-ring .so{font-size:13px;color:rgba(255,255,255,.7);}
+.rstats{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:18px;}
+.rstat{background:rgba(255,255,255,.12);border-radius:10px;padding:12px;}
+.rstat .rv{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;}
+.rstat .rl{font-size:11px;color:rgba(255,255,255,.7);margin-top:2px;}
+.rstat.neg-stat{background:rgba(183,28,28,.3);border:1px solid rgba(255,100,100,.3);}
+.secres{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:20px;}
+.src{background:var(--card);border-radius:12px;border:1px solid var(--bdr);padding:18px;}
+.src h4{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;margin-bottom:10px;}
+.src.p h4{color:var(--phy);}
+.src.c h4{color:var(--che);}
+.src.m h4{color:var(--mat);}
+.src.b h4{color:var(--bio);}
+.src.nb h4{color:var(--neet);}
+.pbar{background:var(--bdr);border-radius:4px;height:7px;margin:5px 0;overflow:hidden;}
+.pfill{height:100%;border-radius:4px;transition:width 1.2s ease;}
+.arev{background:var(--card);border-radius:12px;border:1px solid var(--bdr);padding:22px;}
+.arev h3{font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;color:var(--pri);margin-bottom:14px;}
+.ritem{padding:13px;border-bottom:1px solid var(--bdr);display:grid;grid-template-columns:28px 1fr auto;gap:10px;align-items:start;font-size:13px;}
+.ritem:last-child{border:none;}
+.ritem.ok .ric{color:var(--ok);}
+.ritem.wrong .ric{color:var(--err);}
+.ritem.skip .ric{color:var(--muted);}
+.ric{font-size:17px;line-height:1.2;}
+.sol-box{margin-top:8px;padding:10px 12px;background:#fff8e1;border-left:3px solid #ffa000;border-radius:0 6px 6px 0;font-size:12px;color:#5d4037;line-height:1.7;}
+.sol-box strong{color:#3e2723;}
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:200;align-items:center;justify-content:center;}
+.modal-ov.on{display:flex;}
+.modal{background:#fff;border-radius:16px;padding:28px;width:90%;max-width:400px;box-shadow:0 24px 64px rgba(0,0,0,.3);animation:mIn .2s ease;}
+@keyframes mIn{from{transform:scale(.92);opacity:0}to{transform:scale(1);opacity:1}}
+.modal h2{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;color:var(--pri);margin-bottom:8px;}
+.modal p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:18px;}
+.mact{display:flex;gap:10px;}
+.mact .btn{flex:1;}
+.conf-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:300;align-items:center;justify-content:center;}
+.conf-ov.on{display:flex;}
+.conf-box{background:#fff;border-radius:14px;padding:26px;width:90%;max-width:370px;box-shadow:0 24px 48px rgba(0,0,0,.25);animation:mIn .2s ease;}
+.conf-box h3{font-family:'Rajdhani',sans-serif;font-size:19px;font-weight:700;color:var(--err);margin-bottom:8px;}
+.conf-box p{font-size:13px;color:var(--muted);margin-bottom:18px;line-height:1.6;}
+.ca{display:flex;gap:8px;}
+.ca .btn{flex:1;}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a237e;color:#fff;padding:11px 22px;border-radius:8px;font-size:13px;z-index:999;animation:tIn .3s ease;box-shadow:0 8px 24px rgba(0,0,0,.2);white-space:nowrap;}
+@keyframes tIn{from{opacity:0;transform:translateX(-50%) translateY(8px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
+::-webkit-scrollbar{width:4px;}::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:2px;}
+#rank-scr{padding:0 0 40px;}
+.rank-hero{background:linear-gradient(135deg,#1b5e20,#2e7d32,#388e3c);color:#fff;padding:32px 24px;text-align:center;}
+.rank-hero h1{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;margin-bottom:6px;}
+.rank-body{padding:20px 24px;max-width:800px;margin:0 auto;width:100%;}
+.rank-filter{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap;}
+.rank-filter select{padding:8px 12px;border:1.5px solid var(--bdr);border-radius:8px;font-size:13px;font-family:'Nunito',sans-serif;background:#fff;}
+.rank-table{width:100%;border-collapse:collapse;font-size:13px;background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,.08);}
+.rank-table th{padding:12px 14px;background:#e8eaf6;color:var(--pri);font-weight:700;text-align:left;}
+.rank-table td{padding:11px 14px;border-bottom:1px solid var(--bdr);}
+.rank-table tr:last-child td{border-bottom:none;}
+.rank-table tr:hover td{background:#fafbff;}
+.rank-badge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;font-size:13px;font-weight:700;}
+.rank-1{background:#FFD700;color:#7d5a00;}
+.rank-2{background:#C0C0C0;color:#444;}
+.rank-3{background:#CD7F32;color:#fff;}
+.rank-n{background:#e8eaf6;color:var(--pri);}
+.my-rank-row td{background:#e8f5e9!important;font-weight:700;}
+.rank-card{background:#fff;border-radius:12px;border:2px solid var(--ok);padding:16px 20px;margin-bottom:16px;display:flex;align-items:center;gap:16px;}
+.rank-card .big-rank{font-family:'Rajdhani',sans-serif;font-size:48px;font-weight:700;color:var(--ok);line-height:1;}
+.rank-card .rank-details{flex:1;}
+.rank-card .rank-name{font-size:16px;font-weight:700;}
+.rank-card .rank-meta{font-size:12px;color:var(--muted);margin-top:3px;}
+.empty-rank{text-align:center;padding:40px 20px;color:var(--muted);font-size:14px;}
+.stream-tabs{display:flex;gap:0;border-radius:12px;overflow:hidden;border:2px solid var(--bdr);background:var(--card);margin-bottom:18px;}
+.stream-tab-btn{flex:1;padding:12px 8px;border:none;background:var(--card);color:var(--muted);font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;display:flex;flex-direction:column;align-items:center;gap:2px;border-left:2px solid var(--bdr);}
+.stream-tab-btn:first-child{border-left:none;}
+.stream-tab-btn.active-pcm{background:var(--pri);color:#fff;}
+.stream-tab-btn.active-pcb{background:var(--bio);color:#fff;}
+.stream-tab-btn.active-neet{background:var(--neet);color:#fff;}
+@media(max-width:768px){
+  #exam-scr{flex-direction:column;height:auto;overflow:visible;}
+  .qpanel{overflow:visible;min-height:0;}
+  .qcontent{overflow:visible;padding:12px 14px;}
+  .stabs{padding:0 8px;-webkit-overflow-scrolling:touch;}
+  .stab{padding:10px 14px;font-size:12px;}
+  .qtxt{font-size:14px;padding:13px 14px;word-break:break-word;}
+  .opt{padding:11px 13px;font-size:13px;word-break:break-word;}
+  .okey{width:26px;height:26px;min-width:26px;font-size:11px;}
+  .qact{padding:10px 12px;gap:5px;flex-wrap:wrap;}
+  .qact .btn{font-size:11px;padding:7px 9px;}
+  .sb{width:100%;border-left:none;border-top:2px solid var(--bdr);max-height:none;flex-direction:column;}
+  #exam-sb{display:none;}
+  #exam-sb.mob-open{display:flex!important;flex-direction:column;}
+  .qgrd{grid-template-columns:repeat(8,1fr);gap:5px;}
+  .qbtn{width:34px;height:34px;font-size:10px;}
+  .sbhdr{padding:10px 12px;}
+  .sbstats{padding:6px 10px;flex-wrap:wrap;}
+  .slbl{font-size:9px;}
+  .qgc{padding:8px;}
+  .sb-goto{padding:8px 10px;}
+  .hdr{padding:0 10px;height:52px;gap:6px;}
+  .logo{font-size:17px;}
+  .hdr-r{gap:6px;}
+  .btn-ghost.btn-sm{padding:5px 7px;font-size:10px;}
+  #hdr-user{max-width:60px;font-size:10px;}
+  .timer{font-size:15px;min-width:82px;padding:3px 8px;letter-spacing:1px;}
+  .hero{padding:24px 16px 20px;}
+  .hero h1{font-size:22px;}
+  .hero p{font-size:13px;}
+  .home-body{padding:16px 14px 0;}
+  .stream-tabs{flex-wrap:wrap;border-radius:10px;}
+  .stream-tab-btn{flex:1 1 48%;min-width:0;padding:9px 5px;font-size:12px;}
+  .tgrid{grid-template-columns:1fr;}
+  .sub-strip{flex-wrap:wrap;}
+  .sub-chip{flex:1 1 calc(50% - 10px);}
+  #result-scr{padding:14px;width:100%;}
+  .rhero{padding:20px 16px;border-radius:12px;}
+  .rhero h2{font-size:20px;}
+  .rstats{grid-template-columns:repeat(2,1fr);gap:8px;}
+  .rstat .rv{font-size:18px;}
+  .secres{grid-template-columns:1fr;gap:10px;}
+  .arev{padding:14px;}
+  .ritem{grid-template-columns:24px 1fr;gap:8px;}
+  .ritem>div:last-child{grid-column:2;text-align:left;margin-top:4px;padding-top:4px;border-top:1px dashed var(--bdr);}
+  .rank-body{padding:14px 12px;}
+  #rank-list{overflow-x:auto;-webkit-overflow-scrolling:touch;}
+  .rank-table{font-size:11px;min-width:480px;}
+  .rank-table th,.rank-table td{padding:8px 10px;}
+  .rank-card{flex-wrap:wrap;gap:10px;padding:12px 14px;}
+  .rank-card .big-rank{font-size:36px;}
+  .login-card{padding:28px 20px;}
+  .modal{padding:22px 18px;}
+  .toast{white-space:normal;text-align:center;max-width:88vw;font-size:12px;padding:10px 16px;}
+  #inst-scr{padding:14px;}
+  .icard{padding:16px 14px;}
+  .mtable{font-size:11px;}
+  .mtable th,.mtable td{padding:6px 8px;}
+}
+.exam-active *{-webkit-user-select:none!important;-moz-user-select:none!important;user-select:none!important;}
+#screenshot-warn{display:none;position:fixed;inset:0;background:rgba(0,0,0,.97);z-index:99999;align-items:center;justify-content:center;flex-direction:column;color:#fff;text-align:center;padding:30px;}
+#screenshot-warn.show{display:flex;}
+#screenshot-warn h2{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:#ff5252;margin-bottom:12px;}
+#screenshot-warn p{font-size:15px;color:rgba(255,255,255,.75);max-width:400px;line-height:1.7;}
+#screenshot-warn button{margin-top:22px;background:#1a237e;color:#fff;border:none;padding:12px 28px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Nunito',sans-serif;}
+@media print{body *{display:none!important;}.print-block{display:block!important;color:#000;font-size:20px;padding:40px;font-family:sans-serif;}}
+#login-scr{min-height:100vh;background:linear-gradient(140deg,#0d1b6e 0%,#1a237e 60%,#283593 100%);display:flex;align-items:center;justify-content:center;padding:20px;}
+.login-card{background:#fff;border-radius:20px;padding:36px 32px;width:100%;max-width:420px;box-shadow:0 32px 80px rgba(0,0,0,.35);animation:mIn .3s ease;}
+.login-logo{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;color:var(--pri);text-align:center;margin-bottom:4px;}
+.login-logo span{color:var(--acc);}
+.login-sub{text-align:center;font-size:13px;color:var(--muted);margin-bottom:24px;}
+.lfield{display:flex;flex-direction:column;gap:5px;margin-bottom:14px;}
+.lfield label{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.3px;}
+.lfield input{padding:11px 14px;border:1.5px solid var(--bdr);border-radius:10px;font-size:14px;font-family:'Nunito',sans-serif;outline:none;transition:border .15s;}
+.lfield input:focus{border-color:var(--pri);}
+.lerr{font-size:12px;color:var(--err);background:#ffebee;padding:8px 12px;border-radius:8px;margin-bottom:12px;display:none;}
+.terms-box{background:#f8f9ff;border:1.5px solid #c5cae9;border-radius:10px;padding:14px;height:140px;overflow-y:auto;font-size:12px;line-height:1.8;color:#444;margin-bottom:12px;}
+.check-row{display:flex;align-items:flex-start;gap:8px;font-size:13px;color:var(--txt);margin-bottom:16px;cursor:pointer;}
+.check-row input[type=checkbox]{width:16px;height:16px;margin-top:2px;flex-shrink:0;accent-color:var(--pri);}
+.login-tabs{display:flex;border-bottom:2px solid var(--bdr);margin-bottom:20px;}
+.ltab{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .15s;}
+.ltab.on{color:var(--pri);border-bottom-color:var(--pri);}
+/* ── CONTACT US ── */
+.contact-scr{padding:0 0 40px;}
+.contact-hero{background:linear-gradient(135deg,#0d47a1,#1565c0,#1976d2);color:#fff;padding:36px 28px;text-align:center;}
+.contact-hero h1{font-family:'Rajdhani',sans-serif;font-size:28px;font-weight:700;margin-bottom:8px;}
+.contact-hero p{color:rgba(255,255,255,.75);font-size:14px;}
+.contact-body{padding:24px;max-width:600px;margin:0 auto;width:100%;}
+.contact-card{background:var(--card);border-radius:16px;border:1px solid var(--bdr);padding:28px;margin-bottom:18px;text-align:center;}
+.contact-card-title{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:var(--pri);margin-bottom:20px;}
+.contact-btns{display:flex;flex-direction:column;gap:12px;}
+.contact-btn-wa{display:flex;align-items:center;justify-content:center;gap:12px;padding:16px 24px;background:#25D366;color:#fff;border-radius:12px;font-size:16px;font-weight:700;text-decoration:none;transition:all .2s;font-family:'Nunito',sans-serif;}
+.contact-btn-wa:hover{background:#1ebe5d;transform:translateY(-2px);box-shadow:0 8px 20px rgba(37,211,102,.35);}
+.contact-btn-tg{display:flex;align-items:center;justify-content:center;gap:12px;padding:16px 24px;background:#229ED9;color:#fff;border-radius:12px;font-size:16px;font-weight:700;text-decoration:none;transition:all .2s;font-family:'Nunito',sans-serif;}
+.contact-btn-tg:hover{background:#1a8bc5;transform:translateY(-2px);box-shadow:0 8px 20px rgba(34,158,217,.35);}
+.contact-info-box{background:#f0f4ff;border-radius:12px;border:1px solid #c5cae9;padding:16px 20px;font-size:13px;color:var(--muted);line-height:1.8;}
+.contact-info-box strong{color:var(--pri);}
+.contact-not-configured{background:#fff8e1;border:1.5px solid #ffe082;border-radius:12px;padding:20px;text-align:center;color:#795548;font-size:14px;line-height:1.8;}
+
+/* ── STUDENT DASHBOARD ── */
+#student-scr{padding:0 0 40px;}
+.sd-hero{background:linear-gradient(140deg,#0d1b6e,#1a237e,#283593);color:#fff;padding:32px 24px 28px;text-align:center;}
+.sd-hero h1{font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;margin-bottom:6px;}
+.sd-hero p{font-size:13px;color:rgba(255,255,255,.75);margin-bottom:20px;}
+.sd-search{display:flex;gap:8px;max-width:440px;margin:0 auto;background:rgba(255,255,255,.12);border-radius:12px;padding:5px;border:1px solid rgba(255,255,255,.2);}
+.sd-search input{flex:1;background:transparent;border:none;outline:none;color:#fff;font-family:'Nunito',sans-serif;font-size:14px;padding:6px 10px;}
+.sd-search input::placeholder{color:rgba(255,255,255,.55);}
+.sd-search button{background:var(--acc2);color:#fff;border:none;border-radius:8px;padding:9px 18px;font-weight:700;font-family:'Nunito',sans-serif;font-size:13px;cursor:pointer;}
+.sd-body{padding:20px 24px;max-width:860px;margin:0 auto;width:100%;}
+.sd-result-card{background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;border-radius:14px;padding:24px;margin-bottom:20px;display:none;animation:mIn .3s ease;}
+.sd-result-card.show{display:block;}
+.sd-result-card.pcb-card{background:linear-gradient(135deg,#004d40,#006064);}
+.sd-result-card.neet-card{background:linear-gradient(135deg,#4a148c,#880e4f);}
+.sd-result-card.jee-card{background:linear-gradient(135deg,#bf360c,#e65100);}
+.sd-rc-top{display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:12px;margin-bottom:18px;}
+.sd-rc-name{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;}
+.sd-rc-type{font-size:11px;background:rgba(255,255,255,.2);border-radius:5px;padding:3px 10px;margin-top:4px;display:inline-block;}
+.sd-rank-box{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);border-radius:10px;padding:12px 20px;text-align:center;min-width:90px;}
+.sd-rank-box .sdrn{font-family:'Rajdhani',sans-serif;font-size:34px;font-weight:700;line-height:1;}
+.sd-rank-box .sdrl{font-size:10px;opacity:.8;margin-top:2px;}
+.sd-stats{display:flex;gap:10px;flex-wrap:wrap;}
+.sd-stat{background:rgba(255,255,255,.12);border-radius:9px;padding:11px 16px;text-align:center;flex:1;min-width:88px;}
+.sd-stat .ssv{font-family:'Rajdhani',sans-serif;font-size:20px;font-weight:700;}
+.sd-stat .ssl{font-size:10px;opacity:.75;margin-top:2px;}
+.sd-not-found{background:#fff3e0;border:1.5px solid #ffe082;border-radius:10px;padding:16px 20px;text-align:center;color:#5d4037;font-size:13px;margin-bottom:18px;display:none;}
+.sd-not-found.show{display:block;}
+.sd-lboard-tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.sd-tab{padding:8px 16px;border:1.5px solid var(--bdr);border-radius:8px;background:#fff;font-family:'Nunito',sans-serif;font-size:13px;font-weight:700;cursor:pointer;color:var(--muted);transition:all .15s;}
+.sd-tab:hover{border-color:var(--pri);color:var(--pri);}
+.sd-tab.active{background:var(--pri);color:#fff;border-color:var(--pri);}
+.sd-tab.t-pcb.active{background:#006064;border-color:#006064;}
+.sd-tab.t-neet.active{background:var(--neet);border-color:var(--neet);}
+.sd-tab.t-jee.active{background:var(--jee2);border-color:var(--jee2);}
+.sd-lboard-wrap{background:#fff;border-radius:12px;border:1px solid var(--bdr);overflow:hidden;}
+.sd-table{width:100%;border-collapse:collapse;font-size:13px;}
+.sd-table th{padding:11px 14px;background:#f3f4ff;color:var(--pri);font-weight:700;text-align:left;border-bottom:2px solid var(--bdr);}
+.sd-table td{padding:11px 14px;border-bottom:1px solid var(--bdr);vertical-align:middle;}
+.sd-table tr:last-child td{border-bottom:none;}
+.sd-table tr:hover td{background:#fafbff;}
+.sd-table tr.me td{background:#e8f5e9!important;font-weight:700;}
+.sd-table tr.me td:first-child{border-left:3px solid var(--acc2);}
+.sd-rbadge{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;border-radius:50%;font-size:11px;font-weight:700;color:#fff;}
+.sdr1{background:#f9a825;color:#000!important;}
+.sdr2{background:#9e9e9e;color:#000!important;}
+.sdr3{background:#8d6e63;}
+.sdrn{background:#4caf50;}
+.sd-you{font-size:9px;background:var(--acc);color:#fff;border-radius:3px;padding:2px 5px;margin-left:5px;font-weight:700;}
+.sd-pbar{height:5px;background:#e2e6f0;border-radius:3px;margin-top:4px;width:80px;}
+.sd-pfill{height:100%;border-radius:3px;background:var(--pri);}
+.sd-empty{text-align:center;padding:36px;color:var(--muted);font-size:13px;}
+</style>
+</head>
+<body>
+
+<div id="screenshot-warn">
+  <div style="font-size:56px;margin-bottom:16px">🚫</div>
+  <h2>Screenshot Not Allowed</h2>
+  <p>Taking screenshots during the exam is prohibited. This attempt has been logged.</p>
+  <button onclick="dismissScreenshotWarn()">I Understand — Continue</button>
+</div>
+
+
+<!-- LOGIN -->
+<div id="login-scr" style="display:none">
+  <div class="login-card">
+    <div class="login-logo">PrepXpert</div>
+    <div class="login-sub">Test Series 2025 — Student Portal</div>
+    <div class="login-tabs">
+      <div class="ltab on" id="tab-login" onclick="switchLoginTab('login')">Sign In</div>
+      <div class="ltab" id="tab-register" onclick="switchLoginTab('register')">Register</div>
+    </div>
+    <div id="lerr" class="lerr"></div>
+    <div id="login-form">
+      <div class="lfield"><label>Mobile / Username</label><input id="l-user" type="text" placeholder="Enter mobile or username" autocomplete="username"></div>
+      <div class="lfield"><label>Password</label><input id="l-pass" type="password" placeholder="Enter password" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <button class="btn btn-pri" style="width:100%;padding:13px;font-size:15px;border-radius:10px;margin-top:4px" onclick="doLogin()">Sign In →</button>
+    </div>
+    <div id="register-form" style="display:none">
+      <div class="lfield"><label>Full Name</label><input id="r-name" type="text" placeholder="Enter your full name" autocomplete="name"></div>
+      <div class="lfield"><label>Mobile Number</label><input id="r-mobile" type="tel" placeholder="10-digit mobile" maxlength="10" autocomplete="tel"></div>
+      <div class="lfield"><label>Create Password</label><input id="r-pass" type="password" placeholder="Min 8 chars, 1 uppercase, 1 number" autocomplete="new-password"></div>
+      <div class="lfield"><label>Confirm Password</label><input id="r-pass2" type="password" placeholder="Re-enter password" autocomplete="new-password"></div>
+      <div class="terms-box"><h4 style="color:var(--pri);margin-bottom:8px">Terms of Use</h4>By registering you agree to use this platform fairly. Do not copy or share exam questions. Your scores may appear in the leaderboard. Paid access is non-refundable once unlocked.</div>
+      <label class="check-row"><input type="checkbox" id="r-terms"><span>I agree to the Terms of Use & Privacy Policy</span></label>
+      <button class="btn btn-pri" style="width:100%;padding:13px;font-size:15px;border-radius:10px" onclick="doRegister()">Create Account →</button>
+    </div>
+  </div>
+</div>
+
+<!-- HEADER -->
+<div class="hdr" id="main-hdr" style="display:none">
+  <div class="logo">PrepXpert</div>
+  <div class="hdr-r">
+    <div class="timer" id="timer">03:00:00</div>
+    <button class="btn btn-acc btn-sm" id="sub-btn" style="display:none" onclick="confirmSubmit()">Submit Test</button>
+    <button class="btn btn-ghost btn-sm" id="rank-btn" onclick="showRanking()">🏆 Rankings</button>
+    <button class="btn btn-ghost btn-sm" id="student-dash-btn" onclick="showStudentDash()">🎓 My Rank</button>
+    <button class="btn btn-ghost btn-sm" id="contact-btn" onclick="showContactUs()">📞 Contact</button>
+    <span id="hdr-user" style="font-size:12px;color:rgba(255,255,255,.7);max-width:100px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+    <button class="btn btn-ghost btn-sm" onclick="goHome()" id="home-btn">🏠 Home</button>
+    <button class="btn btn-ghost btn-sm" onclick="doLogout()" style="padding:6px 10px">⏏</button>
+  </div>
+</div>
+
+<!-- HOME -->
+<div class="scr on" id="hs">
+  <div class="hero pcm" id="hero-banner">
+    <h1 id="hero-title">PrepXpert Test Series 2025</h1>
+    <p id="hero-desc">Practice with authentic past papers. Choose your stream below.</p>
+    <div class="hero-chips" id="hero-chips">
+      <div class="hchip"><strong>200</strong>Total Marks</div>
+      <div class="hchip"><strong>3 Hours</strong>Duration</div>
+      <div class="hchip"><strong>Zero</strong>Negative Marking</div>
+      <div class="hchip"><strong>PCM + PCB</strong>Streams</div>
+    </div>
+  </div>
+  <div class="home-body">
+    <div class="stream-tabs">
+      <button class="stream-tab-btn active-pcm" id="stream-pcm-btn" onclick="setStream('pcm')">
+        <span>⚛ PCM</span><span style="font-size:11px;font-weight:400">Phy · Chem · Maths</span>
+      </button>
+      <button class="stream-tab-btn" id="stream-pcb-btn" onclick="setStream('pcb')">
+        <span>🧬 PCB</span><span style="font-size:11px;font-weight:400">Phy · Chem · Bio</span>
+      </button>
+      <button class="stream-tab-btn" id="stream-neet-btn" onclick="setStream('neet')">
+        <span>💊 NEET</span><span style="font-size:11px;font-weight:400">45P+45C+90Bio</span>
+      </button>
+      <button class="stream-tab-btn" id="stream-jee-btn" onclick="setStream('jee')">
+        <span>🔬 JEE</span><span style="font-size:11px;font-weight:400">30P+30C+30M</span>
+      </button>
+    </div>
+    <div id="sub-strip" style="display:flex;gap:10px;margin-bottom:18px"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px">
+      <div id="stream-label" style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:var(--pri)"></div>
+    </div>
+    <div class="sec-ttl">Free Tests</div>
+    <div id="question-container"></div>
+    <div class="tgrid" id="free-grid"></div>
+    <div class="sec-ttl">Paid Tests</div>
+    <div class="tgrid" id="paid-grid"></div>
+
+    <!-- CONTACT FOOTER BANNER -->
+    <div id="contact-footer-banner" style="background:linear-gradient(135deg,#0d47a1,#1565c0);border-radius:14px;padding:18px 22px;margin-top:8px;margin-bottom:24px;display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap">
+      <div style="color:#fff">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:17px;font-weight:700;margin-bottom:3px">💬 Need Help?</div>
+        <div style="font-size:12px;color:rgba(255,255,255,.75)">Questions about tests, payment, or content? We're here!</div>
+      </div>
+      <button class="btn btn-ghost" style="border-color:rgba(255,255,255,.5);color:#fff;flex-shrink:0" onclick="showContactUs()">📞 Contact Us →</button>
+    </div>
+  </div>
+</div>
+
+<!-- INSTRUCTIONS -->
+<div class="scr" id="inst-scr">
+  <div id="inst-inner" style="padding:22px;max-width:800px;margin:0 auto;width:100%">
+    <div class="icard">
+      <h2 id="inst-ttl">Instructions</h2>
+      <div id="neet-inst-warning" style="display:none" class="neet-warning">
+        <strong id="neg-warning-title">⚠ NEET Negative Marking Active!</strong><br>
+        Correct: <strong style="color:var(--ok)">+4 marks</strong> &nbsp;|&nbsp; Wrong (MCQ): <strong style="color:var(--err)">−1 mark</strong> &nbsp;|&nbsp; Numerical Wrong: <strong>0 marks</strong><br>
+        Think carefully before answering. An incorrect MCQ answer reduces your score.
+      </div>
+      <div style="overflow-x:auto;margin-bottom:14px"><table class="mtable" id="inst-marks-table"></table></div>
+      <ul class="ilist">
+        <li>Total duration: <strong id="inst-duration">180 minutes</strong>. Timer counts down in the top bar.</li>
+        <li id="inst-neg-line">No negative marking — only correct answers earn marks.</li>
+        <li id="inst-switch-line">Switch between sections freely at any time.</li>
+        <li><strong>Save & Next</strong> — saves answer and moves to next question.</li>
+        <li><strong>Mark for Review</strong> — bookmarks the question (purple) to revisit.</li>
+        <li>Detailed solutions are shown after submission for every question.</li>
+        <li id="inst-goto-line">Enter any question number in the "Go to Q#" box to jump directly.</li>
+      </ul>
+    </div>
+    <div class="icard">
+      <h2>Question Status Legend</h2>
+      <div class="legend">
+        <div class="leg-item"><div class="qball" style="background:var(--ans)">5</div>Answered</div>
+        <div class="leg-item"><div class="qball" style="background:var(--nv)">3</div>Not Visited</div>
+        <div class="leg-item"><div class="qball" style="background:var(--skp)">7</div>Skipped</div>
+        <div class="leg-item"><div class="qball" style="background:var(--mkd)">9</div>Marked for Review</div>
+        <div class="leg-item"><div class="qball" style="background:var(--pri);box-shadow:0 0 0 2px var(--acc)">2</div>Current Question</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;padding:0 0 20px">
+      <button class="btn btn-out" onclick="showScr('hs')">← Back</button>
+      <button class="btn btn-pri" id="start-btn" onclick="startExam()">Begin Test →</button>
+    </div>
+  </div>
+</div>
+
+<!-- EXAM -->
+<div class="scr" id="exam-scr">
+  <div class="qpanel">
+    <div class="stabs" id="stabs"></div>
+    <div class="qcontent" id="qcontent">
+      <div class="qhdr">
+        <div class="qnum-badge" id="qnuml">Q1 of 50</div>
+        <div class="qmrk-badge" id="qmrkl">1 Mark</div>
+      </div>
+      <div id="neet-neg-hint" class="neet-neg-warning" style="display:none">⚠ MCQ Wrong answer = −1 mark. Numerical wrong = 0 marks. Skip MCQ if unsure.</div>
+      <div class="qtxt" id="qtxt">Loading...</div>
+      <div class="opts" id="opts"></div>
+    </div>
+    <div class="qact">
+      <button class="btn btn-pri btn-sm" onclick="saveNext()">Save & Next →</button>
+      <button class="btn btn-sm" style="background:#f3e5f5;color:var(--mkd);border:1.5px solid #ce93d8" onclick="markRev()">★ Mark</button>
+      <button class="btn btn-sm" style="background:#fff3e0;color:var(--acc);border:1.5px solid #ffcc80" onclick="skipQ()">Skip →</button>
+      <button class="btn btn-sm" style="background:#fce4ec;color:var(--err);border:1.5px solid #f48fb1" onclick="clearR()">✕ Clear</button>
+      <button class="btn btn-out btn-sm" onclick="prevQ()" style="margin-left:auto">← Prev</button>
+      <button class="btn btn-sm" id="mob-nav-btn" style="background:#e8eaf6;color:var(--pri);border:1.5px solid #c5cae9;display:none" onclick="toggleMobNav()">☰ Nav</button>
+    </div>
+  </div>
+  <div class="sb" id="exam-sb">
+    <div class="sbhdr">Question Navigator</div>
+    <div class="sbstats" id="sbstats"></div>
+    <div class="qgc" id="qgc"></div>
+    <div class="sb-goto">
+      <input type="number" id="goto-inp" placeholder="Go to Q#" min="1" max="200">
+      <button class="btn btn-pri btn-sm" onclick="gotoQ()">Go</button>
+    </div>
+    <div class="sb-sub">
+      <div class="ua-count" id="ua-count"></div>
+      <button class="btn btn-err" style="width:100%" onclick="confirmSubmit()">Submit Test</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESULT -->
+<div class="scr" id="result-scr">
+  <div class="rhero" id="result-hero">
+    <h2>Test Completed! 🎉</h2>
+    <div class="tname" id="r-tname"></div>
+    <div class="score-ring">
+      <div class="sv" id="r-score">0</div>
+      <div class="so" id="r-total-lbl">out of 200</div>
+    </div>
+    <div class="rstats">
+      <div class="rstat"><div class="rv" id="r-c">0</div><div class="rl">Correct</div></div>
+      <div class="rstat"><div class="rv" id="r-w">0</div><div class="rl">Wrong</div></div>
+      <div class="rstat"><div class="rv" id="r-s">0</div><div class="rl">Skipped</div></div>
+      <div class="rstat" id="r-neg-stat" style="display:none"><div class="rv" id="r-neg">0</div><div class="rl">Marks Deducted</div></div>
+      <div class="rstat"><div class="rv" id="r-a">0%</div><div class="rl">Accuracy</div></div>
+    </div>
+  </div>
+  <div class="secres" id="secres"></div>
+  <div class="arev">
+    <h3>📋 Answer Review with Solutions</h3>
+    <div id="arev-list"></div>
+  </div>
+  <div style="display:flex;gap:10px;justify-content:center;margin:20px 0;flex-wrap:wrap">
+    <button class="btn btn-pri" onclick="goHome()">← Back to Tests</button>
+    <button class="btn btn-out" onclick="retakeTest()">Retake This Test</button>
+    <button class="btn btn-ok" onclick="showRanking()">🏆 View My Rank</button>
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-ov" id="pay-modal">
+  <div class="modal" style="max-width:440px">
+    <div style="text-align:center;margin-bottom:18px">
+      <div style="font-size:36px;margin-bottom:8px">🔓</div>
+      <h2 style="font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--pri)">Unlock All Paid Tests</h2>
+      <p style="font-size:13px;color:var(--muted);margin-top:6px;line-height:1.6">One-time payment unlocks <strong>all</strong> paid tests — forever on this device.</p>
+    </div>
+    <div style="background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:10px;padding:14px;margin-bottom:18px;text-align:center;">
+      <div style="font-family:'Rajdhani',sans-serif;font-size:32px;font-weight:700;color:var(--ok)">₹<span id="pay-amount">30</span></div>
+      <div style="font-size:12px;color:var(--muted);margin-top:2px">One-time · All tests · All streams</div>
+    </div>
+    <div id="rzp-not-configured" style="display:none;background:#fff3e0;border:1px solid #ffe082;border-radius:8px;padding:10px 14px;font-size:12px;color:#5d4037;margin-bottom:10px">
+      ⚠ Payment not yet configured by admin. Please contact support.
+    </div>
+    <button id="rzp-pay-btn" class="btn btn-acc" style="width:100%;padding:14px;font-size:16px;border-radius:10px;margin-bottom:12px" onclick="startRazorpayPayment()">
+      💳 Pay with Razorpay
+    </button>
+    <div id="pay-processing" style="display:none;text-align:center;padding:10px 0;font-size:13px;color:var(--muted)">
+      <div style="font-size:20px;margin-bottom:6px">⏳</div>Processing payment… please wait.
+    </div>
+    <div id="pay-success-msg" style="display:none;background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:8px;padding:12px;text-align:center;font-size:13px;color:var(--ok);font-weight:700;margin-bottom:10px">
+      ✅ Payment Successful! Tests unlocked.
+    </div>
+    <button class="btn btn-out" style="width:100%;margin-top:4px" onclick="closeModal('pay-modal')">Cancel</button>
+  </div>
+</div>
+
+<!-- CONFIRM SUBMIT -->
+<div class="conf-ov" id="conf-ov">
+  <div class="conf-box">
+    <h3>⚠ Submit Test?</h3>
+    <p id="conf-msg"></p>
+    <div class="ca">
+      <button class="btn btn-out" onclick="closeModal('conf-ov')">Go Back</button>
+      <button class="btn btn-err" onclick="submitTest()">Yes, Submit</button>
+    </div>
+  </div>
+</div>
+
+<!-- RANKING -->
+<div class="scr" id="rank-scr">
+  <div class="rank-hero">
+    <h1>🏆 Leaderboard</h1>
+    <p>Top performers across all tests.</p>
+  </div>
+  <div class="rank-body">
+    <div id="my-rank-card" style="display:none" class="rank-card">
+      <div class="big-rank" id="my-rank-num">—</div>
+      <div class="rank-details">
+        <div class="rank-name" id="my-rank-name">—</div>
+        <div class="rank-meta" id="my-rank-meta">—</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:26px;font-weight:700;color:var(--ok)" id="my-rank-score">—</div>
+        <div style="font-size:11px;color:var(--muted)">Best Score</div>
+      </div>
+    </div>
+    <div class="rank-filter">
+      <select id="rank-test-filter" onchange="renderRanking()"><option value="all">All Tests</option></select>
+      <select id="rank-stream-filter" onchange="renderRanking()">
+        <option value="all">All Streams</option>
+        <option value="pcm">PCM Only</option>
+        <option value="pcb">PCB Only</option>
+        <option value="neet">NEET Only</option>
+        <option value="jee">JEE Only</option>
+      </select>
+    </div>
+    <div id="rank-list"></div>
+  </div>
+</div>
+
+<!-- STUDENT DASHBOARD -->
+<div class="scr" id="student-scr">
+  <div class="sd-hero">
+    <h1>🎓 Student Dashboard</h1>
+    <p>Enter your name to find your rank and score</p>
+    <div class="sd-search">
+      <input type="text" id="sd-name-input" placeholder="Type your full name..." autocomplete="off" />
+      <button onclick="sdFindStudent()">🔍 Find Me</button>
+    </div>
+  </div>
+  <div class="sd-body">
+    <!-- Result Card -->
+    <div id="sd-result-card" class="sd-result-card">
+      <div class="sd-rc-top">
+        <div>
+          <div class="sd-rc-name" id="sd-rc-name">—</div>
+          <div class="sd-rc-type" id="sd-rc-type">—</div>
+        </div>
+        <div class="sd-rank-box">
+          <div class="sdrn" id="sd-rc-rank">—</div>
+          <div class="sdrl">Your Rank</div>
+        </div>
+      </div>
+      <div class="sd-stats">
+        <div class="sd-stat"><div class="ssv" id="sd-rc-score">—</div><div class="ssl">Score</div></div>
+        <div class="sd-stat"><div class="ssv" id="sd-rc-pct">—</div><div class="ssl">Percentage</div></div>
+        <div class="sd-stat"><div class="ssv" id="sd-rc-total">—</div><div class="ssl">Total Students</div></div>
+      </div>
+    </div>
+    <!-- Not Found -->
+    <div id="sd-not-found" class="sd-not-found">⚠️ No student found with that name. Please check your spelling.</div>
+    <!-- Leaderboard -->
+    <div class="sec-ttl">🏆 Leaderboard</div>
+    <div class="sd-lboard-tabs">
+      <button class="sd-tab active" onclick="sdSwitchTab('PCM',this)">🔬 PCM</button>
+      <button class="sd-tab t-pcb"  onclick="sdSwitchTab('PCB',this)">🧬 PCB</button>
+      <button class="sd-tab t-neet" onclick="sdSwitchTab('NEET',this)">🩺 NEET</button>
+      <button class="sd-tab t-jee"  onclick="sdSwitchTab('JEE',this)">⚙️ JEE</button>
+    </div>
+    <div class="sd-lboard-wrap">
+      <div id="sd-lboard-body"><div class="sd-empty">Loading leaderboard...</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONTACT US -->
+<div class="scr" id="contact-scr">
+  <div class="contact-hero">
+    <h1 id="contact-heading-title">💬 Need Help? Contact Us!</h1>
+    <p>Our team is here to help you with your doubts, payment, or technical issues.</p>
+  </div>
+  <div class="contact-body">
+    <div class="contact-card" id="contact-links-card">
+      <div class="contact-card-title">📲 Reach Us Directly</div>
+      <div class="contact-btns" id="contact-btns-container">
+        <!-- Filled dynamically -->
+        <div class="contact-not-configured">
+          ⏳ Contact details not yet configured.<br>
+          <span style="font-size:12px">Please check back later or sync tests.</span>
+        </div>
+      </div>
+    </div>
+    <div class="contact-info-box">
+      <strong>📌 When to contact us?</strong><br>
+      • Payment issues or test unlock problems<br>
+      • Technical errors during the exam<br>
+      • Questions about test content or solutions<br>
+      • General enquiries about the test series<br><br>
+      <strong>⏰ Support Hours:</strong> Mon–Sat, 9 AM – 8 PM
+    </div>
+    <div style="text-align:center;margin-top:20px">
+      <button class="btn btn-out" onclick="goHome()">← Back to Home</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ═══════════════════════ NEET / PCM / PCB SUBJECT CONFIG ═══════════════════════
+const PCM_SUBS=[
+  {name:'Physics',  marks:1, neg:0, color:'var(--phy)', cls:'p', maxQ:50, icon:'⚛'},
+  {name:'Chemistry',marks:1, neg:0, color:'var(--che)', cls:'c', maxQ:50, icon:'🧪'},
+  {name:'Mathematics',marks:2,neg:0,color:'var(--mat)',cls:'m', maxQ:50, icon:'∑'}
+];
+const PCB_SUBS=[
+  {name:'Physics',  marks:1, neg:0, color:'var(--phy)', cls:'p', maxQ:50, icon:'⚛'},
+  {name:'Chemistry',marks:1, neg:0, color:'var(--che)', cls:'c', maxQ:50, icon:'🧪'},
+  {name:'Biology',  marks:1, neg:0, color:'var(--bio)', cls:'b', maxQ:100, icon:'🧬'}
+];
+// NEET: +4 correct, -1 wrong, 0 skip
+const NEET_SUBS=[
+  {name:'Physics',  marks:4, neg:1, color:'var(--neet)', cls:'nb', maxQ:45, icon:'⚛'},
+  {name:'Chemistry',marks:4, neg:1, color:'var(--neet)', cls:'nb', maxQ:45, icon:'🧪'},
+  {name:'Biology',  marks:4, neg:1, color:'var(--neet)', cls:'nb', maxQ:90, icon:'🧬'}
+];
+// JEE: +4 MCQ correct, -1 MCQ wrong, +4 Numerical correct, 0 Numerical wrong
+// Last 5 per subject (Q26-Q30) are numerical fill-in-the-blank
+const JEE_SUBS=[
+  {name:'Physics',  marks:4, neg:1, color:'var(--jee)', cls:'jee', maxQ:30, numericalStart:25, icon:'⚛'},
+  {name:'Chemistry',marks:4, neg:1, color:'var(--jee)', cls:'jee', maxQ:30, numericalStart:25, icon:'🧪'},
+  {name:'Mathematics',marks:4,neg:1,color:'var(--jee)',cls:'jee', maxQ:30, numericalStart:25, icon:'📐'}
+];
+function getSubs(){ 
+  if(!curTest) return PCM_SUBS;
+  if(curTest.stream==='neet') return NEET_SUBS;
+  if(curTest.stream==='pcb') return PCB_SUBS;
+  if(curTest.stream==='jee') return JEE_SUBS;
+  return PCM_SUBS;
+}
+let SUBS=PCM_SUBS;
+
+// ═══════════════════════ STATE ═══════════════════════
+let tests=[], settings={duration:180,price:30};
+let curTest=null, curSec=0, curQ=0, timerInt=null, timeLeft=0, pendingPaid=null;
+let curStream='pcm';
+let currentUser=null;
+
+const DEFAULT_TESTS=[
+  {id:3,name:'JEE Main 2024 Mock',stream:'jee',active:true,free:true,desc:'JEE Mock — 90 Qs · 360 Marks · Last 5 Numerical/Subject',
+    qbank:{0:[
+      {q:"A body accelerates uniformly from 0 to 30 m/s in 5s. Distance covered is",opts:["75 m","150 m","100 m","50 m"],ans:0,sol:"s=ut+½at²; u=0,a=6m/s²,t=5s → s=75m",img:"",isNumerical:false},
+      {q:"Which law states F=ma?",opts:["Newton's 1st","Newton's 2nd","Newton's 3rd","Kepler's"],ans:1,sol:"Newton's second law of motion: F=ma",img:"",isNumerical:false},
+      {q:"If a train moves at 60 km/h for 2.5 hours, distance (km) is? [Numerical]",opts:["","","",""],ans:150,numericalAns:"150",sol:"D=S×T=60×2.5=150 km",img:"",isNumerical:true}
+    ],1:[
+      {q:"Hybridisation of nitrogen in NH₃ is",opts:["sp","sp²","sp³","sp³d"],ans:2,sol:"3 bond pairs + 1 lone pair → sp³",img:"",isNumerical:false},
+      {q:"Atomic number of Carbon is? [Numerical]",opts:["","","",""],ans:6,numericalAns:"6",sol:"Carbon (C) has atomic number 6",img:"",isNumerical:true}
+    ],2:[
+      {q:"∫₀² x dx =",opts:["1","2","3","4"],ans:1,sol:"[x²/2]₀² = 4/2 = 2",img:"",isNumerical:false},
+      {q:"Value of sin(90°) is? [Numerical]",opts:["","","",""],ans:1,numericalAns:"1",sol:"sin(90°) = 1",img:"",isNumerical:true}
+    ]}
+  },
+  {id:0,name:'MHT-CET 2018 PCM',stream:'pcm',active:true,free:true,desc:'Official 2018 PCM paper — 150 Qs',
+    qbank:{0:[
+      {q:"A simple pendulum of length 1m oscillates with path length 16cm. Its maximum velocity is (g=π² m/s²)",opts:["2π cm/s","4π cm/s","8π cm/s","16π cm/s"],ans:2,sol:"Amplitude a=8cm. T=2s. V_max = aω = 8×π = 8π cm/s",img:""},
+      {q:"A transistor CE amplifier: load 2KΩ, input 150Ω, ΔIB=20μA, ΔIC=1.5mA. Voltage gain is",opts:["900","1000","1100","1200"],ans:1,sol:"Av = (RL × ΔIC)/(ri × ΔIB) = (2000×1.5e-3)/(150×20e-6) = 1000",img:""},
+      {q:"Unit vector along (0.8î+bĵ+0.4k̂). b =",opts:["0.4","√0.6","0.2","√0.2"],ans:3,sol:"0.64+b²+0.16=1 → b²=0.2 → b=√0.2",img:""}
+    ],1:[
+      {q:"Metal used for galvanization of iron",opts:["Copper","Zinc","Nickel","Tin"],ans:1,sol:"Zinc oxidizes preferentially, protecting iron from corrosion",img:""},
+      {q:"Hybridisation of P in PCl₃",opts:["sp²","sp³","sp³d","sp³d²"],ans:1,sol:"3 bond pairs + 1 lone pair = sp³ hybridisation",img:""}
+    ],2:[
+      {q:"∫₀ᴷ dx/(2+18x²)=π/24. K is",opts:["3","4","1/3","1/4"],ans:2,sol:"K=1/3 (integrate using tan⁻¹ formula)",img:""},
+      {q:"Min value of f(x)=x logx",opts:["-1/e","-e","1/e","e"],ans:0,sol:"f'(x)=1+logx=0 → x=1/e. f(1/e)=-1/e",img:""}
+    ]}
+  },
+  {id:1,name:'NEET 2024 Mock',stream:'neet',active:true,free:true,desc:'NEET Mock — 180 Qs · 720 Marks · −1 Negative Marking',
+    qbank:{0:[
+      {q:"A body of mass 2 kg moves with velocity 10 m/s. Its kinetic energy is",opts:["50 J","100 J","200 J","20 J"],ans:1,sol:"KE = ½mv² = ½ × 2 × 10² = 100 J",img:""},
+      {q:"Which of the following is NOT a vector quantity?",opts:["Force","Velocity","Speed","Acceleration"],ans:2,sol:"Speed has magnitude only, no direction — it is a scalar quantity.",img:""}
+    ],1:[
+      {q:"The hybridisation of carbon in methane (CH₄) is",opts:["sp","sp²","sp³","sp³d"],ans:2,sol:"4 bond pairs, no lone pairs → sp³, tetrahedral geometry",img:""},
+      {q:"Which element has atomic number 6?",opts:["Nitrogen","Carbon","Oxygen","Boron"],ans:1,sol:"Carbon (C) has atomic number 6 and forms the basis of organic chemistry.",img:""}
+    ],2:[
+      {q:"Which organelle is called the powerhouse of the cell?",opts:["Nucleus","Ribosome","Mitochondria","Golgi body"],ans:2,sol:"Mitochondria produce ATP through cellular respiration — hence called the powerhouse.",img:""},
+      {q:"DNA replication is",opts:["Conservative","Semi-conservative","Dispersive","Non-conservative"],ans:1,sol:"Watson & Crick model: each new DNA retains one original strand — semi-conservative.",img:""}
+    ]}
+  }
+];
+
+function loadData(){
+  try{
+    const raw=localStorage.getItem('mhtcet_student_data')||localStorage.getItem('mhtcet_admin_data');
+    if(raw){
+      const p=JSON.parse(raw);
+      if(p.tests&&p.tests.length){
+        tests=p.tests;
+        if(p.settings) settings={...settings,...p.settings};
+        // Ensure NEET tests have stream property
+        tests.forEach(t=>{ if(!t.stream)t.stream='pcm'; if(!t.qbank)t.qbank={0:[],1:[],2:[]}; });
+        // Preserve unlocked state
+        tests.forEach(t=>{ if(localStorage.getItem('unlocked_'+t.id)==='1')t.unlocked=true; });
+        if(localStorage.getItem('mhtcet_full_access')==='1') tests.forEach(t=>t.unlocked=true);
+        return;
+      }
+    }
+  }catch(e){}
+  tests=DEFAULT_TESTS;
+}
+
+// ═══════════════════════ STREAM SWITCHING ═══════════════════════
+function setStream(s){
+  curStream=s;
+  document.querySelectorAll('.stream-tab-btn').forEach(b=>{ b.className='stream-tab-btn'; });
+  document.getElementById('hero-banner').style.background='';
+  const sBtn=document.getElementById('stream-'+s+'-btn');if(sBtn)sBtn.className='stream-tab-btn active-'+(s==='jee'?'neet':s);
+  renderSubStrip();
+  renderHero();
+  renderHome();
+}
+
+function renderHero(){
+  const hero=document.getElementById('hero-banner');
+  const title=document.getElementById('hero-title');
+  const desc=document.getElementById('hero-desc');
+  const chips=document.getElementById('hero-chips');
+  if(curStream==='neet'){
+    hero.className='hero neet-hero';
+    title.textContent='NEET Test Series 2025';
+    desc.textContent='National Eligibility cum Entrance Test preparation — 180 questions, 720 marks, negative marking.';
+    chips.innerHTML=`<div class="hchip neet-chip"><strong>720</strong>Total Marks</div>
+      <div class="hchip neet-chip"><strong>+4 / −1</strong>Marking Scheme</div>
+      <div class="hchip neet-chip"><strong>3 Hours</strong>Duration</div>
+      <div class="hchip neet-chip"><strong>180 Qs</strong>45P+45C+90B</div>`;
+  } else if(curStream==='jee'){
+    hero.className='hero neet-hero';
+    hero.style.background='linear-gradient(140deg,#bf360c 0%,#e65100 50%,#ff6f00 100%)';
+    title.textContent='PrepXpert JEE Test Series 2025';
+    desc.textContent='JEE preparation — 90 questions, 360 marks, negative marking. Last 5 per subject are numerical fill-in-the-blank.';
+    chips.innerHTML=`<div class="hchip neet-chip"><strong>360</strong>Total Marks</div>
+      <div class="hchip neet-chip"><strong>+4 / −1</strong>MCQ Marking</div>
+      <div class="hchip neet-chip"><strong>3 Hours</strong>Duration</div>
+      <div class="hchip neet-chip"><strong>Last 5</strong>Numerical per Subject</div>`;
+  } else if(curStream==='pcb'){
+    hero.className='hero pcb';
+    hero.style.background='';
+    title.textContent='PrepXpert PCB Test Series 2025';
+    desc.textContent='Physics, Chemistry & Biology — 200 questions, 200 marks, no negative marking.';
+    chips.innerHTML=`<div class="hchip"><strong>200</strong>Total Marks</div>
+      <div class="hchip"><strong>3 Hours</strong>Duration</div>
+      <div class="hchip"><strong>Zero</strong>Negative Marking</div>
+      <div class="hchip"><strong>PCB</strong>Stream</div>`;
+  } else {
+    hero.className='hero pcm';
+    hero.style.background='';
+    title.textContent='PrepXpert PCM Test Series 2025';
+    desc.textContent='Physics, Chemistry & Mathematics — 150 questions, 200 marks, no negative marking.';
+    chips.innerHTML=`<div class="hchip"><strong>200</strong>Total Marks</div>
+      <div class="hchip"><strong>3 Hours</strong>Duration</div>
+      <div class="hchip"><strong>Zero</strong>Negative Marking</div>
+      <div class="hchip"><strong>PCM</strong>Stream</div>`;
+  }
+}
+
+function renderSubStrip(){
+  const strip=document.getElementById('sub-strip');
+  const lbl=document.getElementById('stream-label');
+  if(curStream==='jee'){
+    strip.innerHTML=`
+      <div class="sub-chip"><div class="sv" style="color:var(--jee)">30</div><div class="sl">Physics · +4/−1 MCQ</div></div>
+      <div class="sub-chip"><div class="sv" style="color:var(--jee)">30</div><div class="sl">Chemistry · +4/−1 MCQ</div></div>
+      <div class="sub-chip"><div class="sv" style="color:var(--jee)">30</div><div class="sl">Maths · Last 5 Numerical</div></div>`;
+    lbl.textContent='JEE Tests — 90 Questions · 360 Marks · Negative Marking · Numerical Fill-In';
+    lbl.style.color='var(--jee)';
+  } else if(curStream==='neet'){
+    strip.innerHTML=`
+      <div class="sub-chip"><div class="sv" style="color:var(--neet)">45</div><div class="sl">Physics · +4/−1</div></div>
+      <div class="sub-chip"><div class="sv" style="color:var(--neet)">45</div><div class="sl">Chemistry · +4/−1</div></div>
+      <div class="sub-chip"><div class="sv" style="color:var(--neet)">90</div><div class="sl">Biology · +4/−1</div></div>`;
+    lbl.textContent='NEET Tests — 180 Questions · 720 Marks · Negative Marking';
+    lbl.style.color='var(--neet)';
+  } else if(curStream==='pcb'){
+    strip.innerHTML=`
+      <div class="sub-chip"><div class="sv" style="color:var(--phy)">50</div><div class="sl">Physics · 1 mark</div></div>
+      <div class="sub-chip"><div class="sv" style="color:var(--che)">50</div><div class="sl">Chemistry · 1 mark</div></div>
+      <div class="sub-chip"><div class="sv" style="color:var(--bio)">100</div><div class="sl">Biology · 1 mark</div></div>`;
+    lbl.textContent='PCB Tests — 200 Questions · 200 Marks';
+    lbl.style.color='var(--pri)';
+  } else {
+    strip.innerHTML=`
+      <div class="sub-chip"><div class="sv" style="color:var(--phy)">50</div><div class="sl">Physics · 1 mark</div></div>
+      <div class="sub-chip"><div class="sv" style="color:var(--che)">50</div><div class="sl">Chemistry · 1 mark</div></div>
+      <div class="sub-chip"><div class="sv" style="color:var(--mat)">50</div><div class="sl">Maths · 2 marks</div></div>`;
+    lbl.textContent='PCM Tests — 150 Questions · 200 Marks';
+    lbl.style.color='var(--pri)';
+  }
+}
+
+// ═══════════════════════ HOME ═══════════════════════
+function renderHome(){
+  const fg=document.getElementById('free-grid'), pg=document.getElementById('paid-grid');
+  fg.innerHTML=''; pg.innerHTML='';
+  const streamTests=tests.filter(t=>(t.stream||'pcm')===curStream);
+  const visible=streamTests.filter(t=>t.active||(t.qbank&&(t.qbank[0]?.length||t.qbank[1]?.length||t.qbank[2]?.length)));
+  const freeTests=visible.filter(t=>t.free);
+  const paidTests=visible.filter(t=>!t.free);
+  if(!freeTests.length) fg.innerHTML=`<p style="color:var(--muted);font-size:13px;padding:4px 0">No ${curStream.toUpperCase()} free tests available yet.</p>`;
+  freeTests.forEach(t=>fg.appendChild(makeTestCard(t)));
+  if(!paidTests.length) pg.innerHTML=`<p style="color:var(--muted);font-size:13px;padding:4px 0">No ${curStream.toUpperCase()} paid tests available yet.</p>`;
+  paidTests.forEach(t=>pg.appendChild(makeTestCard(t)));
+}
+
+function makeTestCard(t){
+  const total=(t.qbank?.[0]?.length||0)+(t.qbank?.[1]?.length||0)+(t.qbank?.[2]?.length||0);
+  const hasQs=total>0;
+  const isNEET=t.stream==='neet';
+  const isJEE=t.stream==='jee';
+  const totalMarks=isNEET?NEET_SUBS.reduce((a,s)=>a+s.maxQ*s.marks,0):isJEE?360:200;
+  const marksLabel=isNEET?`720 marks · +4/−1`:isJEE?`360 marks · +4/−1 MCQ`:`200 marks`;
+  const card=document.createElement('div');
+  card.className='tcard'+(isNEET?' neet-card':isJEE?' neet-card':'')+(!t.free&&!t.unlocked?' locked':'');
+  const topics=t.topics||{};
+  const thirdLbl=isNEET?'Bio':(t.stream==='pcb'?'Bio':'Maths');
+  const thirdColor=isNEET||t.stream==='pcb'?'var(--neet)':isJEE?'var(--jee)':'var(--mat)';
+  const topicsHtml=(topics.phy||topics.che||topics.third)?`<div style="margin-top:9px;font-size:11px;line-height:1.75;background:#f8f9ff;border-radius:8px;padding:8px 11px;border:1px solid #e0e3ff;">${topics.phy?`<div><span style="font-weight:700;color:var(--phy)">Phy:</span> ${escHtml(topics.phy)}</div>`:''}${topics.che?`<div><span style="font-weight:700;color:var(--che)">Chem:</span> ${escHtml(topics.che)}</div>`:''}${topics.third?`<div><span style="font-weight:700;color:${thirdColor}">${thirdLbl}:</span> ${escHtml(topics.third)}</div>`:''}</div>`:'';
+  card.innerHTML=`
+    <span class="tbadge ${t.free?'free':'paid'} ${isNEET||isJEE?'neet-badge':''}">${t.free?'FREE':'PAID'}${isNEET?' · NEET':isJEE?' · JEE':''}</span>
+    <h3>${escHtml(t.name)}</h3>
+    <p>${escHtml(t.desc||'')}</p>
+    ${topicsHtml}
+    <div class="tmeta">
+      <span>📋 ${hasQs?total+' Q':'—'}</span>
+      <span>⏱ ${settings.duration} min</span>
+      <span>🏆 ${marksLabel}</span>
+      ${isNEET?'<span style="color:var(--err);font-weight:700">⚠ −1 Neg</span>':''}
+    </div>
+    ${(!t.free&&!t.unlocked)
+      ? `<button class="btn ${isNEET||isJEE?'btn-neet':'btn-acc'} btn-sm" style="width:100%;margin-top:12px" onclick="unlockTest(${t.id})">🔒 Unlock — ₹${settings.price||30}</button>`
+      : hasQs
+        ? `<button class="btn ${isNEET||isJEE?'btn-neet':'btn-pri'} btn-sm" style="width:100%;margin-top:12px" onclick="openInst(${t.id})">Start Test →</button>`
+        : `<button class="btn btn-sm" style="width:100%;margin-top:12px;background:#f0f2f5;color:var(--muted);cursor:default" disabled>Coming Soon</button>`
+    }`;
+  return card;
+}
+
+// ═══════════════════════ INSTRUCTIONS ═══════════════════════
+function openInst(id){
+  curTest=tests.find(t=>t.id===id)||tests[id];
+  const totalQs=(curTest?.qbank?.[0]?.length||0)+(curTest?.qbank?.[1]?.length||0)+(curTest?.qbank?.[2]?.length||0);
+  if(!totalQs){ toast('⚠ No questions loaded. Admin needs to add questions first.'); return; }
+  SUBS=getSubs();
+  curTest.state={};
+  [0,1,2].forEach(s=>{ curTest.state[s]=(curTest.qbank[s]||[]).map(q=>({...q,status:'nv',chosen:null})); });
+  const isNEET=curTest.stream==='neet';
+  const isJEE=curTest.stream==='jee';
+  document.getElementById('inst-ttl').textContent=`Instructions — ${curTest.name}`;
+  // Show/hide NEET warning
+  document.getElementById('neet-inst-warning').style.display=(isNEET||isJEE)?'block':'none';
+  const warnTitle=document.getElementById('neg-warning-title');
+  if(warnTitle) warnTitle.textContent=isJEE?'⚠ JEE: MCQ Negative Marking | Numerical: No Negative':'⚠ NEET Negative Marking Active!';
+  document.getElementById('inst-neg-line').textContent=isNEET
+    ?'NEET Negative Marking: Correct = +4 marks, Wrong = −1 mark, Skipped = 0 marks.'
+    :isJEE?'JEE Marking: MCQ Correct = +4, MCQ Wrong = −1, Numerical Correct = +4, Numerical Wrong = 0.'
+    :'No negative marking — only correct answers earn marks.';
+  // Marks table
+  const totalQ=SUBS.reduce((a,s)=>a+s.maxQ,0);
+  const totalM=SUBS.reduce((a,s)=>a+s.maxQ*s.marks,0);
+  document.getElementById('inst-marks-table').innerHTML=`
+    <tr><th>Subject</th><th>Questions</th><th>Type</th><th>Marks/Q</th><th>${isNEET||isJEE?'Wrong':'Total'}</th><th>Total</th></tr>
+    ${SUBS.map(s=>`<tr>
+      <td>${s.name}</td><td>${s.maxQ}</td>
+      <td style="color:var(--ok);font-weight:700">+${s.marks}</td>
+      ${isNEET?`<td style="color:var(--err);font-weight:700">−${s.neg}</td>`:''}
+      <td><strong>${s.maxQ*s.marks}</strong></td>
+    </tr>`).join('')}
+    <tr style="background:#f8f9ff"><td><strong>Total</strong></td><td><strong>${totalQ}</strong></td><td>—</td>${isNEET?'<td>—</td>':''}<td><strong>${totalM}</strong></td></tr>`;
+  document.getElementById('inst-switch-line').textContent=`Switch between ${SUBS.map(s=>s.name).join(', ')} sections freely at any time.`;
+  // Update start button color for NEET
+  const sb=document.getElementById('start-btn');
+  sb.className=`btn ${isNEET||isJEE?'btn-neet':'btn-pri'}`;
+  showScr('inst-scr');
+}
+
+// ═══════════════════════ EXAM ═══════════════════════
+function startExam(){
+  curSec=0; curQ=0;
+  setExamMode(true); blurCount=0;
+  if(curTest.state[0][0]) curTest.state[0][0].status='skp';
+  const isNEET=curTest.stream==='neet';
+  const isJEE=curTest.stream==='jee';
+  const stabs=document.getElementById('stabs');
+  stabs.innerHTML=SUBS.map((sub,i)=>`<div class="stab${i===0?' on':''}" data-s="${i}" onclick="switchSec(${i})">${sub.name}</div>`).join('');
+  document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));
+  document.getElementById('exam-scr').classList.add('on');
+  document.getElementById('timer').style.display='block';
+  document.getElementById('sub-btn').style.display='inline-flex';
+  document.getElementById('home-btn').style.display='none';
+  // Show neg marking hint during exam
+  document.getElementById('neet-neg-hint').style.display=(isNEET||curTest.stream==='jee')?'flex':'none';
+  timeLeft=settings.duration*60;
+  updateTimer();
+  timerInt=setInterval(()=>{ timeLeft--; if(timeLeft<=0){clearInterval(timerInt);submitTest();return;} updateTimer(); },1000);
+  checkMobNav();
+  if(window.innerWidth<=768){
+    const sb=document.getElementById('exam-sb');
+    if(sb){sb.classList.remove('mob-open');sb.style.display='';}
+    const btn=document.getElementById('mob-nav-btn');
+    if(btn)btn.textContent='☰ Nav';
+  }
+  renderQ(); renderSB();
+}
+
+function updateTimer(){
+  const h=Math.floor(timeLeft/3600),m=Math.floor((timeLeft%3600)/60),s=timeLeft%60;
+  const el=document.getElementById('timer');
+  el.textContent=`${pad(h)}:${pad(m)}:${pad(s)}`;
+  el.className='timer'+(timeLeft<600?' crit':timeLeft<1800?' warn':'');
+}
+const pad=n=>n<10?'0'+n:String(n);
+
+function switchSec(s){
+  curSec=s; curQ=0;
+  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('on'));
+  document.querySelector(`.stab[data-s="${s}"]`).classList.add('on');
+  renderQ(); renderSB();
+}
+
+function renderQ(){
+  const qs=curTest.state[curSec]; if(!qs||!qs.length) return;
+  const q=qs[curQ]; const sub=SUBS[curSec];
+  const isNEET=curTest.stream==='neet';
+  const isJEE=curTest.stream==='jee';
+  const badge=document.getElementById('qnuml');
+  badge.textContent=`Q${curQ+1} of ${qs.length} · ${sub.name}`;
+  badge.style.background=sub.color;
+  const mrkBadge=document.getElementById('qmrkl');
+  mrkBadge.textContent=isNEET?`+${sub.marks} / −${sub.neg}`:`${sub.marks} Mark${sub.marks>1?'s':''}`;
+  mrkBadge.className=`qmrk-badge${isNEET?' neet-marks':''}`;
+  const qtxt=document.getElementById('qtxt');
+  qtxt.textContent=q.q;
+  qtxt.className=`qtxt${isNEET?' neet-q':''}`;
+  let imgEl=document.getElementById('q-diagram');
+  if(!imgEl){ imgEl=document.createElement('img'); imgEl.id='q-diagram'; imgEl.className='qimg'; qtxt.after(imgEl); }
+  if(q.img){ imgEl.src=q.img; imgEl.style.display='block'; } else { imgEl.style.display='none'; imgEl.src=''; }
+  const ok=['A','B','C','D'];
+  const ol=document.getElementById('opts'); ol.innerHTML='';
+  const isJEENum=q.isNumerical===true;
+  if(isJEENum){
+    // Numerical question — show keyboard input
+    const numVal=q.numericalInput!==undefined?q.numericalInput:'';
+    ol.innerHTML=`
+      <div style="background:#fff3e0;border:2px solid #e65100;border-radius:12px;padding:18px 20px;margin-bottom:8px;">
+        <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#e65100;margin-bottom:10px;">
+          🔢 Numerical Answer — Type your answer below
+        </div>
+        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+          <input type="number" id="num-answer-inp" step="any" placeholder="Enter numerical answer..."
+            value="${numVal}"
+            style="flex:1;min-width:160px;padding:12px 16px;font-size:18px;font-family:'Rajdhani',sans-serif;font-weight:700;border:2px solid #e65100;border-radius:8px;outline:none;background:#fffde7;color:#bf360c;"
+            oninput="saveNumericalInput(this.value)"
+            onkeydown="if(event.key==='Enter'){saveNext();}"
+          >
+          <div style="font-size:12px;color:#7b6000;line-height:1.6;">
+            <div>✅ +4 marks if correct</div>
+            <div>⬜ 0 marks if wrong</div>
+            <div style="font-size:11px;color:#999">No negative marking for numerical</div>
+          </div>
+        </div>
+        <div style="font-size:11px;color:#999;margin-top:8px;">Press Enter or click Save & Next to continue</div>
+      </div>`;
+    // Focus the input
+    setTimeout(()=>{ const inp=document.getElementById('num-answer-inp'); if(inp)inp.focus(); },100);
+  } else {
+    q.opts.forEach((o,i)=>{
+      const d=document.createElement('div');
+      d.className='opt'+(q.chosen===i?' sel':'');
+      d.innerHTML=`<div class="okey">${ok[i]}</div><div style="flex:1">${o}</div>`;
+      d.onclick=()=>selectOpt(i);
+      ol.appendChild(d);
+    });
+  }
+  updateUA();
+}
+
+function saveNumericalInput(val){
+  const q=curTest.state[curSec][curQ];
+  q.numericalInput=val;
+  q.status=val.trim()!==''?'ans':'skp';
+  renderSB();
+}
+function selectOpt(i){ const q=curTest.state[curSec][curQ]; q.chosen=(q.chosen===i)?null:i; q.status=q.chosen!==null?'ans':'skp'; renderQ(); renderSB(); }
+function saveNext(){const q=curTest.state[curSec][curQ];q.status=q.chosen!==null?'ans':'skp';navNext();}
+function skipQ(){curTest.state[curSec][curQ].status='skp';navNext();}
+function markRev(){curTest.state[curSec][curQ].status='mkd';navNext();}
+function clearR(){
+  const q=curTest.state[curSec][curQ];
+  if(q.isNumerical){q.numericalInput='';q.status='skp';}
+  else{q.chosen=null;q.status='skp';}
+  renderQ();renderSB();
+}
+function prevQ(){if(curQ>0){curQ--;const q=curTest.state[curSec][curQ];if(q.status==='nv')q.status='skp';renderQ();renderSB();}}
+function navNext(){
+  const total=curTest.state[curSec].length;
+  if(curQ<total-1){curQ++;const q=curTest.state[curSec][curQ];if(q.status==='nv')q.status='skp';}
+  else if(curSec<2){switchSec(curSec+1);return;}
+  renderQ();renderSB();
+}
+
+function gotoQ(){
+  const totalQ=SUBS.reduce((a,s)=>a+s.maxQ,0);
+  const raw=parseInt(document.getElementById('goto-inp').value);
+  if(!raw||raw<1||raw>totalQ){toast('Enter 1–'+totalQ);return;}
+  const n=raw-1;
+  let ts,qi;
+  let cum=0;
+  for(let s=0;s<SUBS.length;s++){
+    if(n<cum+SUBS[s].maxQ){ts=s;qi=n-cum;break;}
+    cum+=SUBS[s].maxQ;
+  }
+  curSec=ts; curQ=qi;
+  document.querySelectorAll('.stab').forEach(t=>t.classList.remove('on'));
+  document.querySelector(`.stab[data-s="${ts}"]`).classList.add('on');
+  const q=curTest.state[curSec][curQ]; if(q&&q.status==='nv')q.status='skp';
+  renderQ(); renderSB(); document.getElementById('goto-inp').value='';
+}
+
+function renderSB(){
+  const gc=document.getElementById('qgc'); gc.innerHTML='';
+  let an=0,sk=0,nv=0,mk=0;
+  [0,1,2].forEach(s=>{
+    const sub=SUBS[s];
+    const lb=document.createElement('div'); lb.className=`slbl ${sub.cls}`; lb.textContent=sub.name; gc.appendChild(lb);
+    const gd=document.createElement('div'); gd.className='qgrd';
+    (curTest.state[s]||[]).forEach((q,i)=>{
+      const isCur=s===curSec&&i===curQ;
+      const b=document.createElement('button');
+      b.className='qbtn '+(isCur?'cur':q.status);
+      b.textContent=i+1;
+      b.onclick=()=>{
+        curSec=s;curQ=i;
+        document.querySelectorAll('.stab').forEach(t=>t.classList.remove('on'));
+        document.querySelector(`.stab[data-s="${s}"]`).classList.add('on');
+        const qq=curTest.state[s][i];if(qq.status==='nv')qq.status='skp';
+        renderQ();renderSB();
+      };
+      if(q.status==='ans')an++;else if(q.status==='skp')sk++;else if(q.status==='nv')nv++;else if(q.status==='mkd')mk++;
+      gd.appendChild(b);
+    });
+    gc.appendChild(gd);
+  });
+  document.getElementById('sbstats').innerHTML=`<div class="sc a">✓ ${an}</div><div class="sc s">✗ ${sk}</div><div class="sc n">○ ${nv}</div><div class="sc m">★ ${mk}</div>`;
+  updateUA();
+}
+
+function updateUA(){
+  let ua=0;
+  [0,1,2].forEach(s=>(curTest.state[s]||[]).forEach(q=>{
+    if(q.isNumerical){if(!q.numericalInput||q.numericalInput.trim()==='')ua++;}
+    else{if(q.chosen===null)ua++;}
+  }));
+  document.getElementById('ua-count').textContent=ua>0?`${ua} question(s) unanswered`:'All questions answered! ✓';
+}
+
+function confirmSubmit(){
+  let ua=0;
+[0,1,2].forEach(s=>(curTest.state[s] || []).forEach(q =>{
+  if (!q) return;   // ✅ ADD THIS LINE
+
+  
+    if(q.isNumerical){if(!q.numericalInput||q.numericalInput.trim()==='')ua++;}
+    else{if(q.chosen===null)ua++;}
+  }));
+
+  const isNEET=curTest.stream==='neet';
+  const isJEE=curTest.stream==='jee';
+  let msg=ua>0?`${ua} questions are unanswered.`:'All answered.';
+  if(isNEET&&ua>0) msg+=' (Unanswered = 0 marks, better than a wrong answer which deducts 1 mark.)';
+  msg+=' Ready to submit?';
+  document.getElementById('conf-msg').textContent=msg;
+  document.getElementById('conf-ov').classList.add('on');
+}
+
+function submitTest(){
+  closeModal('conf-ov');
+  if(timerInt){clearInterval(timerInt);timerInt=null;}
+  setExamMode(false);
+  document.getElementById('timer').style.display='none';
+  document.getElementById('sub-btn').style.display='none';
+  document.getElementById('home-btn').style.display='inline-flex';
+  showResults();
+}
+
+function retakeTest(){openInst(curTest.id);}
+
+// ═══════════════════════ RESULTS ═══════════════════════
+function showResults(){
+  const isNEET=curTest.stream==='neet';
+  const isJEE=curTest.stream==='jee';
+  let totScore=0,totC=0,totW=0,totS=0,totNeg=0;
+  const secStats=[];
+  [0,1,2].forEach(s=>{
+    
+    let sc=0,c=0,w=0,sk=0,neg=0;
+    const sub=SUBS[s];
+    (curTest.state[s]||[]).forEach(q=>{
+      if(q.isNumerical){
+        // Numerical: compare typed vs correct
+        
+        const typed=parseFloat((q.numericalInput||'').trim());
+        const correct=parseFloat(q.numericalAns||String(q.ans));
+        if(q.numericalInput===undefined||q.numericalInput.trim()===''){sk++;}
+        else if(!isNaN(typed)&&!isNaN(correct)&&Math.abs(typed-correct)<0.01){sc+=sub.marks;c++;}
+        else{w++; /* no negative for JEE numerical */}
+      } else {
+        if(q.chosen===null){sk++;}
+        else if(q.chosen===q.ans){sc+=sub.marks;c++;}
+        else{w++;if(isNEET||curTest.stream==='jee'){sc-=sub.neg;neg+=sub.neg;}}
+      
+        
+      }
+    });
+    
+    const actualQ=curTest.state[s]?.length||sub.maxQ;
+    const maxScore=actualQ*sub.marks;
+    secStats.push({c,w,sk,sc,neg,tot:maxScore});
+    totScore+=sc; totC+=c; totW+=w; totS+=sk; totNeg+=neg;
+  });const name = prompt("Enter your name:");
+
+const API = "https://prepxpert-backend.onrender.com";
+
+// ── Wake-up retry helper ──────────────────────────────────────────────
+// Render free tier sleeps after 15 min. This retries up to 4 times with
+// a growing delay so the first cold-start doesn't just fail silently.
+async function fetchWithRetry(url, options = {}, retries = 4, delayMs = 4000) {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const res = await fetch(url, options);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res;
+    } catch (err) {
+      console.warn(`⚠️ Attempt ${attempt}/${retries} failed for ${url}:`, err.message);
+      if (attempt === retries) throw err;
+      await new Promise(r => setTimeout(r, delayMs * attempt));
+    }
+  }
+}
+
+// Ping backend on page load so it wakes up before the user needs it
+(function pingBackend() {
+  fetch(API + '/health').catch(() => {});
+})();
+
+fetchWithRetry(`${API}/save-result`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({
+    name: name,
+    score: totScore,
+    total: totC + totW + totS,
+    type: curTest.stream.toUpperCase()
+  })
+})
+.then(res => res.json())
+.then(data => { console.log("Saved ✅", data); })
+.catch(err => { console.error("Error saving result ❌", err); toast('⚠️ Could not save result – server may be waking up. Try again.'); });
+  const totalMarks=SUBS.reduce((a,s)=>a+s.maxQ*s.marks,0);
+  const att=totC+totW, acc=att>0?Math.round(totC/att*100):0;
+
+  // Hero
+  const hero=document.getElementById('result-hero');
+  hero.className=isNEET?'rhero neet-result':'rhero';
+  document.getElementById('r-tname').textContent=curTest.name;
+  document.getElementById('r-score').textContent=totScore;
+  document.getElementById('r-total-lbl').textContent=`out of ${totalMarks}`;
+  document.getElementById('r-c').textContent=totC;
+  document.getElementById('r-w').textContent=totW;
+  document.getElementById('r-s').textContent=totS;
+  document.getElementById('r-a').textContent=acc+'%';
+  // NEET negative stat
+  const negStat=document.getElementById('r-neg-stat');
+  negStat.style.display=isNEET?'block':'none';
+  if(isNEET){ document.getElementById('r-neg').textContent='-'+totNeg; negStat.className='rstat neg-stat'; }
+
+  // Section results
+  const sr=document.getElementById('secres'); sr.innerHTML='';
+  secStats.forEach((st,s)=>{
+    const pct=st.tot>0?Math.round(Math.max(0,st.sc)/st.tot*100):0;
+    const card=document.createElement('div');
+    card.className=`src ${SUBS[s].cls}`;
+    card.innerHTML=`<h4>${SUBS[s].name}</h4>
+      <div style="font-size:20px;font-weight:700;font-family:'Rajdhani',sans-serif;color:${SUBS[s].color}">${st.sc}/${st.tot}</div>
+      <div class="pbar"><div class="pfill" style="width:${pct}%;background:${SUBS[s].color}"></div></div>
+      <div style="font-size:11px;color:var(--muted);margin-top:5px">✓ ${st.c} · ✗ ${st.w} · — ${st.sk}${isNEET?` · −${st.neg} deducted`:''}</div>`;
+    sr.appendChild(card);
+  });
+
+  // Answer Review with Solutions
+  const al=document.getElementById('arev-list'); al.innerHTML='';
+  const ok=['A','B','C','D']; let gq=1;
+  [0,1,2].forEach(s=>{
+    (curTest.state[s]||[]).forEach((q,i)=>{
+      let isC, isW;
+      if(q.isNumerical){
+        const typed=parseFloat((q.numericalInput||'').trim());
+        const correct=parseFloat(q.numericalAns||String(q.ans));
+        isC=q.numericalInput&&q.numericalInput.trim()!==''&&!isNaN(typed)&&!isNaN(correct)&&Math.abs(typed-correct)<0.01;
+        isW=q.numericalInput&&q.numericalInput.trim()!==''&&!isC;
+      } else {
+        isC=q.chosen!==null&&q.chosen===q.ans;
+        isW=q.chosen!==null&&q.chosen!==q.ans;
+      }
+      const cls3=(q.isNumerical?(q.numericalInput===undefined||q.numericalInput.trim()===''):q.chosen===null)?'skip':isC?'ok':'wrong';
+      const icon=q.chosen===null?'○':isC?'✓':'✗';
+      const markChange=isC?`+${SUBS[s].marks}`:isW?(isNEET||curTest.stream==='jee'?`−${SUBS[s].neg}`:'0'):'0';
+      const markColor=isC?'var(--ok)':isW&&isNEET?'var(--err)':'var(--muted)';
+      const d=document.createElement('div');
+      d.className=`ritem ${cls3}`;
+      d.innerHTML=`
+        <div class="ric">${icon}</div>
+        <div>
+          <div style="font-size:11px;color:var(--muted);margin-bottom:3px">${SUBS[s].name} · Q${i+1} · Global Q${gq}</div>
+          <div style="font-size:13px;line-height:1.55">${q.q.substring(0,140)}${q.q.length>140?'…':''}</div>
+          ${q.img?`<img src="${q.img}" style="max-width:100%;max-height:120px;border-radius:6px;margin-top:6px;border:1px solid var(--bdr)">`:''}
+          <div style="font-size:12px;margin-top:6px;display:flex;flex-wrap:wrap;gap:8px">
+            ${q.isNumerical
+              ? `<span style="color:var(--ok);font-weight:700">✓ Correct: ${q.numericalAns||q.ans}</span>
+                 ${q.numericalInput!==undefined&&q.numericalInput.trim()!==''
+                   ? `<span style="color:${Math.abs(parseFloat(q.numericalInput)-parseFloat(q.numericalAns||q.ans))<0.01?'var(--ok)':'var(--err)'}">Your answer: ${q.numericalInput}</span>`
+                   : '<span style="color:var(--muted)">Not attempted</span>'}`
+              : `<span style="color:var(--ok);font-weight:700">✓ ${ok[q.ans]}) ${q.opts[q.ans]}</span>
+                 ${isW?`<span style="color:var(--err)">✗ Your: ${ok[q.chosen]}) ${q.opts[q.chosen]}</span>`:''}
+                 ${q.chosen===null?'<span style="color:var(--muted)">Not attempted</span>':''}`}
+          </div>
+          ${q.sol?`<div class="sol-box"><strong>💡 Solution:</strong> ${q.sol}</div>`:''}
+        </div>
+        <div style="font-size:13px;font-weight:800;color:${markColor};white-space:nowrap">${markChange}</div>`;
+      al.appendChild(d); gq++;
+    });
+  });
+
+  saveScore(curTest.name, curTest.stream||'pcm', totScore, totalMarks, totC, totW, totS);
+  showScr('result-scr');
+}
+
+// ═══════════════════════ PAYMENT — RAZORPAY ═══════════════════════
+// Key is set from Admin Panel → Settings → Razorpay Settings
+// It is automatically synced here when admin saves
+function getRzpKeyId(){
+  // 1. Try admin-pushed settings (most up to date)
+  try{
+    const sd=JSON.parse(localStorage.getItem('mhtcet_student_data')||'{}');
+    if(sd.settings?.rzp_key_id && sd.settings.rzp_key_id.startsWith('rzp_')) return sd.settings.rzp_key_id;
+  }catch(e){}
+  // 2. Try direct admin config store
+  try{
+    const cfg=JSON.parse(localStorage.getItem('rzp_admin_config')||'{}');
+    if(cfg.keyId && cfg.keyId.startsWith('rzp_')) return cfg.keyId;
+  }catch(e){}
+  // 3. Fallback placeholder
+  return 'rzp_test_XXXXXXXXXXXXXXXX';
+}
+
+function unlockTest(id){
+  if(localStorage.getItem('mhtcet_full_access')==='1'){ const t=tests.find(tt=>tt.id===id); if(t){t.unlocked=true;openInst(id);return;} }
+  pendingPaid=id;
+  document.getElementById('pay-amount').textContent=settings.price||30;
+  document.getElementById('pay-processing').style.display='none';
+  document.getElementById('pay-success-msg').style.display='none';
+  document.getElementById('rzp-pay-btn').style.display='block';
+  // Warn if Razorpay key not yet configured
+  const rzpKey=getRzpKeyId();
+  const rzpWarn=document.getElementById('rzp-not-configured');
+  if(rzpWarn) rzpWarn.style.display=rzpKey==='rzp_test_XXXXXXXXXXXXXXXX'?'block':'none';
+  document.getElementById('pay-modal').classList.add('on');
+}
+
+function _doUnlockAll(){
+  localStorage.setItem('mhtcet_full_access','1');
+  tests.forEach(t=>{t.unlocked=true;localStorage.setItem('unlocked_'+t.id,'1');});
+  if(currentUser){
+    const users=getUsers();
+    const idx=users.findIndex(u=>u.mobile===currentUser.mobile);
+    if(idx>=0){users[idx].paid=true;saveUsers(users);currentUser=users[idx];localStorage.setItem('mhtcet_current_user',JSON.stringify(currentUser));}
+  }
+  closeModal('pay-modal'); renderHome(); toast('✅ Payment successful! All tests unlocked!');
+  const t=tests.find(tt=>tt.id===pendingPaid); if(t&&(t.qbank?.[0]?.length||t.qbank?.[1]?.length)) openInst(pendingPaid);
+}
+
+function startRazorpayPayment(){
+  const amountPaise=Math.round((parseFloat(settings.price)||30)*100);
+  const options={
+    key:getRzpKeyId(),
+    amount:amountPaise,
+    currency:'INR',
+    name:'PrepXpert',
+    description:'Unlock All Paid Tests',
+    prefill:{name:currentUser?.name||'',contact:currentUser?.mobile||''},
+    theme:{color:'#1a237e'},
+    handler:function(response){
+      document.getElementById('pay-processing').style.display='none';
+      document.getElementById('pay-success-msg').style.display='block';
+      setTimeout(()=>{ _doUnlockAll(); },1200);
+    },
+    modal:{
+      ondismiss:function(){
+        document.getElementById('pay-processing').style.display='none';
+        document.getElementById('rzp-pay-btn').style.display='block';
+      }
+    }
+  };
+  if(typeof Razorpay==='undefined'){
+    const s=document.createElement('script');
+    s.src='https://checkout.razorpay.com/v1/checkout.js';
+    s.onload=()=>_openRzp(options);
+    s.onerror=()=>{ document.getElementById('rzp-pay-btn').style.display='block'; document.getElementById('pay-processing').style.display='none'; toast('⚠ Could not load payment. Check internet.'); };
+    document.head.appendChild(s);
+  } else { _openRzp(options); }
+}
+
+function _openRzp(options){
+  document.getElementById('rzp-pay-btn').style.display='none';
+  document.getElementById('pay-processing').style.display='block';
+  try{
+    const rzp=new Razorpay(options);
+    rzp.on('payment.failed',function(resp){
+      document.getElementById('pay-processing').style.display='none';
+      document.getElementById('rzp-pay-btn').style.display='block';
+      toast('❌ Payment failed: '+(resp.error?.description||'Please try again.'));
+    });
+    rzp.open();
+  }catch(e){
+    document.getElementById('pay-processing').style.display='none';
+    document.getElementById('rzp-pay-btn').style.display='block';
+    toast('⚠ Payment error. Please try again.');
+  }
+}
+
+// ═══════════════════════ MOBILE NAV HELPERS ═══════════════════════
+function toggleMobNav(){
+  const sb=document.getElementById('exam-sb');
+  if(!sb)return;
+  const isOpen=sb.classList.contains('mob-open');
+  sb.classList.toggle('mob-open',!isOpen);
+  document.getElementById('mob-nav-btn').textContent=!isOpen?'✕ Close Nav':'☰ Nav';
+}
+function checkMobNav(){
+  const btn=document.getElementById('mob-nav-btn');
+  if(!btn)return;
+  if(window.innerWidth<=768){
+    btn.style.display='inline-flex';
+  } else {
+    btn.style.display='none';
+    const sb=document.getElementById('exam-sb');
+    if(sb){sb.classList.remove('mob-open');sb.style.display='';}
+  }
+}
+window.addEventListener('resize',checkMobNav);
+
+// ═══════════════════════ SECURITY ENGINE ═══════════════════════
+/*(function(){
+  // Block right-click
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  // Block DevTools shortcuts & view-source
+  document.addEventListener('keydown', e => {
+    if(e.key==='F12'){ e.preventDefault(); return false; }
+    if(e.ctrlKey && e.shiftKey && ['i','j','c','k','s','u'].includes(e.key.toLowerCase())){ e.preventDefault(); return false; }
+    if(e.ctrlKey && ['u','s'].includes(e.key.toLowerCase())){ e.preventDefault(); return false; }
+    if(e.ctrlKey && e.key==='p'){ e.preventDefault(); if(examActive)showScreenshotWarn(); return false; }
+    if(e.key==='PrintScreen'){ e.preventDefault(); if(examActive)showScreenshotWarn(); return false; }
+  });
+  // DevTools size detection — disabled on mobile to avoid false positives (address bar changes size)
+  const _isMob=/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||('ontouchstart' in window);
+  let devOpen=false;
+  if(!_isMob){
+    //setInterval(()=>{
+      //if(window.outerWidth-window.innerWidth>160||window.outerHeight-window.innerHeight>160){
+      if(!devOpen){devOpen=true;document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;background:#1a237e;color:#fff;font-size:20px;font-weight:700;flex-direction:column;gap:10px"><div>🔒 Access Denied</div><div style="font-size:13px;font-weight:400;color:rgba(255,255,255,.65)">Close developer tools to use PrepXpert.</div></div>';}
+      } else { if(devOpen) location.reload(); }
+    },800);
+  }*/
+  // Block copy of content
+  document.addEventListener('copy', e=>{ if(examActive){e.clipboardData.setData('text/plain','');e.preventDefault();} });
+  document.addEventListener('cut',  e=>{ if(examActive){e.clipboardData.setData('text/plain','');e.preventDefault();} });
+  // Block drag
+  document.addEventListener('dragstart', e=>e.preventDefault());
+  // Block print
+  window.addEventListener('beforeprint', e=>{ e.preventDefault(); window.stop(); });
+  // Block view-source via URL
+  if(location.href.startsWith('view-source:')) location.replace('about:blank');
+
+
+// --- SHA-256 ---
+async function sha256(msg){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// --- Login brute-force lockout ---
+const LOGIN_MAX = 5;
+const LOGIN_LOCK_MS = 10 * 60 * 1000;
+function getLoginLock(){ try{ return JSON.parse(sessionStorage.getItem('_llock')||'{}'); }catch(e){ return {}; } }
+function saveLoginLock(s){ sessionStorage.setItem('_llock', JSON.stringify(s)); }
+
+function getUsers(){ try{return JSON.parse(localStorage.getItem('mhtcet_users')||'[]');}catch(e){return[];} }
+function saveUsers(u){ localStorage.setItem('mhtcet_users', JSON.stringify(u)); }
+
+async function doLogin(){
+  const lock = getLoginLock();
+  const now  = Date.now();
+  if(lock.until && now < lock.until){
+    const mins = Math.ceil((lock.until-now)/60000);
+    showLErr(`Too many failed attempts. Wait ${mins} min.`);
+    return;
+  }
+  const user = document.getElementById('l-user').value.trim();
+  const pass = document.getElementById('l-pass').value;
+  if(!user||!pass){ showLErr('Enter username and password.'); return; }
+  const users = getUsers();
+  const found = users.find(u=>u.mobile===user||u.name.toLowerCase()===user.toLowerCase());
+  if(!found){
+    const a=(lock.attempts||0)+1;
+    if(a>=LOGIN_MAX) saveLoginLock({attempts:a,until:now+LOGIN_LOCK_MS});
+    else saveLoginLock({attempts:a});
+    showLErr(`Account not found. (${a}/${LOGIN_MAX} attempts)`); return;
+  }
+  const inpHash = await sha256(pass);
+  // Support both old simpleHash and new sha256
+  const match = found.passwordHash===inpHash || found.passwordHash===simpleHash(pass);
+  if(!match){
+    const a=(lock.attempts||0)+1;
+    if(a>=LOGIN_MAX) saveLoginLock({attempts:a,until:now+LOGIN_LOCK_MS});
+    else saveLoginLock({attempts:a});
+    showLErr(`Incorrect password. (${a}/${LOGIN_MAX} attempts)`); return;
+  }
+  // Upgrade hash to SHA-256 if still using old simpleHash
+  if(found.passwordHash===simpleHash(pass) && found.passwordHash!==inpHash){
+    const idx=users.indexOf(found);
+    users[idx].passwordHash=inpHash;
+    saveUsers(users);
+  }
+  saveLoginLock({});
+  currentUser=found; localStorage.setItem('mhtcet_current_user',JSON.stringify(found)); enterApp();
+}
+
+async function doRegister(){
+  const name   = document.getElementById('r-name').value.trim();
+  const mobile = document.getElementById('r-mobile').value.trim();
+  const pass   = document.getElementById('r-pass').value;
+  const pass2  = document.getElementById('r-pass2').value;
+  const terms  = document.getElementById('r-terms').checked;
+  if(!name){ showLErr('Enter your full name.'); return; }
+  if(!/^\d{10}$/.test(mobile)){ showLErr('Enter a valid 10-digit mobile number.'); return; }
+  if(pass.length<8){ showLErr('Password must be at least 8 characters.'); return; }
+  if(!/[A-Z]/.test(pass)){ showLErr('Password must have at least 1 uppercase letter.'); return; }
+  if(!/[0-9]/.test(pass)){ showLErr('Password must have at least 1 number.'); return; }
+  if(pass!==pass2){ showLErr('Passwords do not match.'); return; }
+  if(!terms){ showLErr('Please accept the Terms & Conditions.'); return; }
+  const users=getUsers();
+  if(users.find(u=>u.mobile===mobile)){ showLErr('Mobile already registered. Please sign in.'); return; }
+  const hash = await sha256(pass);
+  const newUser={name,mobile,passwordHash:hash,joinedAt:new Date().toISOString(),scores:[]};
+  users.push(newUser); saveUsers(users);
+  currentUser=newUser; localStorage.setItem('mhtcet_current_user',JSON.stringify(newUser));
+  toast('✅ Account created! Welcome, '+name); enterApp();
+}
+function doLogout(){if(!confirm('Sign out?'))return;currentUser=null;localStorage.removeItem('mhtcet_current_user');showLoginScreen();}
+function enterApp(){
+  document.getElementById('login-scr').style.display='none';
+  document.getElementById('main-hdr').style.display='flex';
+  document.querySelectorAll('.scr').forEach(s=>s.style.display='');
+  if(currentUser)document.getElementById('hdr-user').textContent='👤 '+currentUser.name.split(' ')[0];
+  if(currentUser?.paid) localStorage.setItem('mhtcet_full_access','1');
+  loadData(); renderHero(); renderSubStrip(); renderHome(); showScr('hs');
+}
+function showLoginScreen(){
+  document.getElementById('login-scr').style.display='flex';
+  document.getElementById('main-hdr').style.display='none';
+  document.querySelectorAll('.scr').forEach(s=>{s.classList.remove('on');s.style.display='none';});
+}
+
+// ═══════════════════════ RANKING ═══════════════════════
+function saveScore(testName,stream,score,totalMarks,correct,wrong,skipped){
+  if(!currentUser)return;
+  const users=getUsers(); const idx=users.findIndex(u=>u.mobile===currentUser.mobile); if(idx<0)return;
+  if(!users[idx].scores)users[idx].scores=[];
+  const entry={testName,stream,score,totalMarks,correct,wrong,skipped,accuracy:(correct+wrong)>0?Math.round(correct/(correct+wrong)*100):0,date:new Date().toLocaleDateString('en-IN'),ts:Date.now()};
+  users[idx].scores.push(entry); saveUsers(users);
+  try{const flat=JSON.parse(localStorage.getItem('mhtcet_scores')||'[]');flat.push({mobile:currentUser.mobile,name:currentUser.name,...entry});if(flat.length>2000)flat.splice(0,flat.length-2000);localStorage.setItem('mhtcet_scores',JSON.stringify(flat));}catch(e){}
+  currentUser=users[idx]; localStorage.setItem('mhtcet_current_user',JSON.stringify(currentUser));
+}
+
+function getAllScores(testFilter='all',streamFilter='all'){
+  const users=getUsers(); const rows=[];
+  users.forEach(u=>{ if(!u.scores||!u.scores.length)return; let filtered=u.scores; if(testFilter!=='all')filtered=filtered.filter(s=>s.testName===testFilter); if(streamFilter!=='all')filtered=filtered.filter(s=>s.stream===streamFilter); if(!filtered.length)return; const best=filtered.reduce((a,b)=>b.score>a.score?b:a,filtered[0]); rows.push({name:u.name,mobile:u.mobile,score:best.score,totalMarks:best.totalMarks,testName:best.testName,stream:best.stream,date:best.date,accuracy:best.accuracy}); });
+  rows.sort((a,b)=>b.score!==a.score?b.score-a.score:b.accuracy-a.accuracy); return rows;
+}
+
+function showContactUs(){
+  const contact=settings.contact||{};
+  const wa=(contact.wa||'').trim();
+  const tg=(contact.tg||'').trim();
+  const waMsg=encodeURIComponent((contact.waMsg||'Hi, I need help with PrepXpert').trim());
+  const heading=contact.heading||'Need Help? Contact Us!';
+
+  document.getElementById('contact-heading-title').textContent='💬 '+heading;
+
+  const container=document.getElementById('contact-btns-container');
+  if(!wa && !tg){
+    container.innerHTML=`<div class="contact-not-configured">⏳ Contact details not yet configured by admin.<br><span style="font-size:12px">Please sync tests or check back later.</span></div>`;
+  } else {
+    let html='';
+    if(wa){
+      html+=`<a href="https://wa.me/${wa}?text=${waMsg}" target="_blank" class="contact-btn-wa">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Chat on WhatsApp
+      </a>`;
+    }
+    if(tg){
+      const isNum=/^\d+$/.test(tg);
+      const tgHref=isNum?`https://t.me/+${tg}`:`https://t.me/${tg}`;
+      html+=`<a href="${tgHref}" target="_blank" class="contact-btn-tg">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>
+        Message on Telegram
+      </a>`;
+    }
+    container.innerHTML=html;
+  }
+  showScr('contact-scr');
+}
+
+function showRanking(){
+  const tf=document.getElementById('rank-test-filter'); tf.innerHTML='<option value="all">All Tests</option>';
+  tests.forEach(t=>{const o=document.createElement('option');o.value=t.name;o.textContent=t.name;tf.appendChild(o);});
+  renderRanking(); showScr('rank-scr');
+}
+
+function renderRanking(){
+  const testFilter=document.getElementById('rank-test-filter').value;
+  const streamFilter=document.getElementById('rank-stream-filter').value;
+  const rows=getAllScores(testFilter,streamFilter);
+  const list=document.getElementById('rank-list');
+  if(!rows.length){list.innerHTML='<div class="empty-rank">🏆 No scores yet.<br><span style="font-size:12px">Complete a test to appear on the leaderboard!</span></div>';document.getElementById('my-rank-card').style.display='none';return;}
+  const myIdx=currentUser?rows.findIndex(r=>r.mobile===currentUser.mobile):-1;
+  const myRank=myIdx>=0?myIdx+1:null;
+  if(myRank&&currentUser){
+    const myRow=rows[myIdx];
+    document.getElementById('my-rank-card').style.display='flex';
+    document.getElementById('my-rank-num').textContent='#'+myRank;
+    document.getElementById('my-rank-name').textContent=myRow.name+' (You)';
+    document.getElementById('my-rank-meta').textContent=myRow.testName+' · '+myRow.stream.toUpperCase()+' · '+myRow.date+' · Accuracy: '+myRow.accuracy+'%';
+    document.getElementById('my-rank-score').textContent=myRow.score+'/'+myRow.totalMarks;
+  } else { document.getElementById('my-rank-card').style.display='none'; }
+  const medals=['🥇','🥈','🥉'];
+  let html=`<table class="rank-table"><thead><tr><th>Rank</th><th>Student</th><th>Test</th><th>Score</th><th>Accuracy</th><th>Date</th></tr></thead><tbody>`;
+  rows.slice(0,50).forEach((r,i)=>{
+    const isMe=currentUser&&r.mobile===currentUser.mobile;
+    const rankDisp=i<3?`<span class="rank-badge rank-${i+1}">${medals[i]}</span>`:`<span class="rank-badge rank-n">${i+1}</span>`;
+    const streamTag=r.stream==='neet'?`<span style="background:#fce4ec;color:var(--neet);padding:1px 5px;border-radius:3px;font-size:10px;font-weight:700">NEET</span>`:
+      `<span style="background:#e8eaf6;padding:1px 5px;border-radius:3px;font-size:10px">${r.stream.toUpperCase()}</span>`;
+    html+=`<tr class="${isMe?'my-rank-row':''}"><td>${rankDisp}</td><td><strong>${r.name}</strong>${isMe?' <span style="background:#c8e6c9;color:#1b5e20;padding:1px 6px;border-radius:4px;font-size:10px;font-weight:700">YOU</span>':''}</td><td style="font-size:12px;color:var(--muted)">${r.testName}<br>${streamTag}</td><td><strong style="color:var(--ok)">${r.score}</strong>/${r.totalMarks}</td><td>${r.accuracy}%</td><td style="font-size:12px;color:var(--muted)">${r.date}</td></tr>`;
+  });
+  html+=`</tbody></table>`;
+  list.innerHTML=html;
+}
+
+// ═══════════════════════ UTILS ═══════════════════════
+function closeModal(id){document.getElementById(id).classList.remove('on');}
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function toast(msg){const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),3000);}
+function showScr(id){document.querySelectorAll('.scr').forEach(s=>s.classList.remove('on'));document.getElementById(id)?.classList.add('on');}
+function goHome(){if(timerInt){clearInterval(timerInt);timerInt=null;}document.getElementById('timer').style.display='none';document.getElementById('sub-btn').style.display='none';document.getElementById('home-btn').style.display='inline-flex';loadData();renderHero();renderSubStrip();renderHome();showScr('hs');}
+window.addEventListener('click',e=>{if(e.target.classList.contains('modal-ov'))closeModal(e.target.id);if(e.target.classList.contains('conf-ov'))closeModal(e.target.id);});
+
+// ═══════════════════════ EXAM INTEGRITY ═══════════════════════
+let examActive=false, screenshotWarnings=0, blurCount=0;
+function setExamMode(on){examActive=on;on?document.body.classList.add('exam-active'):document.body.classList.remove('exam-active');}
+function showScreenshotWarn(){screenshotWarnings++;document.getElementById('screenshot-warn').classList.add('show');}
+function dismissScreenshotWarn(){document.getElementById('screenshot-warn').classList.remove('show');}
+document.addEventListener('visibilitychange',()=>{if(examActive&&document.hidden)console.log('tab_switch');});
+window.addEventListener('blur',()=>{if(examActive){blurCount++;if(blurCount>=3)toast('⚠ Switching apps during exam is monitored');}});
+window.addEventListener('focus',()=>{if(examActive)blurCount=Math.max(0,blurCount-1);});
+
+
+// ═══════════════════════ BOOT ═══════════════════════
+// Keep simpleHash for backward compat (existing accounts upgrade on next login)
+function simpleHash(str){ let h=0;for(let i=0;i<str.length;i++)h=(Math.imul(31,h)+str.charCodeAt(i))|0;return h.toString(36); }
+
+function switchLoginTab(tab){
+  document.getElementById('tab-login').classList.toggle('on',tab==='login');
+  document.getElementById('tab-register').classList.toggle('on',tab==='register');
+  document.getElementById('login-form').style.display=tab==='login'?'':'none';
+  document.getElementById('register-form').style.display=tab==='register'?'':'none';
+  document.getElementById('lerr').style.display='none';
+}
+function showLErr(msg){const el=document.getElementById('lerr');el.textContent=msg;el.style.display='block';}
+
+const savedUser=localStorage.getItem('mhtcet_current_user');
+if(savedUser){try{currentUser=JSON.parse(savedUser);enterApp();}catch(e){showLoginScreen();}}
+else{showLoginScreen();}
+// ============ AUTO-SYNC WITH ADMIN ============
+
+// Listen for storage changes (when admin saves data)
+window.addEventListener('storage', function(e) {
+    if (e.key === 'mhtcet_student_data' || 
+        e.key === 'mhtcet_admin_data' ||
+        e.key === 'mhtcet_full_access') {
+        
+        console.log('🔄 Admin updated data. Syncing...');
+        
+        // Show sync notification
+        showSyncNotification();
+        
+        // Reload data
+        loadData();
+        
+        // Refresh the current view
+        if (document.getElementById('hs').classList.contains('on')) {
+            renderHome();
+        }
+        
+        // Refresh tests list
+        if (typeof renderHome === 'function') {
+            renderHome();
+        }
+        
+        // Refresh rankings if open
+        if (document.getElementById('rank-scr').classList.contains('on')) {
+            if (typeof renderRanking === 'function') renderRanking();
+        }
+    }
+});
+
+// Show a nice sync notification
+function showSyncNotification() {
+    // Create notification element
+    let notif = document.getElementById('sync-notification');
+    if (!notif) {
+        notif = document.createElement('div');
+        notif.id = 'sync-notification';
+        notif.style.cssText = `
+            position: fixed;
+            top: 70px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            z-index: 9999;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s ease;
+            font-family: 'Nunito', sans-serif;
+        `;
+        document.body.appendChild(notif);
+        
+        // Add animation style
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; }
+                to { opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    notif.textContent = '🔄 New tests added! Refreshing...';
+    notif.style.display = 'block';
+    
+    setTimeout(() => {
+        notif.style.animation = 'fadeOut 0.3s ease';
+        setTimeout(() => {
+            notif.style.display = 'none';
+            notif.style.animation = 'slideIn 0.3s ease';
+        }, 300);
+    }, 2000);
+}
+
+// Manual sync button - Add this to your home page
+function addSyncButton() {
+    const homeBody = document.querySelector('.home-body');
+    if (homeBody && !document.getElementById('manual-sync-btn')) {
+        const syncBtn = document.createElement('button');
+        syncBtn.id = 'manual-sync-btn';
+        syncBtn.innerHTML = '🔄 Sync Latest Tests';
+        syncBtn.className = 'btn btn-ghost btn-sm';
+        syncBtn.style.marginBottom = '15px';
+        syncBtn.onclick = () => {
+            loadData();
+            renderHome();
+            showSyncNotification();
+            toast('✅ Synced with latest data!');
+        };
+        
+        // Add after stream tabs
+        const streamTabs = document.querySelector('.stream-tabs');
+        if (streamTabs && streamTabs.nextSibling) {
+            streamTabs.parentNode.insertBefore(syncBtn, streamTabs.nextSibling);
+        }
+    }
+}
+
+// Call this after renderHome
+const originalRenderHome = renderHome;
+renderHome = function() {
+    originalRenderHome();
+    setTimeout(addSyncButton, 100);
+};
+
+// Also sync when page becomes visible (user comes back to tab)
+document.addEventListener('visibilitychange', function() {
+    if (!document.hidden) {
+        console.log('🔄 Tab visible - checking for updates');
+        loadData();
+        if (typeof renderHome === 'function' && document.getElementById('hs').classList.contains('on')) {
+            renderHome();
+        }
+    }
+});
+
+// Initial sync button add
+setTimeout(addSyncButton, 1000);
+
+// ═══════════════════ STUDENT DASHBOARD ═══════════════════
+let sdAllResults = [];
+let sdCurrentTab = 'PCM';
+let sdCurrentStudent = null;
+
+const API = "https://prepxpert-backend.onrender.com";
+
+function showStudentDash() {
+  showScr('student-scr');
+
+  // Load results if not already loaded
+  if (!sdAllResults.length) {
+    const lbBody = document.getElementById('sd-lboard-body');
+    if (lbBody) lbBody.innerHTML = '<div class="sd-empty">⏳ Connecting to server…</div>';
+
+    fetchWithRetry(`${API}/results`)
+      .then(r => r.json())
+      .then(data => {
+        sdAllResults = data;
+        sdRenderLeaderboard('PCM');
+
+        // Pre-fill name
+        if (currentUser && currentUser.name) {
+          document.getElementById('sd-name-input').value = currentUser.name;
+          sdFindStudent();
+        }
+      })
+      .catch(() => {
+        document.getElementById('sd-lboard-body').innerHTML =
+          '<div class="sd-empty">⚠️ Could not connect to server. The backend may still be waking up — please wait 30 seconds and try again.</div>';
+      });
+
+  } else {
+    sdRenderLeaderboard(sdCurrentTab);
+
+    if (currentUser && currentUser.name && !sdCurrentStudent) {
+      document.getElementById('sd-name-input').value = currentUser.name;
+      sdFindStudent();
+    }
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  const inp = document.getElementById('sd-name-input');
+  if (inp) inp.addEventListener('keydown', e => {
+    if (e.key === 'Enter') sdFindStudent();
+  });
+});
+
+function sdFindStudent() {
+  const query = (document.getElementById('sd-name-input').value || '').trim().toLowerCase();
+  const card  = document.getElementById('sd-result-card');
+  const nf    = document.getElementById('sd-not-found');
+  card.className = 'sd-result-card';
+  nf.className   = 'sd-not-found';
+  if (!query) return;
+
+  const match = sdAllResults.find(r => r.name.toLowerCase() === query)
+             || sdAllResults.find(r => r.name.toLowerCase().includes(query));
+
+  if (!match) {
+    nf.className = 'sd-not-found show';
+    sdCurrentStudent = null;
+    sdRenderLeaderboard(sdCurrentTab);
+    return;
+  }
+
+  sdCurrentStudent = match;
+  const sameType = sdAllResults
+    .filter(r => (r.type||'').toUpperCase() === (match.type||'').toUpperCase())
+    .sort((a, b) => b.score - a.score);
+  const rank = sameType.findIndex(r => r.name === match.name) + 1;
+  const pct  = match.total ? Math.round((match.score / match.total) * 100) : 0;
+
+  document.getElementById('sd-rc-name').textContent  = match.name;
+  document.getElementById('sd-rc-type').textContent  = '📋 ' + (match.type || '—') + ' Exam';
+  document.getElementById('sd-rc-rank').textContent  = '#' + rank;
+  document.getElementById('sd-rc-score').textContent = match.score + '/' + match.total;
+  document.getElementById('sd-rc-pct').textContent   = pct + '%';
+  document.getElementById('sd-rc-total').textContent = sameType.length;
+
+  const t = (match.type || '').toUpperCase();
+  const colourMap = { NEET: 'neet-card', JEE: 'jee-card', PCB: 'pcb-card' };
+  card.className = 'sd-result-card show ' + (colourMap[t] || '');
+
+  // Switch tab to student's exam
+  const tabs = document.querySelectorAll('.sd-tab');
+  const tabMap = { PCM: 0, PCB: 1, NEET: 2, JEE: 3 };
+  sdSwitchTab(t, tabs[tabMap[t] || 0]);
+}
+
+function sdSwitchTab(type, btn) {
+  sdCurrentTab = type;
+  document.querySelectorAll('.sd-tab').forEach(b => b.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  sdRenderLeaderboard(type);
+}
+
+function sdRenderLeaderboard(type) {
+  const el = document.getElementById('sd-lboard-body');
+  const filtered = sdAllResults
+    .filter(r => (r.type||'').toUpperCase() === type)
+    .sort((a, b) => b.score - a.score);
+
+  if (!filtered.length) {
+    el.innerHTML = '<div class="sd-empty">No results yet for ' + type + '</div>';
+    return;
+  }
+
+  const rows = filtered.map((s, i) => {
+    const rank = i + 1;
+    const pct  = s.total ? Math.round((s.score / s.total) * 100) : 0;
+    const isMe = sdCurrentStudent
+                 && s.name === sdCurrentStudent.name
+                 && (s.type||'').toUpperCase() === (sdCurrentStudent.type||'').toUpperCase();
+
+    const rc = rank === 1 ? 'sdr1' : rank === 2 ? 'sdr2' : rank === 3 ? 'sdr3' : 'sdrn';
+    const medal = rank === 1 ? '🥇 ' : rank === 2 ? '🥈 ' : rank === 3 ? '🥉 ' : '';
+    return `<tr class="${isMe ? 'me' : ''}">
+      <td><span class="sd-rbadge ${rc}">${rank}</span></td>
+      <td>${medal}${s.name || 'Unknown'}${isMe ? '<span class="sd-you">YOU</span>' : ''}</td>
+      <td><strong>${s.score}/${s.total}</strong>
+        <div class="sd-pbar"><div class="sd-pfill" style="width:${pct}%"></div></div>
+      </td>
+      <td>${pct}%</td>
+      <td style="font-size:11px;color:#9ca3af">${s.date || '—'}</td>
+    </tr>`;
+  }).join('');
+
+  el.innerHTML = `<table class="sd-table">
+    <thead><tr><th>Rank</th><th>Name</th><th>Score</th><th>%</th><th>Date</th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+
+  setTimeout(() => {
+    const hl = el.querySelector('.me');
+    if (hl) hl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, 100);
+}
+// ═════════════════════════════════════════════════════════
+</script>
+</body>
+</html>
