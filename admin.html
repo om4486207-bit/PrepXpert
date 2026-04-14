@@ -1,0 +1,1860 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx/dist/xlsx.full.min.js"></script>
+<title>PrepXpert Admin — Bulk Import (PCM/PCB/NEET)</title>
+<style>body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background: #f5f7fb;
+}
+
+/* Tabs */
+.tab-buttons {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.tab-buttons button {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 12px;
+  background: #eef2f7;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.tab-buttons button:hover {
+  background: #4caf50;
+  color: white;
+  transform: translateY(-2px);
+}
+
+.active-tab {
+  background: linear-gradient(135deg, #4caf50, #2e7d32) !important;
+  color: white !important;
+}
+
+/* Card */
+.table-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 16px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+}
+
+/* Table */
+.modern-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+}
+
+/* Header */
+.modern-table th {
+  text-align: left;
+  padding: 10px;
+  font-weight: 600;
+  color: #555;
+}
+
+/* Rows */
+.modern-table td {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+}
+
+/* Rank badges */
+.rank-badge {
+  padding: 6px 12px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+}
+
+/* Top 3 colors */
+.rank-1 { background: gold; color: black; }
+.rank-2 { background: silver; color: black; }
+.rank-3 { background: #cd7f32; }
+
+/* Others */
+.rank-other { background: #4caf50; }
+
+/* Score */
+.score {
+  font-weight: 600;
+  color: #2e7d32;
+}</style>
+
+<style>.tab-buttons {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+.tab-buttons button {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #f1f3f8;
+  cursor: pointer;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.tab-buttons button:hover {
+  background: #4caf50;
+  color: white;
+}
+
+.active-tab {
+  background: #4caf50 !important;
+  color: white !important;
+}
+
+.rank-card {
+  background: white;
+  padding: 15px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+}
+
+.modern-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.modern-table th {
+  background: #f4f6fb;
+  padding: 10px;
+  text-align: left;
+}
+
+.modern-table td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.modern-table tr:hover {
+  background: #f9fafc;
+}</style>
+
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--pri:#1a237e;--pri2:#283593;--acc:#e65100;--ok:#1b5e20;--err:#b71c1c;--neet:#880e4f;--neet2:#ad1457;--jee:#e65100;--jee2:#bf360c;--bg:#f0f2f7;--card:#fff;--txt:#111827;--muted:#6b7280;--bdr:#e2e6f0;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--txt);min-height:100vh;letter-spacing:-0.01em;}
+#admin-gate{position:fixed;inset:0;background:linear-gradient(135deg,#0d1b6e,#1a237e,#283593);display:flex;align-items:center;justify-content:center;z-index:9999;}
+.agate-card{background:#fff;border-radius:20px;padding:40px 36px;width:380px;box-shadow:0 32px 80px rgba(0,0,0,.45);text-align:center;}
+.agate-card h1{font-family:'Space Grotesk',sans-serif;font-size:26px;font-weight:700;color:var(--pri);margin-bottom:4px;}
+.agate-card h1 span{color:#ffa000;}
+.agate-card p{font-size:13px;color:var(--muted);margin-bottom:18px;}
+.agate-card input{width:100%;padding:13px 14px;border:1.5px solid var(--bdr);border-radius:10px;font-size:15px;outline:none;text-align:center;margin-bottom:12px;}
+.agate-card input:focus{border-color:var(--pri);}
+.agate-err{color:var(--err);font-size:12px;margin-bottom:12px;min-height:18px;}
+.agate-hint{font-size:11px;color:var(--muted);margin-top:8px;}
+.agate-card button{width:100%;padding:13px;background:var(--pri);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;}
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:260px;background:linear-gradient(180deg,#0d1b6e,#1a237e,#283593);color:#fff;position:fixed;height:100vh;overflow-y:auto;z-index:50;}
+.sb-logo{padding:22px 20px;border-bottom:1px solid rgba(255,255,255,.12);}
+.sb-logo h1{font-family:'Space Grotesk',sans-serif;font-size:20px;}
+.sb-logo h1 span{color:#ffa000;}
+.sb-logo p{font-size:11px;opacity:.6;margin-top:3px;}
+.sb-nav{padding:12px 0;}
+.nav-section{font-size:10px;font-weight:700;letter-spacing:1.5px;color:rgba(255,255,255,.35);padding:12px 20px 5px;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:13px;font-weight:600;color:rgba(255,255,255,.7);cursor:pointer;border-left:3px solid transparent;transition:all .15s;}
+.nav-item:hover{background:rgba(255,255,255,.08);color:#fff;}
+.nav-item.on{background:rgba(255,255,255,.12);color:#fff;border-left-color:#ffa000;}
+.nav-item.neet-nav{color:#f48fb1;}
+.nav-item.neet-nav.on{border-left-color:#f48fb1;}
+.main{margin-left:260px;flex:1;}
+.topbar{background:var(--card);border-bottom:1px solid var(--bdr);padding:0 28px;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:40;}
+.topbar h2{font-family:'Space Grotesk',sans-serif;font-size:19px;color:var(--pri);}
+.topbar-right{display:flex;gap:8px;align-items:center;}
+.content{padding:24px 28px;}
+.page{display:none;}.page.on{display:block;}
+.card{background:var(--card);border-radius:12px;border:1px solid var(--bdr);padding:22px 24px;margin-bottom:20px;}
+.card-title{font-family:'Space Grotesk',sans-serif;font-size:17px;font-weight:700;color:var(--pri);margin-bottom:16px;display:flex;justify-content:space-between;flex-wrap:wrap;align-items:center;gap:8px;}
+.card-title.neet{color:var(--neet);}
+.data-table{width:100%;border-collapse:collapse;font-size:13px;}
+.data-table th{padding:10px 14px;text-align:left;background:#f3f4ff;color:var(--pri);border-bottom:2px solid var(--bdr);}
+.data-table td{padding:10px 14px;border-bottom:1px solid var(--bdr);vertical-align:middle;}
+.frow{display:grid;gap:14px;margin-bottom:14px;}
+.frow.c2{grid-template-columns:1fr 1fr;}
+.frow.c3{grid-template-columns:1fr 1fr 1fr;}
+.fgrp{display:flex;flex-direction:column;gap:5px;}
+.fgrp label{font-size:12px;font-weight:700;color:var(--muted);letter-spacing:.3px;}
+.fgrp input,.fgrp select,.fgrp textarea{padding:9px 12px;border:1.5px solid var(--bdr);border-radius:8px;font-size:13px;outline:none;font-family:'Plus Jakarta Sans',sans-serif;}
+.fgrp input:focus,.fgrp select:focus,.fgrp textarea:focus{border-color:var(--pri);}
+.fgrp textarea{min-height:80px;resize:vertical;}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:8px;font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;transition:all .15s;}
+.btn-pri{background:var(--pri);color:#fff;}.btn-pri:hover{background:var(--pri2);}
+.btn-ok{background:var(--ok);color:#fff;}
+.btn-err{background:var(--err);color:#fff;}
+.btn-neet{background:var(--neet);color:#fff;}.btn-neet:hover{background:var(--neet2);}
+.btn-ghost{background:transparent;color:var(--pri);border:1.5px solid var(--bdr);}
+.btn-ghost:hover{background:#f0f2ff;}
+.btn-sm{padding:6px 12px;font-size:12px;}
+.btn-xs{padding:4px 9px;font-size:11px;}
+.badge-ok{background:#e8f5e9;color:var(--ok);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;}
+.badge-err{background:#ffebee;color:var(--err);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;}
+.badge-neet{background:#fce4ec;color:var(--neet);padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;}
+.bulk-section{background:#f8f9ff;border-radius:12px;padding:20px;margin-bottom:20px;border:1px solid #c5cae9;}
+.bulk-section-title{font-size:15px;font-weight:700;margin-bottom:12px;padding-bottom:8px;border-bottom:2px solid;}
+.section-phy .bulk-section-title{border-bottom-color:#1565c0;color:#1565c0;}
+.section-che .bulk-section-title{border-bottom-color:#6a1b9a;color:#6a1b9a;}
+.section-mat .bulk-section-title{border-bottom-color:#1b5e20;color:#1b5e20;}
+.section-bio .bulk-section-title{border-bottom-color:#006064;color:#006064;}
+.section-neet-bio .bulk-section-title{border-bottom-color:#880e4f;color:#880e4f;}
+.bulk-section textarea{width:100%;padding:10px 12px;border:1.5px solid var(--bdr);border-radius:8px;font-size:12px;font-family:monospace;outline:none;resize:vertical;margin-bottom:8px;}
+.q-preview{background:#f5f5f5;border-radius:8px;padding:12px;margin-top:15px;max-height:400px;overflow-y:auto;}
+.q-preview-item{padding:10px;border-bottom:1px solid #ddd;margin-bottom:8px;border-radius:6px;}
+.q-preview-item.success{background:#e8f5e9;border-left:3px solid var(--ok);}
+.q-preview-item .sol-preview{background:#fff8e1;border-left:3px solid #ffa000;padding:5px 8px;border-radius:0 4px 4px 0;margin-top:5px;font-size:11px;color:#6d4c00;}
+.q-item-card{background:#fff;border:1px solid var(--bdr);border-radius:10px;padding:15px;margin-bottom:15px;}
+.q-text{font-weight:600;margin-bottom:10px;line-height:1.5;font-size:14px;}
+.q-options{font-size:12px;margin:8px 0;color:var(--muted);}
+.q-options span{display:inline-block;margin-right:12px;margin-bottom:4px;}
+.q-answer{color:var(--ok);font-weight:700;margin:5px 0;font-size:13px;}
+.q-solution{background:#fff8e1;border-left:3px solid #ffa000;padding:7px 10px;border-radius:0 6px 6px 0;font-size:12px;color:#5d4037;margin-top:4px;line-height:1.6;}
+.q-image{max-width:100%;max-height:180px;margin:10px 0;border-radius:8px;border:1px solid #ddd;display:block;}
+.img-upload-area{border:1px dashed #c5cae9;border-radius:8px;padding:10px;margin-top:10px;background:#f8f9ff;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.img-upload-btn{padding:6px 12px;border:1px solid #c5cae9;background:#fff;border-radius:6px;font-size:12px;cursor:pointer;font-family:'Plus Jakarta Sans',sans-serif;}
+.toast{position:fixed;bottom:22px;right:22px;background:#1a237e;color:#fff;padding:11px 20px;border-radius:8px;z-index:9999;animation:tIn .3s;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.2);}
+@keyframes tIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.stat-card{background:#f0f2ff;border-radius:12px;padding:14px;text-align:center;}
+.stat-card.neet{background:#fce4ec;}
+.stat-val{font-size:28px;font-weight:800;color:var(--pri);}
+.stat-card.neet .stat-val{color:var(--neet);}
+.stat-lbl{font-size:12px;color:var(--muted);margin-top:2px;}
+.modal-ov{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;align-items:center;justify-content:center;}
+.modal-ov.on{display:flex;}
+.modal{background:#fff;border-radius:16px;padding:28px;width:90%;max-width:500px;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.3);}
+.modal h2{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700;color:var(--pri);margin-bottom:18px;}
+.modal-actions{display:flex;gap:8px;margin-top:18px;}
+.toggle{position:relative;display:inline-block;width:38px;height:20px;}
+.toggle input{opacity:0;width:0;height:0;}
+.toggle-slider{position:absolute;inset:0;background:#ccc;border-radius:20px;cursor:pointer;transition:.3s;}
+.toggle-slider::before{content:'';position:absolute;height:14px;width:14px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.3s;}
+.toggle input:checked+.toggle-slider{background:var(--ok);}
+.toggle input:checked+.toggle-slider::before{transform:translateX(18px);}
+.sync-badge{font-size:11px;padding:4px 10px;border-radius:6px;border:1px solid #a5d6a7;background:#e8f5e9;color:#2e7d32;}
+.parser-hint{background:#fffde7;border:1px solid #ffe082;border-radius:8px;padding:12px 14px;font-size:12px;color:#5d4037;margin-bottom:14px;line-height:1.8;}
+.parser-hint code{background:#fff8e1;padding:1px 4px;border-radius:3px;font-family:monospace;font-size:11px;}
+.neet-info-box{background:#fce4ec;border:1px solid #f48fb1;border-radius:10px;padding:14px 18px;margin-bottom:16px;}
+.neet-info-box h4{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:var(--neet);margin-bottom:8px;}
+.neet-info-box table{font-size:12px;width:100%;border-collapse:collapse;}
+.neet-info-box table td{padding:4px 8px;border-bottom:1px solid #f8bbd0;}
+.neet-info-box table td:first-child{font-weight:700;color:var(--neet);width:100px;}
+.section-jee .bulk-section-title{border-bottom-color:#e65100;color:#e65100;}
+.badge-jee{background:#fff3e0;color:#e65100;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700;}
+.btn-jee{background:#e65100;color:#fff;}.btn-jee:hover{background:#bf360c;}
+.nav-item.jee-nav{color:#ffb74d;}
+.nav-item.jee-nav.on{border-left-color:#ffb74d;}
+.card-title.jee{color:#e65100;}
+.jee-info-box{background:#fff3e0;border:1px solid #ffcc80;border-radius:10px;padding:14px 18px;margin-bottom:16px;}
+.jee-info-box h4{font-family:'Space Grotesk',sans-serif;font-size:15px;font-weight:700;color:#e65100;margin-bottom:8px;}
+.jee-info-box table{font-size:12px;width:100%;border-collapse:collapse;}
+.jee-info-box table td{padding:4px 8px;border-bottom:1px solid #ffe082;}
+.jee-info-box table td:first-child{font-weight:700;color:#e65100;width:140px;}
+.num-input-preview{background:#fffde7;border:1px solid #ffe082;border-radius:6px;padding:6px 10px;font-size:12px;color:#5d4037;margin-top:4px;}
+.sb-bottom{padding:14px 20px;font-size:11px;color:rgba(255,255,255,.35);border-top:1px solid rgba(255,255,255,.08);}
+</style>
+</head>
+<body>
+<div id="admin-gate">
+  <div class="agate-card">
+    <h1>Prep<span>Xpert</span> Admin</h1>
+    <p>Authorized access only</p>
+    <input type="password" id="ag-pass" placeholder="Enter admin password" autocomplete="off" onkeydown="if(event.key==='Enter')verifyAdminPass()">
+    <div class="agate-err" id="ag-err"></div>
+    <div id="ag-lockout" style="display:none;color:#b71c1c;font-size:12px;margin-bottom:8px;font-weight:700;"></div>
+    <button id="ag-btn" onclick="verifyAdminPass()">🔐 Unlock Admin</button>
+  </div>
+</div>
+
+<!-- EDIT TOPICS MODAL -->
+<div class="modal-ov" id="edit-topics-modal"><div class="modal"><h2>📚 Edit Topics for Test</h2>
+  <div id="et-test-name" style="font-size:13px;color:var(--muted);margin-bottom:16px;"></div>
+  <div style="background:#f0f2ff;border-radius:10px;padding:14px;border:1px solid #c5cae9;">
+    <div class="fgrp" style="margin-bottom:10px"><label id="et-phy-lbl">⚡ Physics Topics</label><input type="text" id="et-phy-topics" placeholder="e.g. Kinematics, Laws of Motion"></div>
+    <div class="fgrp" style="margin-bottom:10px"><label id="et-che-lbl">⚗️ Chemistry Topics</label><input type="text" id="et-che-topics" placeholder="e.g. Atomic Structure, Equilibrium"></div>
+    <div class="fgrp"><label id="et-third-lbl">📐 Third Subject Topics</label><input type="text" id="et-third-topics" placeholder="e.g. Algebra, Calculus"></div>
+  </div>
+  <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal('edit-topics-modal')">Cancel</button><button class="btn btn-pri" onclick="saveTopics()">Save Topics</button></div>
+</div></div>
+
+<!-- NEW TEST MODAL -->
+<div class="modal-ov" id="new-test-modal"><div class="modal"><h2>➕ Add New Test</h2>
+  <div class="fgrp" style="margin-bottom:14px"><label>Test Name *</label><input type="text" id="nt-name" placeholder="e.g. NEET 2025 Mock Test 1"></div>
+  <div class="frow c2">
+    <div class="fgrp"><label>Stream / Exam</label>
+      <select id="nt-stream" onchange="updateNewTestModal()">
+        <option value="pcm">PCM (Phy+Chem+Maths)</option>
+        <option value="pcb">PCB (Phy+Chem+Biology)</option>
+        <option value="neet">NEET (45P+45C+90Bio, -1 marking)</option>
+        <option value="jee">JEE (30P+30C+30M, last 5 numerical)</option>
+      </select>
+    </div>
+    <div class="fgrp"><label>Access</label><select id="nt-type"><option value="1">Free</option><option value="0">Paid</option></select></div>
+  </div>
+  <div id="nt-stream-info" style="font-size:12px;color:var(--muted);background:#f8f9ff;padding:8px 12px;border-radius:6px;margin-bottom:12px;"></div>
+  <div class="fgrp"><label>Description</label><input type="text" id="nt-desc" placeholder="Short description"></div>
+  <div style="background:#f0f2ff;border-radius:10px;padding:14px;margin-top:10px;border:1px solid #c5cae9;">
+    <div style="font-size:12px;font-weight:700;color:var(--pri);margin-bottom:10px;letter-spacing:.3px;">📚 TOPICS COVERED (shown to students on test card)</div>
+    <div class="fgrp" style="margin-bottom:10px"><label id="nt-phy-lbl">⚡ Physics Topics</label><input type="text" id="nt-phy-topics" placeholder="e.g. Kinematics, Laws of Motion, Work &amp; Energy"></div>
+    <div class="fgrp" style="margin-bottom:10px"><label id="nt-che-lbl">⚗️ Chemistry Topics</label><input type="text" id="nt-che-topics" placeholder="e.g. Atomic Structure, Chemical Bonding, Equilibrium"></div>
+    <div class="fgrp"><label id="nt-third-lbl">📐 Mathematics Topics</label><input type="text" id="nt-third-topics" placeholder="e.g. Algebra, Calculus, Trigonometry"></div>
+  </div>
+  <div class="modal-actions"><button class="btn btn-ghost" onclick="closeModal('new-test-modal')">Cancel</button><button class="btn btn-pri" onclick="addNewTest()">Add Test</button></div>
+</div></div>
+
+<div class="layout" id="admin-layout" style="display:none">
+<div class="sidebar">
+  <div class="sb-logo"><h1>PrepXpert</h1><p>Admin Panel v9.0</p></div>
+  <div class="sb-nav">
+    <div class="nav-section">MAIN</div>
+    <div class="nav-item on" onclick="navTo('dashboard',this)">📊 Dashboard</div>
+    <div class="nav-section">PCM / PCB IMPORT</div>
+    <div class="nav-item" onclick="navTo('bulk150',this)">📦 PCM/PCB Bulk Import</div>
+    <div class="nav-section">JEE IMPORT</div>
+    <div class="nav-item jee-nav" onclick="navTo('bulkjee',this)">🔬 JEE Bulk Import</div>
+    <div class="nav-section">NEET IMPORT</div>
+    <div class="nav-item neet-nav" onclick="navTo('bulkneet',this)">🧬 NEET Bulk Import</div>
+    <div class="nav-section">MANAGE</div>
+    <div class="nav-item" onclick="navTo('tests',this)">📋 Manage Tests</div>
+    <div class="nav-item" onclick="navTo('questions',this)">❓ Question Bank + Images</div>
+    <div class="nav-item" onclick="navTo('anskey',this)">🔑 Answer Key</div>
+    <div class="nav-section">USERS</div>
+    <div class="nav-item" onclick="navTo('students',this)">👥 Students & Ranking</div>
+    
+    <div class="nav-section">CONFIG</div>
+    <div class="nav-item" onclick="navTo('settings',this)">⚙ Settings</div>
+  </div>
+  <div class="sb-bottom">v9.0 · PCM + PCB + NEET + JEE</div>
+</div>
+
+<div class="main">
+  <div class="topbar">
+    <h2 id="page-title">Dashboard</h2>
+    <div class="topbar-right">
+      <span id="last-saved" style="font-size:11px;color:var(--muted)">—</span>
+      <span class="sync-badge" id="sync-status">● Loading</span>
+      <button class="btn btn-ok btn-sm" onclick="saveAll()">💾 Save & Sync</button>
+      <button class="btn btn-ghost btn-sm" onclick="exportData()">⬇ Export</button>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="page on" id="page-dashboard">
+      <div class="card"><div class="card-title">📊 Quick Stats</div><div id="stat-row" style="display:grid;grid-template-columns:repeat(6,1fr);gap:14px;"></div></div>
+      <div class="card"><div class="card-title">Tests Overview</div><table class="data-table" id="dash-tests-table"></table></div>
+    </div>
+
+    <!-- PCM/PCB BULK IMPORT -->
+    <div class="page" id="page-bulk150">
+      <div class="card">
+        <div class="card-title">📦 PCM/PCB Bulk Import</div>
+        <div class="parser-hint">
+          <strong>📋 Paste Format (with Solution):</strong><br>
+          <code>Q1. Question text here?</code><br>
+          <code>A) Option A</code> &nbsp; <code>B) Option B</code> &nbsp; <code>C) Option C</code> &nbsp; <code>D) Option D</code><br>
+          <code>Answer : A (Solution goes here — explanation of why A is correct)</code><br>
+          <span style="color:#7b6000">💡 Everything after <strong>(</strong> in the Answer line becomes the solution shown to students after submission.</span>
+        </div>
+        <div class="frow c2">
+          <div class="fgrp"><label>Select Test</label><select id="bulk-test" onchange="updateBulkDynamic()"></select></div>
+          <div class="fgrp"><label>Stream Info</label><input id="bulk-stream-display" readonly style="background:#f8f9ff;"></div>
+        </div>
+        <div class="bulk-section section-phy">
+          <div class="bulk-section-title">🔬 PHYSICS — 50 Questions</div>
+          <textarea id="bulk-phy" rows="8" placeholder="Q1. What is Newton's first law?&#10;A) Law of inertia&#10;B) Law of acceleration&#10;C) Law of action-reaction&#10;D) Law of gravitation&#10;Answer : A (An object at rest stays at rest unless acted upon by a force — this is inertia.)"></textarea>
+          <div><button class="btn btn-sm btn-ghost" onclick="previewSection('phy')">👁 Preview</button><span id="phy-count" style="margin-left:12px;font-size:12px;"></span></div>
+        </div>
+        <div class="bulk-section section-che">
+          <div class="bulk-section-title">⚗️ CHEMISTRY — 50 Questions</div>
+          <textarea id="bulk-che" rows="8" placeholder="Q1. Which element has atomic number 6?&#10;A) Nitrogen&#10;B) Carbon&#10;C) Oxygen&#10;D) Boron&#10;Answer : B (Carbon has atomic number 6 and is the basis of organic chemistry.)"></textarea>
+          <div><button class="btn btn-sm btn-ghost" onclick="previewSection('che')">👁 Preview</button><span id="che-count" style="margin-left:12px;font-size:12px;"></span></div>
+        </div>
+        <div class="bulk-section section-mat">
+          <div class="bulk-section-title" id="third-section-title">📐 MATHEMATICS — 50 Questions</div>
+          <textarea id="bulk-mat" rows="8" placeholder="Q1. Integrate ∫x²dx&#10;A) x³+C&#10;B) x³/3+C&#10;C) 2x+C&#10;D) x²/2+C&#10;Answer : B (By power rule: ∫xⁿdx = xⁿ⁺¹/(n+1)+C, so ∫x²dx = x³/3+C.)"></textarea>
+          <div><button class="btn btn-sm btn-ghost" onclick="previewSection('mat')">👁 Preview</button><span id="mat-count" style="margin-left:12px;font-size:12px;"></span></div>
+        </div>
+        <div class="frow c2" style="margin-top:8px">
+          <div class="fgrp"><label>Import Mode</label><select id="bulk-replace"><option value="0">Append to existing</option><option value="1">Replace all questions</option></select></div>
+          <div><button class="btn btn-pri" style="width:100%" onclick="importAllSections()">📥 Import All Sections</button></div>
+        </div>
+        <div id="bulk-preview" class="q-preview" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- NEET BULK IMPORT -->
+    <div class="page" id="page-bulkneet">
+      <div class="card">
+        <div class="card-title neet">🧬 NEET Bulk Import</div>
+        <div class="neet-info-box">
+          <h4>📌 NEET Exam Pattern</h4>
+          <table>
+            <tr><td>Physics</td><td>45 Questions × +4 marks = 180 marks</td></tr>
+            <tr><td>Chemistry</td><td>45 Questions × +4 marks = 180 marks</td></tr>
+            <tr><td>Biology</td><td>90 Questions × +4 marks = 360 marks</td></tr>
+            <tr><td>Wrong Answer</td><td style="color:var(--err);font-weight:700">−1 mark (Negative Marking)</td></tr>
+            <tr><td>Total</td><td><strong>180 Questions · 720 Marks</strong></td></tr>
+          </table>
+        </div>
+        <div class="parser-hint">
+          <strong>📋 NEET Paste Format (with Solution):</strong><br>
+          <code>Q1. Question text here?</code><br>
+          <code>A) Option A</code> &nbsp; <code>B) Option B</code> &nbsp; <code>C) Option C</code> &nbsp; <code>D) Option D</code><br>
+          <code>Answer : A (Explanation of the correct answer goes here.)</code><br>
+          <span style="color:#7b6000">💡 Solution text after <strong>(</strong> is shown to students after submission. Wrong answers deduct 1 mark.</span>
+        </div>
+        <div class="frow c2">
+          <div class="fgrp"><label>Select NEET Test</label><select id="neet-bulk-test"></select></div>
+          <div class="fgrp"><label>Exam Info</label><input value="NEET: 45 Physics + 45 Chemistry + 90 Biology" readonly style="background:#fce4ec;color:var(--neet);font-weight:700;"></div>
+        </div>
+
+        <div class="bulk-section section-phy">
+          <div class="bulk-section-title">🔬 PHYSICS — 45 Questions (+4 / −1)</div>
+          <textarea id="neet-bulk-phy" rows="8" placeholder="Q1. A body of mass 2 kg is moving with velocity 10 m/s. Its kinetic energy is?&#10;A) 50 J&#10;B) 100 J&#10;C) 200 J&#10;D) 20 J&#10;Answer : B (KE = ½mv² = ½ × 2 × 10² = 100 J)"></textarea>
+          <div><button class="btn btn-sm btn-ghost" onclick="previewNeetSection('phy')">👁 Preview</button><span id="neet-phy-count" style="margin-left:12px;font-size:12px;"></span></div>
+        </div>
+
+        <div class="bulk-section section-che">
+          <div class="bulk-section-title">⚗️ CHEMISTRY — 45 Questions (+4 / −1)</div>
+          <textarea id="neet-bulk-che" rows="8" placeholder="Q1. The hybridisation of carbon in CH₄ is?&#10;A) sp&#10;B) sp²&#10;C) sp³&#10;D) sp³d&#10;Answer : C (Methane has 4 bond pairs, no lone pairs → sp³ hybridisation, tetrahedral geometry.)"></textarea>
+          <div><button class="btn btn-sm btn-ghost" onclick="previewNeetSection('che')">👁 Preview</button><span id="neet-che-count" style="margin-left:12px;font-size:12px;"></span></div>
+        </div>
+
+        <div class="bulk-section section-neet-bio">
+          <div class="bulk-section-title">🧬 BIOLOGY — 90 Questions (+4 / −1)</div>
+          <textarea id="neet-bulk-bio" rows="10" placeholder="Q1. Which organelle is called the powerhouse of the cell?&#10;A) Nucleus&#10;B) Ribosome&#10;C) Mitochondria&#10;D) Golgi body&#10;Answer : C (Mitochondria produce ATP via cellular respiration — hence the 'powerhouse' nickname.)"></textarea>
+          <div><button class="btn btn-sm btn-ghost" onclick="previewNeetSection('bio')">👁 Preview</button><span id="neet-bio-count" style="margin-left:12px;font-size:12px;"></span></div>
+        </div>
+
+        <div class="frow c2" style="margin-top:8px">
+          <div class="fgrp"><label>Import Mode</label><select id="neet-bulk-replace"><option value="0">Append to existing</option><option value="1">Replace all questions</option></select></div>
+          <div><button class="btn btn-neet" style="width:100%" onclick="importNeetSections()">📥 Import NEET Questions</button></div>
+        </div>
+        <div id="neet-bulk-preview" class="q-preview" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- JEE BULK IMPORT -->
+    <div class="page" id="page-bulkjee">
+      <div class="card">
+        <div class="card-title jee">🔬 JEE Bulk Import</div>
+        <div class="jee-info-box">
+          <h4>📌 JEE Exam Pattern (PrepXpert)</h4>
+          <table>
+            <tr><td>Physics</td><td>30 Questions (Q1–Q25: MCQ +4/−1 | Q26–Q30: Numerical, no options)</td></tr>
+            <tr><td>Chemistry</td><td>30 Questions (Q1–Q25: MCQ +4/−1 | Q26–Q30: Numerical, no options)</td></tr>
+            <tr><td>Mathematics</td><td>30 Questions (Q1–Q25: MCQ +4/−1 | Q26–Q30: Numerical, no options)</td></tr>
+            <tr><td>Wrong MCQ</td><td style="color:var(--err);font-weight:700">−1 mark (Negative Marking)</td></tr>
+            <tr><td>Numerical</td><td>Last 5 per subject — student types the answer (no options)</td></tr>
+            <tr><td>Total</td><td><strong>90 Questions · 360 Marks</strong></td></tr>
+          </table>
+        </div>
+        <div class="parser-hint">
+          <strong>📋 JEE MCQ Format (Q1–Q25 per subject):</strong><br>
+          <code>Q1. Question text here?</code><br>
+          <code>A) Option A</code> &nbsp; <code>B) Option B</code> &nbsp; <code>C) Option C</code> &nbsp; <code>D) Option D</code><br>
+          <code>Answer : A (Explanation goes here.)</code><br>
+          <br>
+          <strong>📋 JEE Numerical Format (Q26–Q30 per subject — NO options needed):</strong><br>
+          <code>Q26. If f(x) = x² + 2x + 1, then f(3) = ?</code><br>
+          <code>Answer : 16 (f(3) = 9 + 6 + 1 = 16)</code><br>
+          <span style="color:#7b6000">💡 Numerical questions: just write Answer : [number] (solution). No A/B/C/D options. Students type the answer via keyboard.</span>
+        </div>
+        <div class="frow c2">
+          <div class="fgrp"><label>Select JEE Test</label><select id="jee-bulk-test"></select></div>
+          <div class="fgrp"><label>Exam Info</label><input value="JEE: 30 Phy + 30 Chem + 30 Maths | Last 5 Numerical" readonly style="background:#fff3e0;color:#e65100;font-weight:700;"></div>
+        </div>
+
+        <div class="bulk-section section-phy">
+          <div class="bulk-section-title">🔬 PHYSICS — 30 Questions (Q1–Q25 MCQ +4/−1, Q26–Q30 Numerical +4)</div>
+          <textarea id="jee-bulk-phy" rows="8" placeholder="Q1. A particle moves with v=3t² m/s. Acceleration at t=2s?&#10;A) 6 m/s²&#10;B) 12 m/s²&#10;C) 18 m/s²&#10;D) 24 m/s²&#10;Answer : B (a=dv/dt=6t; at t=2, a=12 m/s²)&#10;&#10;Q26. Ball thrown up at 20 m/s (g=10). Max height (m)?&#10;Answer : 20 (v²=u²-2gh, h=20 m)"></textarea>
+          <div><button class="btn btn-sm btn-ghost" onclick="previewJeeSection('phy')">👁 Preview</button><span id="jee-phy-count" style="margin-left:12px;font-size:12px;"></span></div>
+        </div>
+
+        <div class="bulk-section section-che">
+          <div class="bulk-section-title">⚗️ CHEMISTRY — 30 Questions (Q1–Q25 MCQ +4/−1, Q26–Q30 Numerical +4)</div>
+          <textarea id="jee-bulk-che" rows="8" placeholder="Q1. Hybridisation of carbon in CO₂?&#10;A) sp&#10;B) sp²&#10;C) sp³&#10;D) sp³d&#10;Answer : A (CO₂ linear, sp)&#10;&#10;Q26. Molar mass of H₂SO₄ (g/mol)?&#10;Answer : 98 (2+32+64=98)"></textarea>
+          <div><button class="btn btn-sm btn-ghost" onclick="previewJeeSection('che')">👁 Preview</button><span id="jee-che-count" style="margin-left:12px;font-size:12px;"></span></div>
+        </div>
+
+        <div class="bulk-section section-mat">
+          <div class="bulk-section-title">📐 MATHEMATICS — 30 Questions (Q1–Q25 MCQ +4/−1, Q26–Q30 Numerical +4)</div>
+          <textarea id="jee-bulk-mat" rows="8" placeholder="Q1. ∫₀¹ x² dx =&#10;A) 1/2&#10;B) 1/3&#10;C) 1/4&#10;D) 2/3&#10;Answer : B (x³/3 from 0 to 1 = 1/3)&#10;&#10;Q26. Number of real roots of x³ - 3x + 2 = 0?&#10;Answer : 3 (factor: (x-1)²(x+2)=0, roots 1,1,-2)"></textarea>
+          <div><button class="btn btn-sm btn-ghost" onclick="previewJeeSection('mat')">👁 Preview</button><span id="jee-mat-count" style="margin-left:12px;font-size:12px;"></span></div>
+        </div>
+
+        <div class="frow c2" style="margin-top:8px">
+          <div class="fgrp"><label>Import Mode</label><select id="jee-bulk-replace"><option value="0">Append to existing</option><option value="1">Replace all questions</option></select></div>
+          <div><button class="btn btn-jee" style="width:100%" onclick="importJeeSections()">📥 Import JEE Questions</button></div>
+        </div>
+        <div id="jee-bulk-preview" class="q-preview" style="display:none"></div>
+      </div>
+    </div>
+
+    <!-- Manage Tests -->
+    <div class="page" id="page-tests">
+      <div class="card">
+        <div class="card-title">Manage Tests<button class="btn btn-pri btn-sm" onclick="openNewTestModal()">+ New Test</button></div>
+        <table class="data-table" id="tests-table"></table>
+      </div>
+    </div>
+
+    <!-- Question Bank + Images -->
+    <div class="page" id="page-questions">
+      <div class="card">
+        <div class="card-title">Question Bank — Image Upload
+          <div>
+            <select id="qb-test" onchange="loadQuestionsForImageManage()"></select>
+            <select id="qb-sub" onchange="loadQuestionsForImageManage()">
+              <option value="0">Physics</option>
+              <option value="1">Chemistry</option>
+              <option value="2">Third Subject</option>
+            </select>
+          </div>
+        </div>
+        <div id="image-manager-questions" style="max-height:620px;overflow-y:auto;"></div>
+      </div>
+    </div>
+
+    <!-- Answer Key -->
+    <div class="page" id="page-anskey">
+      <div class="card">
+        <div class="card-title">🔑 Apply Answer Key</div>
+        <div class="frow c3">
+          <div class="fgrp"><label>Test</label><select id="ak-test"></select></div>
+          <div class="fgrp"><label>Subject</label><select id="ak-sub"><option value="0">Physics</option><option value="1">Chemistry</option><option value="2">Third Subject / Biology</option></select></div>
+          <div><button class="btn btn-pri" onclick="applyAnswerKey()">Apply Key</button></div>
+        </div>
+        <div class="fgrp"><label>Answer Key (1-A 2-B ...)</label><textarea id="ak-input" rows="8" placeholder="1-A&#10;2-B&#10;3-C"></textarea></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-students">
+      <div class="card">
+        <div class="card-title">👥 Students &amp; Ranking
+          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+            <button class="btn btn-ok btn-sm" onclick="loadScoresFromDB()" id="refresh-btn">🔄 Refresh</button>
+            <button class="btn btn-ghost btn-sm" onclick="exportToExcel()">📥 Export Excel</button>
+            <button class="btn btn-err btn-sm" onclick="confirmClearStudentData()">🗑 Clear All</button>
+          </div>
+        </div>
+
+        <!-- Search + Filter Row -->
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:16px;align-items:center">
+          <input type="text" id="search-student" placeholder="🔍 Search by name..." oninput="applyFilters()"
+            style="padding:9px 14px;border:1.5px solid var(--bdr);border-radius:8px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;outline:none;min-width:200px;flex:1">
+          <select id="filter-type" onchange="applyFilters()"
+            style="padding:9px 14px;border:1.5px solid var(--bdr);border-radius:8px;font-size:13px;font-family:'Plus Jakarta Sans',sans-serif;outline:none;background:#fff">
+            <option value="ALL">📋 All Exams</option>
+            <option value="PCM">⚛ PCM</option>
+            <option value="PCB">🧬 PCB</option>
+            <option value="NEET">🩺 NEET</option>
+            <option value="JEE">⚙️ JEE</option>
+          </select>
+        </div>
+
+        <!-- Loading indicator -->
+        <div id="ranking-loading" style="text-align:center;padding:30px;color:var(--muted);display:none">
+          <div style="font-size:24px;margin-bottom:8px">⏳</div>
+          <div>Loading student data...</div>
+        </div>
+
+        <!-- Ranking tabs + tables -->
+        <div id="ranking"></div>
+      </div>
+    </div>
+
+    <div class="page" id="page-settings">
+
+      <!-- RAZORPAY SETTINGS -->
+      <div class="card">
+        <div class="card-title" style="color:#2e7d32">💳 Razorpay Payment Settings</div>
+        <div style="background:#e8f5e9;border:1.5px solid #a5d6a7;border-radius:10px;padding:14px 18px;margin-bottom:16px;font-size:13px;color:#2e7d32;line-height:1.8">
+          <strong>How it works:</strong> Students click "Unlock" → Razorpay popup opens → after payment, tests unlock automatically.<br>
+          Get your Key ID &amp; Secret from <strong>dashboard.razorpay.com → Settings → API Keys</strong>.<br>
+          Use <code style="background:#c8e6c9;padding:1px 5px;border-radius:3px;font-family:monospace">rzp_test_...</code> for testing, <code style="background:#c8e6c9;padding:1px 5px;border-radius:3px;font-family:monospace">rzp_live_...</code> for production.
+        </div>
+        <div class="frow c2">
+          <div class="fgrp">
+            <label>Razorpay Key ID *</label>
+            <input type="text" id="rzp-key-id" placeholder="rzp_test_XXXXXXXXXXXXXXXX" autocomplete="off" style="font-family:monospace;font-size:13px">
+          </div>
+          <div class="fgrp">
+            <label>Razorpay Key Secret *</label>
+            <div style="display:flex;gap:6px">
+              <input type="password" id="rzp-key-secret" placeholder="Your secret key" autocomplete="off" style="font-family:monospace;font-size:13px;flex:1">
+              <button class="btn btn-ghost btn-sm" onclick="toggleSecretVis()" id="rzp-eye-btn" title="Show/Hide">👁</button>
+            </div>
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">⚠ Stored locally only — never sent anywhere.</div>
+          </div>
+        </div>
+        <div class="frow c2">
+          <div class="fgrp">
+            <label>Payment Amount (₹)</label>
+            <input id="set-amount" type="number" value="30" min="1">
+          </div>
+          <div class="fgrp">
+            <label>Mode</label>
+            <select id="rzp-mode">
+              <option value="test">🧪 Test Mode (no real money)</option>
+              <option value="live">🚀 Live Mode (real payments)</option>
+            </select>
+          </div>
+        </div>
+        <div id="rzp-status-box" style="display:none;border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px;"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <button class="btn btn-ok" onclick="saveRazorpaySettings()">💾 Save Razorpay Settings</button>
+          <button class="btn btn-ghost" onclick="testRazorpayKey()">🔍 Verify Key ID</button>
+          <div id="rzp-saved-indicator" style="font-size:12px;color:var(--muted)"></div>
+        </div>
+        <!-- Current saved key display -->
+        <div id="rzp-current" style="margin-top:14px;padding:10px 14px;background:#f8f9ff;border:1px solid #c5cae9;border-radius:8px;font-size:12px;display:none">
+          <strong style="color:var(--pri)">Currently saved:</strong>
+          <span id="rzp-current-key" style="font-family:monospace;color:var(--ok)"></span>
+          <span id="rzp-current-mode" style="margin-left:8px;padding:1px 7px;border-radius:4px;font-size:11px;font-weight:700"></span>
+        </div>
+      </div>
+
+      <!-- GENERAL SETTINGS -->
+      <div class="card">
+        <div class="card-title">⚙ General Settings</div>
+        <div class="frow c2">
+          <div class="fgrp"><label>Test Duration (min)</label><input id="set-duration" type="number" value="180"></div>
+          <div class="fgrp"><label>Price shown to students (₹)</label><input id="set-price-display" type="number" value="30" min="1"></div>
+        </div>
+        <button class="btn btn-pri" onclick="saveSettings()">Save General Settings</button>
+      </div>
+
+      <!-- CHANGE PASSWORD -->
+      <div class="card">
+        <div class="card-title">🔐 Change Admin Password</div>
+        <div style="background:#fff3e0;border:1px solid #ffe082;border-radius:8px;padding:10px 14px;font-size:12px;color:#5d4037;margin-bottom:12px">
+          ⚠ Password must be <strong>min 8 chars</strong> with at least <strong>1 uppercase letter</strong> and <strong>1 number</strong>.
+        </div>
+        <div class="frow c2">
+          <div class="fgrp"><label>New Password</label><input type="password" id="new-pass" autocomplete="new-password"></div>
+          <div class="fgrp"><label>Confirm</label><input type="password" id="confirm-pass" autocomplete="new-password"></div>
+        </div>
+        <button class="btn btn-err" onclick="changePassword()">Update Password Securely</button>
+      </div>
+
+      <!-- DATA BACKUP -->
+      <div class="card">
+        <div class="card-title">🔄 Data Backup</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-ghost" onclick="exportData()">⬇ Export Backup</button>
+          <button class="btn btn-ghost" onclick="importBackup()">⬆ Import Backup</button>
+          <input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImportFile(this)">
+        </div>
+      </div>
+
+      <!-- CONTACT US SETTINGS -->
+      <div class="card" style="border:2px solid #25D366">
+        <div class="card-title" style="color:#25D366">📞 Contact Us Settings (WhatsApp &amp; Telegram)</div>
+        <div style="background:#f0fff4;border:1.5px solid #86efac;border-radius:10px;padding:14px 18px;margin-bottom:16px;font-size:13px;color:#166534;line-height:1.8">
+          <strong>How it works:</strong> Students see a "Contact Us" button in their app. These numbers appear as clickable WhatsApp &amp; Telegram links. Use your <strong>business/institute account numbers</strong>.<br>
+          Format: <strong>country code + number</strong>, e.g. <code style="background:#dcfce7;padding:1px 5px;border-radius:3px;font-family:monospace">919876543210</code> (no +, no spaces).
+        </div>
+        <div class="frow c2">
+          <div class="fgrp">
+            <label>📱 WhatsApp Business Number</label>
+            <input type="text" id="contact-wa" placeholder="e.g. 919876543210" maxlength="15" autocomplete="off" style="font-family:monospace;font-size:14px">
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">With country code, no spaces or +</div>
+          </div>
+          <div class="fgrp">
+            <label>✈️ Telegram Username or Number</label>
+            <input type="text" id="contact-tg" placeholder="e.g. PrepXpertSupport or 919876543210" autocomplete="off" style="font-family:monospace;font-size:14px">
+            <div style="font-size:11px;color:var(--muted);margin-top:4px">Username (no @) or phone with country code</div>
+          </div>
+        </div>
+        <div class="frow c2">
+          <div class="fgrp">
+            <label>💬 WhatsApp Pre-filled Message (optional)</label>
+            <input type="text" id="contact-wa-msg" placeholder="e.g. Hi, I need help with PrepXpert" autocomplete="off">
+          </div>
+          <div class="fgrp">
+            <label>📌 Contact Section Heading</label>
+            <input type="text" id="contact-heading" placeholder="e.g. Need Help? Contact Us!" value="Need Help? Contact Us!">
+          </div>
+        </div>
+        <div id="contact-preview" style="display:none;background:#f8f9ff;border-radius:10px;padding:14px;margin-bottom:12px;border:1px solid #c5cae9">
+          <div style="font-size:12px;font-weight:700;color:var(--pri);margin-bottom:8px">Preview (what students will see):</div>
+          <div id="contact-preview-inner" style="display:flex;gap:10px;flex-wrap:wrap"></div>
+        </div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+          <button class="btn btn-ok" onclick="saveContactSettings()">💾 Save Contact Settings</button>
+          <button class="btn btn-ghost" onclick="previewContactSettings()">👁 Preview</button>
+          <div id="contact-saved-indicator" style="font-size:12px;color:var(--muted)"></div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+</div>
+</div>
+
+<script>
+// ═══════════════════════ BACKEND URL CONFIG ═══════════════════════
+// Change this to your Render deployment URL (no trailing slash)
+const BASE_URL = "https://prepxpert-backend.onrender.com";
+
+// ── Wake-up retry helper ──────────────────────────────────────────────
+async function fetchWithRetry(url, options = {}, retries = 4, delayMs = 4000) {
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const res = await fetch(url, options);
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      return res;
+    } catch (err) {
+      console.warn(`⚠️ Attempt ${attempt}/${retries} failed for ${url}:`, err.message);
+      if (attempt === retries) throw err;
+      await new Promise(r => setTimeout(r, delayMs * attempt));
+    }
+  }
+}
+
+// Ping backend on load so it starts waking up immediately
+(function pingBackend() {
+  fetch(BASE_URL + '/health').catch(() => {});
+})();
+
+let state = { tests: [], settings: { pay_amount:30, price:30, duration:180, rzp_key_id:'', rzp_mode:'test' } };
+let studentData = {
+  users: [],
+  scores: []
+};
+function loadState(){
+  try{ const raw=localStorage.getItem('mhtcet_admin_data'); if(raw){ const p=JSON.parse(raw); if(p.tests)state.tests=p.tests; if(p.settings)state.settings={...state.settings,...p.settings}; } }catch(e){}
+  if(!state.tests.length) state.tests=[
+    {id:0,name:'MHT-CET PCM 2024',stream:'pcm',active:true,free:true,desc:'PCM Base',qbank:{0:[],1:[],2:[]}},
+    {id:1,name:'MHT-CET PCB 2024',stream:'pcb',active:true,free:true,desc:'PCB Base',qbank:{0:[],1:[],2:[]}},
+    {id:2,name:'NEET 2024 Mock',stream:'neet',active:true,free:true,desc:'NEET Mock — 180 Qs, 720 marks',qbank:{0:[],1:[],2:[]}}
+  ];
+  state.tests.forEach(t=>{ if(!t.qbank)t.qbank={0:[],1:[],2:[]}; if(!t.stream)t.stream='pcm'; if(!t.topics)t.topics={phy:'',che:'',third:''}; });
+  try{ const u=localStorage.getItem('mhtcet_users'); if(u)studentData.users=JSON.parse(u); }catch(e){}
+  
+  pushToStudent();
+}
+
+function pushToStudent(){
+  localStorage.setItem('mhtcet_student_data', JSON.stringify({tests:state.tests, settings:state.settings}));
+}
+
+function saveAll(){  let questions = [
+  { question: "Test Question 1" }
+];
+  localStorage.setItem('mhtcet_admin_data', JSON.stringify({tests:state.tests, settings:state.settings}));
+  fetch(BASE_URL + "/add-questions", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(state.tests)
+})
+.then(res => res.text())
+.then(data => {
+  alert("Saved to DB ✅");
+})
+.catch(err => {
+  alert("Error saving ❌");
+});
+  pushToStudent();
+  localStorage.setItem('mhtcet_users', JSON.stringify(studentData.users));
+  
+  document.getElementById('last-saved').textContent='Saved '+new Date().toLocaleTimeString();
+  updateSyncStatus(); toast('✅ Saved & synced to student app');
+}
+
+function updateSyncStatus(){
+  const el=document.getElementById('sync-status');
+  if(el) el.innerHTML=`● ${studentData.users?.length||0} students`;
+}
+
+function toast(msg){
+  let t=document.createElement('div'); t.className='toast'; t.textContent=msg;
+  document.body.appendChild(t); setTimeout(()=>t.remove(),2800);
+}
+
+// ══════════════════════════════════════════════════════
+// IMPROVED PARSER — supports "Answer : A (Solution text)"
+// ══════════════════════════════════════════════════════
+function parseQuestionsFromText(text, maxCount=50){
+  if(!text.trim()) return [];
+  const lines=text.split(/\r?\n/);
+  let questions=[], qText=[], opts=['','','',''], ans=-1, sol='', inSol=false;
+
+  const isQStart = l => /^(Q?\s*\d+)\s*[\.\)]\s+/i.test(l.trim());
+  const extractQ = l => { let m=l.trim().match(/^Q?\s*\d+\s*[\.\)]\s+(.*)/i); return m?m[1].trim():l.trim(); };
+
+  const finalize = ()=>{
+    if(qText.length && opts.some(o=>o.trim())){
+      questions.push({
+        q:qText.join(' ').substring(0,2000),
+        opts:opts.map(o=>o.trim()||'—'),
+        ans:ans>=0?ans:0,
+        sol:sol.trim(),
+        img:''
+      });
+    }
+    qText=[]; opts=['','','','']; ans=-1; sol=''; inSol=false;
+  };
+
+  for(let line of lines){
+    let l=line.trim(); if(!l) continue;
+
+    if(isQStart(l)){ finalize(); qText=[extractQ(l)]; continue; }
+    if(!qText.length) continue;
+
+    // Option lines: A) / A. / (A) / [A]
+    let optM=l.match(/^[\(\[]?\s*([A-Da-d])\s*[\)\.\:\-\]]\s*(.*)/i);
+    if(optM && !inSol){
+      let idx={A:0,B:1,C:2,D:3}[optM[1].toUpperCase()];
+      if(idx!==undefined && optM[2].trim()){ opts[idx]=optM[2].trim(); continue; }
+    }
+
+    // Answer line: "Answer : A (solution...)" OR "Answer: A" OR "Ans: A"
+    // Improved: captures everything after ( as solution
+    let ansM=l.match(/^(?:Ans(?:wer)?)\s*[:\-]?\s*\(?([A-Da-d])\)?[\s\.\-]*(.*)/i);
+    if(ansM){
+      ans={A:0,B:1,C:2,D:3}[ansM[1].toUpperCase()];
+      // Extract solution from rest: could be "(solution text)" or just "solution text"
+      let rest=ansM[2].trim();
+      // Remove wrapping parens if present
+      if(rest.startsWith('(')){ rest=rest.slice(1); if(rest.endsWith(')'))rest=rest.slice(0,-1); }
+      if(rest) sol=rest;
+      inSol=!!rest; // continue collecting sol on next lines if needed
+      continue;
+    }
+
+    // Solution line: "Solution: text" OR "Sol: text"
+    let solM=l.match(/^(?:Sol(?:ution)?)\s*[:\-]\s*(.*)/i);
+    if(solM){ sol=(sol?sol+' ':'')+solM[1].trim(); inSol=true; continue; }
+
+    // If we're in solution mode, keep appending
+    if(inSol){ sol+=' '+l; continue; }
+
+    qText.push(l);
+  }
+  finalize();
+  return questions.slice(0, maxCount);
+}
+
+function updateBulkDynamic(){
+  let ti=parseInt(document.getElementById('bulk-test').value);
+  let t=state.tests[ti]; if(!t) return;
+  let isPCB=t.stream==='pcb';
+  let isNEET=t.stream==='neet';
+  if(isNEET){
+    document.getElementById('bulk-stream-display').value='⚠ Use NEET Bulk Import for NEET tests';
+    return;
+  }
+  if(t.stream==='jee'){
+    document.getElementById('bulk-stream-display').value='⚠ Use JEE Bulk Import for JEE tests';
+    return;
+  }
+  let thirdLabel=isPCB?'🧬 BIOLOGY — 100 Questions':'📐 MATHEMATICS — 50 Questions';
+  document.getElementById('bulk-stream-display').value=isPCB?'PCB: 50 Phy + 50 Chem + 100 Biology':'PCM: 50 Phy + 50 Chem + 50 Maths';
+  document.getElementById('third-section-title').innerHTML=thirdLabel;
+}
+
+function previewSection(s){
+  let sel=document.getElementById('bulk-test');
+  let ti=parseInt(sel.value);
+  let t=state.tests[ti];
+  let max=(s==='mat'&&t?.stream==='pcb')?100:50;
+  let text=document.getElementById(`bulk-${s}`).value;
+  let qs=parseQuestionsFromText(text,max);
+  document.getElementById(`${s}-count`).innerHTML=`📊 ${qs.length}/${max} parsed`;
+  renderPreview(qs, 'bulk-preview', s.toUpperCase(), max);
+}
+
+function previewNeetSection(s){
+  let maxMap={phy:45,che:45,bio:90};
+  let max=maxMap[s];
+  let text=document.getElementById(`neet-bulk-${s}`).value;
+  let qs=parseQuestionsFromText(text,max);
+  document.getElementById(`neet-${s}-count`).innerHTML=`📊 ${qs.length}/${max} parsed`;
+  renderPreview(qs, 'neet-bulk-preview', s.toUpperCase(), max);
+}
+
+function renderPreview(qs, containerId, label, max){
+  let html=`<strong>${label} — ${qs.length} questions parsed</strong>`;
+  qs.forEach((q,i)=>{
+    html+=`<div class="q-preview-item success">
+      <strong>Q${i+1}:</strong> ${q.q.substring(0,120)}<br>
+      <small>${q.opts.map((o,j)=>`${String.fromCharCode(65+j)}) ${o.substring(0,35)}`).join(' · ')}</small><br>
+      <small style="color:var(--ok);font-weight:700">✓ Ans: ${String.fromCharCode(65+q.ans)}</small>
+      ${q.sol?`<div class="sol-preview">💡 ${q.sol.substring(0,100)}${q.sol.length>100?'…':''}</div>`:''}
+    </div>`;
+  });
+  if(!qs.length) html='<p style="color:var(--err)">No valid questions found. Check format.</p>';
+  let pv=document.getElementById(containerId); pv.innerHTML=html; pv.style.display='block';
+}
+
+function importAllSections(){
+  let ti=parseInt(document.getElementById('bulk-test').value);
+  let t=state.tests[ti]; if(!t){ toast('Select a test'); return; }
+  if(t.stream==='neet'){ toast('⚠ Use NEET Bulk Import for NEET tests'); return; }
+  if(t.stream==='jee'){ toast('⚠ Use JEE Bulk Import for JEE tests'); return; }
+  let replace=document.getElementById('bulk-replace').value==='1';
+  if(replace) t.qbank={0:[],1:[],2:[]};
+  let isPCB=t.stream==='pcb';
+  let maxThird=isPCB?100:50;
+  let phy=parseQuestionsFromText(document.getElementById('bulk-phy').value,50);
+  let che=parseQuestionsFromText(document.getElementById('bulk-che').value,50);
+  let third=parseQuestionsFromText(document.getElementById('bulk-mat').value,maxThird);
+  phy.forEach(q=>{ if(t.qbank[0].length<50)t.qbank[0].push({...q}); });
+  che.forEach(q=>{ if(t.qbank[1].length<50)t.qbank[1].push({...q}); });
+  third.forEach(q=>{ if(t.qbank[2].length<maxThird)t.qbank[2].push({...q}); });
+  saveAll(); renderDashboard(); loadQuestionsForImageManage();
+  toast(`✅ Imported: ${phy.length} Physics, ${che.length} Chemistry, ${third.length} ${isPCB?'Biology':'Math'}`);
+}
+
+
+// ══════════════════════════════════════════════════════
+// JEE PARSER — MCQ (Q1-Q25) + Numerical (Q26-Q30, no options)
+// ══════════════════════════════════════════════════════
+function parseJeeQuestions(text, numericalStart=26, maxCount=30){
+  if(!text.trim()) return [];
+  const lines=text.split(/\r?\n/);
+  let questions=[], qText=[], opts=['','','',''], ans=-1, sol='', inSol=false, isNumerical=false;
+  let qNum=0;
+
+  const isQStart = l => /^(Q?\s*\d+)\s*[\.\)]\s+/i.test(l.trim());
+  const extractQ = l => { let m=l.trim().match(/^Q?\s*(\d+)\s*[\.\)]\s+(.*)/i); qNum=m?parseInt(m[1]):qNum+1; return m?m[2].trim():l.trim(); };
+
+  const finalize = ()=>{
+    if(qText.length){
+      if(isNumerical){
+        questions.push({
+          q:qText.join(' ').substring(0,2000),
+          opts:['','','',''],
+          ans:ans,
+          numericalAns: ans>=0 ? String(ans) : '',
+          sol:sol.trim(),
+          img:'',
+          isNumerical:true
+        });
+      } else if(opts.some(o=>o.trim())){
+        questions.push({
+          q:qText.join(' ').substring(0,2000),
+          opts:opts.map(o=>o.trim()||'—'),
+          ans:ans>=0?ans:0,
+          sol:sol.trim(),
+          img:'',
+          isNumerical:false
+        });
+      }
+    }
+    qText=[]; opts=['','','','']; ans=-1; sol=''; inSol=false; isNumerical=false;
+  };
+
+  for(let line of lines){
+    let l=line.trim(); if(!l) continue;
+
+    if(isQStart(l)){
+      finalize();
+      let qBody=extractQ(l);
+      isNumerical=(qNum>=numericalStart);
+      qText=[qBody];
+      continue;
+    }
+    if(!qText.length) continue;
+
+    // Option lines (skip for numerical)
+    if(!isNumerical){
+      let optM=l.match(/^[\(\[]?\s*([A-Da-d])\s*[\)\.\:\-\]]\s*(.*)/i);
+      if(optM && !inSol){
+        let idx={A:0,B:1,C:2,D:3}[optM[1].toUpperCase()];
+        if(idx!==undefined && optM[2].trim()){ opts[idx]=optM[2].trim(); continue; }
+      }
+    }
+
+    // Answer line
+    let ansM=l.match(/^(?:Ans(?:wer)?)\s*[:\-]?\s*(.*)/i);
+    if(ansM){
+      let rest=ansM[1].trim();
+      if(isNumerical){
+        // Extract numerical answer — first token
+        let numMatch=rest.match(/^([\-\d\.]+)/);
+        ans=numMatch?parseFloat(numMatch[1]):0;
+        let afterNum=rest.slice(numMatch?numMatch[0].length:0).trim();
+        if(afterNum.startsWith('(')){ afterNum=afterNum.slice(1); if(afterNum.endsWith(')'))afterNum=afterNum.slice(0,-1); }
+        if(afterNum) sol=afterNum;
+      } else {
+        let letterM=rest.match(/^\(?([A-Da-d])\)?[\s\.\-]*(.*)/i);
+        if(letterM){
+          ans={A:0,B:1,C:2,D:3}[letterM[1].toUpperCase()];
+          let solPart=letterM[2].trim();
+          if(solPart.startsWith('(')){ solPart=solPart.slice(1); if(solPart.endsWith(')'))solPart=solPart.slice(0,-1); }
+          if(solPart) sol=solPart;
+        }
+      }
+      inSol=true; continue;
+    }
+
+    let solM=l.match(/^(?:Sol(?:ution)?)\s*[:\-]\s*(.*)/i);
+    if(solM){ sol=(sol?sol+' ':'')+solM[1].trim(); inSol=true; continue; }
+    if(inSol){ sol+=' '+l; continue; }
+    qText.push(l);
+  }
+  finalize();
+  return questions.slice(0,maxCount);
+}
+
+function previewJeeSection(s){
+  let text=document.getElementById(`jee-bulk-${s}`).value;
+  let qs=parseJeeQuestions(text,26,30);
+  let numCount=qs.filter(q=>q.isNumerical).length;
+  let mcqCount=qs.filter(q=>!q.isNumerical).length;
+  document.getElementById(`jee-${s}-count`).innerHTML=`📊 ${qs.length}/30 parsed (${mcqCount} MCQ + ${numCount} Numerical)`;
+  renderJeePreview(qs,'jee-bulk-preview',s.toUpperCase());
+}
+
+function renderJeePreview(qs,containerId,label){
+  let html=`<strong>${label} — ${qs.length} questions parsed</strong>`;
+  qs.forEach((q,i)=>{
+    html+=`<div class="q-preview-item success" style="${q.isNumerical?'border-left:3px solid #e65100':''}">
+      <strong>Q${i+1}${q.isNumerical?' <span style=\"background:#fff3e0;color:#e65100;padding:1px 6px;border-radius:3px;font-size:10px\">NUMERICAL</span>':''}:</strong> ${q.q.substring(0,120)}<br>
+      ${!q.isNumerical?`<small>${q.opts.map((o,j)=>`${String.fromCharCode(65+j)}) ${o.substring(0,35)}`).join(' · ')}</small><br>`:''}
+      <small style="color:${q.isNumerical?'#e65100':'var(--ok)'};font-weight:700">✓ Ans: ${q.isNumerical?q.numericalAns:String.fromCharCode(65+q.ans)}</small>
+      ${q.sol?`<div class="sol-preview">💡 ${q.sol.substring(0,100)}${q.sol.length>100?'…':''}</div>`:''}
+    </div>`;
+  });
+  if(!qs.length) html='<p style="color:var(--err)">No valid questions found. Check format.</p>';
+  let pv=document.getElementById(containerId); pv.innerHTML=html; pv.style.display='block';
+}
+
+function importJeeSections(){
+  let ti=parseInt(document.getElementById('jee-bulk-test').value);
+  let t=state.tests[ti]; if(!t){ toast('Select a JEE test'); return; }
+  if(t.stream!=='jee'){ toast('⚠ Selected test is not JEE type'); return; }
+  let replace=document.getElementById('jee-bulk-replace').value==='1';
+  if(replace) t.qbank={0:[],1:[],2:[]};
+  let phy=parseJeeQuestions(document.getElementById('jee-bulk-phy').value,26,30);
+  let che=parseJeeQuestions(document.getElementById('jee-bulk-che').value,26,30);
+  let mat=parseJeeQuestions(document.getElementById('jee-bulk-mat').value,26,30);
+  phy.forEach(q=>{ if(t.qbank[0].length<30)t.qbank[0].push({...q}); });
+  che.forEach(q=>{ if(t.qbank[1].length<30)t.qbank[1].push({...q}); });
+  mat.forEach(q=>{ if(t.qbank[2].length<30)t.qbank[2].push({...q}); });
+  const allQuestions = [...phy, ...che, ...mat];
+
+fetch(BASE_URL + "/add-questions", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(allQuestions)
+});saveAll(); renderDashboard();
+  let pNum=phy.filter(q=>q.isNumerical).length,cNum=che.filter(q=>q.isNumerical).length,mNum=mat.filter(q=>q.isNumerical).length;
+  toast(`✅ JEE Import: ${phy.length} Phy (${pNum} num), ${che.length} Chem (${cNum} num), ${mat.length} Maths (${mNum} num)`);
+}
+
+function importNeetSections(){
+  let ti=parseInt(document.getElementById('neet-bulk-test').value);
+  let t=state.tests[ti]; if(!t){ toast('Select a NEET test'); return; }
+  if(t.stream!=='neet'){ toast('⚠ Selected test is not NEET type'); return; }
+  let replace=document.getElementById('neet-bulk-replace').value==='1';
+  if(replace) t.qbank={0:[],1:[],2:[]};
+  let phy=parseQuestionsFromText(document.getElementById('neet-bulk-phy').value,45);
+  let che=parseQuestionsFromText(document.getElementById('neet-bulk-che').value,45);
+  let bio=parseQuestionsFromText(document.getElementById('neet-bulk-bio').value,90);
+  phy.forEach(q=>{ if(t.qbank[0].length<45)t.qbank[0].push({...q}); });
+  che.forEach(q=>{ if(t.qbank[1].length<45)t.qbank[1].push({...q}); });
+  bio.forEach(q=>{ if(t.qbank[2].length<90)t.qbank[2].push({...q}); });
+  const allQuestions = [...phy, ...che, ...bio];
+
+fetch(BASE_URL + "/add-questions", {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json"
+  },
+  body: JSON.stringify(allQuestions)
+});saveAll(); renderDashboard();
+  toast(`✅ NEET Import: ${phy.length} Phy, ${che.length} Chem, ${bio.length} Bio`);
+}
+
+function populateSelects(){
+  let opts=state.tests.map((t,i)=>`<option value="${i}">${escapeHtml(t.name)} [${t.stream.toUpperCase()}]</option>`).join('');
+  let jeeOpts=state.tests.filter((t,i)=>t.stream==='jee').map((t,i)=>{
+    let realIdx=state.tests.indexOf(t);
+    return `<option value="${realIdx}">${escapeHtml(t.name)}</option>`;
+  }).join('');
+  let neetOpts=state.tests.filter((t,i)=>t.stream==='neet').map((t,i)=>{
+    let realIdx=state.tests.indexOf(t);
+    return `<option value="${realIdx}">${escapeHtml(t.name)}</option>`;
+  }).join('');
+  ['bulk-test','ak-test','qb-test'].forEach(id=>{ let el=document.getElementById(id); if(el)el.innerHTML=opts; });
+  let ne=document.getElementById('neet-bulk-test');
+  if(ne) ne.innerHTML=neetOpts||'<option value="">No NEET tests yet</option>';
+  let je=document.getElementById('jee-bulk-test');
+  if(je) je.innerHTML=jeeOpts||'<option value="">No JEE tests yet</option>';
+  if(document.getElementById('set-amount')){
+    document.getElementById('set-amount').value=state.settings.pay_amount||30;
+    document.getElementById('set-duration').value=state.settings.duration||180;
+  }
+  updateBulkDynamic();
+}
+
+function loadQuestionsForImageManage(){
+  let ti=parseInt(document.getElementById('qb-test').value);
+  let si=parseInt(document.getElementById('qb-sub').value);
+  let t=state.tests[ti]; if(!t) return;
+  let isPCB=t.stream==='pcb', isNEET=t.stream==='neet';
+  let subNames=isNEET?['Physics','Chemistry','Biology']:['Physics','Chemistry',isPCB?'Biology':'Mathematics'];
+  document.getElementById('qb-sub').options[2].text=subNames[2];
+  let qs=t.qbank[si]||[];
+  let html=`<div style="background:#e8eaf6;padding:12px;border-radius:8px;margin-bottom:16px"><strong>${t.name}</strong> | ${subNames[si]} | ${qs.length} questions</div>`;
+  qs.forEach((q,idx)=>{
+    html+=`<div class="q-item-card">
+      <div class="q-number" style="font-family:'Space Grotesk',sans-serif;font-weight:700;color:var(--pri);margin-bottom:6px">Q${idx+1}</div>
+      <div class="q-text">${escapeHtml(q.q.substring(0,180))}</div>
+      <div class="q-options">${q.opts.map((opt,i)=>`<span><strong>${String.fromCharCode(65+i)})</strong> ${escapeHtml(opt.substring(0,50))}</span>`).join('')}</div>
+      <div class="q-answer">✓ Ans: ${String.fromCharCode(65+q.ans)}</div>
+      ${q.sol?`<div class="q-solution">💡 <strong>Solution:</strong> ${escapeHtml(q.sol.substring(0,200))}</div>`:'<div style="color:#aaa;font-size:11px;margin-top:4px">No solution added</div>'}
+      ${q.img?`<img src="${q.img}" class="q-image">`:'<div style="color:#aaa;font-size:12px;margin-top:6px">📷 No diagram</div>'}
+      <div class="img-upload-area">
+        <input type="file" accept="image/*" style="display:none" id="img-${ti}-${si}-${idx}" onchange="uploadImg(${ti},${si},${idx},this)">
+        <button class="img-upload-btn" onclick="document.getElementById('img-${ti}-${si}-${idx}').click()">📤 ${q.img?'Change':'Upload'} Diagram</button>
+        ${q.img?`<button class="img-upload-btn" style="background:#ffebee;color:var(--err)" onclick="removeImg(${ti},${si},${idx})">Remove</button>`:''}
+      </div>
+    </div>`;
+  });
+  if(!qs.length) html+='<div style="padding:40px;text-align:center;color:#aaa">No questions. Use Bulk Import first.</div>';
+  document.getElementById('image-manager-questions').innerHTML=html;
+}
+
+function escapeHtml(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function uploadImg(ti,si,qi,input){ if(!input.files[0])return; let f=input.files[0]; if(f.size>2*1024*1024){toast('Max 2MB');return;} let r=new FileReader(); r.onload=e=>{state.tests[ti].qbank[si][qi].img=e.target.result;saveAll();loadQuestionsForImageManage();toast('Diagram uploaded');}; r.readAsDataURL(f); }
+function removeImg(ti,si,qi){ if(confirm('Remove diagram?')){state.tests[ti].qbank[si][qi].img='';saveAll();loadQuestionsForImageManage();toast('Removed');} }
+
+function applyAnswerKey(){
+  let ti=parseInt(document.getElementById('ak-test').value);
+  let si=parseInt(document.getElementById('ak-sub').value);
+  let raw=document.getElementById('ak-input').value;
+  let pairs=raw.match(/(\d+)\s*[-:.\s]\s*([A-Da-d])/g);
+  if(!pairs){toast('Invalid format');return;}
+  let n=0;
+  for(let p of pairs){
+    let m=p.match(/(\d+)\s*[-:.\s]\s*([A-Da-d])/);
+    if(m){let qi=parseInt(m[1])-1;let ans={A:0,B:1,C:2,D:3}[m[2].toUpperCase()];if(state.tests[ti].qbank[si][qi]&&ans!==undefined){state.tests[ti].qbank[si][qi].ans=ans;n++;}}
+  }
+  saveAll(); toast(`Updated ${n} answers`);
+}
+
+function renderDashboard(){
+  let totalQ=0,neetQ=0,active=0,neetTests=0;
+  state.tests.forEach(t=>{
+    let p=t.qbank[0]?.length||0,c=t.qbank[1]?.length||0,m=t.qbank[2]?.length||0;
+    totalQ+=p+c+m; if(t.active)active++;
+    if(t.stream==='neet'){neetQ+=p+c+m;neetTests++;}
+  });
+  let sc=studentData.users?.length||0;
+  document.getElementById('stat-row').innerHTML=`
+    <div class="stat-card"><div class="stat-val">${state.tests.length}</div><div class="stat-lbl">Total Tests</div></div>
+    <div class="stat-card"><div class="stat-val">${active}</div><div class="stat-lbl">Active</div></div>
+    <div class="stat-card"><div class="stat-val">${totalQ}</div><div class="stat-lbl">Questions</div></div>
+    <div class="stat-card neet"><div class="stat-val">${neetTests}</div><div class="stat-lbl">NEET Tests</div></div>
+    <div class="stat-card neet"><div class="stat-val">${neetQ}</div><div class="stat-lbl">NEET Qs</div></div>
+    <div class="stat-card"><div class="stat-val">${sc}</div><div class="stat-lbl">Students</div></div>`;
+
+  let dashHtml=`<thead><tr><th>#</th><th>Test</th><th>Stream</th><th>S1</th><th>S2</th><th>S3</th><th>Status</th></tr></thead><tbody>`;
+  state.tests.forEach((t,i)=>{
+    let isNEET=t.stream==='neet';
+    let isJEE=t.stream==='jee';let max1=isNEET?45:isJEE?30:50,max2=isNEET?45:isJEE?30:50,max3=isNEET?90:isJEE?30:(t.stream==='pcb'?100:50);
+    let streamBadge=isNEET?`<span class="badge-neet">NEET</span>`:isJEE?`<span class="badge-jee">JEE</span>`:`<span class="badge-ok">${t.stream.toUpperCase()}</span>`;
+    dashHtml+=`<tr>
+      <td>${i+1}</td>
+      <td><strong>${escapeHtml(t.name)}</strong></td>
+      <td>${streamBadge}</td>
+      <td>${t.qbank[0]?.length||0}/${max1}</td>
+      <td>${t.qbank[1]?.length||0}/${max2}</td>
+      <td>${t.qbank[2]?.length||0}/${max3}</td>
+      <td class="${t.active?'badge-ok':'badge-err'}">${t.active?'LIVE':'Draft'}</td>
+    </tr>`;
+  });
+  dashHtml+=`</tbody>`;
+  document.getElementById('dash-tests-table').innerHTML=dashHtml;
+}
+
+function renderTestsTable(){
+  let html=`<thead><tr><th>Name</th><th>Stream</th><th>Free</th><th>Active</th><th>Qs</th><th>Actions</th></tr></thead><tbody>`;
+  state.tests.forEach((t,i)=>{
+    let total=(t.qbank[0]?.length||0)+(t.qbank[1]?.length||0)+(t.qbank[2]?.length||0);
+    html+=`<tr>
+      <td><strong>${escapeHtml(t.name)}</strong></td>
+      <td>
+        <select onchange="state.tests[${i}].stream=this.value;saveAll();renderTestsTable();renderDashboard();updateBulkDynamic();">
+          <option value="pcm" ${t.stream==='pcm'?'selected':''}>PCM</option>
+          <option value="pcb" ${t.stream==='pcb'?'selected':''}>PCB</option>
+          <option value="neet" ${t.stream==='neet'?'selected':''}>NEET</option>
+          <option value="jee" ${t.stream==='jee'?'selected':''}>JEE</option>
+        </select>
+      </td>
+      <td><label class="toggle"><input type="checkbox" ${t.free?'checked':''} onchange="state.tests[${i}].free=this.checked;saveAll();"><span class="toggle-slider"></span></label></td>
+      <td><label class="toggle"><input type="checkbox" ${t.active?'checked':''} onchange="state.tests[${i}].active=this.checked;saveAll();renderDashboard();"><span class="toggle-slider"></span></label></td>
+      <td>${total}</td>
+      <td>
+        <button class="btn btn-err btn-xs" onclick="deleteTest(${i})">Delete</button>
+        <button class="btn btn-ghost btn-xs" onclick="clearTestQuestions(${i})">Clear Qs</button>
+        <button class="btn btn-pri btn-xs" onclick="openEditTopics(${i})">📚 Topics</button>
+      </td>
+    </tr>`;
+  });
+  html+=`</tbody>`;
+  document.getElementById('tests-table').innerHTML=html;
+}
+
+function deleteTest(i){ if(confirm(`Delete "${state.tests[i].name}"?`)){ state.tests.splice(i,1); saveAll(); renderTestsTable(); populateSelects(); renderDashboard(); toast('Deleted'); } }
+function clearTestQuestions(i){ if(confirm(`Clear all questions from "${state.tests[i].name}"?`)){ state.tests[i].qbank={0:[],1:[],2:[]}; saveAll(); renderTestsTable(); renderDashboard(); toast('Cleared'); } }
+
+let editTopicsIdx=-1;
+function openEditTopics(i){
+  editTopicsIdx=i;
+  const t=state.tests[i];
+  document.getElementById('et-test-name').textContent=`Test: ${t.name} [${t.stream.toUpperCase()}]`;
+  const topics=t.topics||{};
+  document.getElementById('et-phy-topics').value=topics.phy||'';
+  document.getElementById('et-che-topics').value=topics.che||'';
+  document.getElementById('et-third-topics').value=topics.third||'';
+  const thirdLbl=document.getElementById('et-third-lbl');
+  if(t.stream==='pcm') thirdLbl.textContent='📐 Mathematics Topics';
+  else thirdLbl.textContent='🧬 Biology Topics';
+  document.getElementById('edit-topics-modal').classList.add('on');
+}
+function saveTopics(){
+  if(editTopicsIdx<0)return;
+  if(!state.tests[editTopicsIdx].topics) state.tests[editTopicsIdx].topics={};
+  state.tests[editTopicsIdx].topics.phy=document.getElementById('et-phy-topics').value.trim();
+  state.tests[editTopicsIdx].topics.che=document.getElementById('et-che-topics').value.trim();
+  state.tests[editTopicsIdx].topics.third=document.getElementById('et-third-topics').value.trim();
+  saveAll(); closeModal('edit-topics-modal'); toast('✅ Topics saved & synced to students');
+}
+
+function renderStudents(){
+  try{ const u=localStorage.getItem('mhtcet_users'); if(u)studentData.users=JSON.parse(u); }catch(e){}
+  let users=studentData.users||[];
+  if(!users.length){ document.getElementById('students-content').innerHTML='<p style="padding:20px;color:var(--muted)">No students yet.</p>'; return; }
+  let rows=[];
+  users.forEach(u=>{
+    let best=u.scores?.length?u.scores.reduce((a,b)=>b.score>a.score?b:a,u.scores[0]):null;
+    rows.push({name:u.name,mobile:u.mobile,attempts:u.scores?.length||0,bestScore:best?.score||0,bestTest:best?.testName||'—'});
+  });
+  rows.sort((a,b)=>b.bestScore-a.bestScore);
+  let html=`<table class="data-table"><thead><tr><th>Rank</th><th>Name</th><th>Mobile</th><th>Best Score</th><th>Attempts</th><th>Best Test</th></tr></thead><tbody>`;
+  rows.forEach((r,idx)=>{
+    html+=`<tr><td>#${idx+1}</td><td>${escapeHtml(r.name)}</td><td>${r.mobile}</td><td class="badge-ok">${r.bestScore}</td><td>${r.attempts}</td><td>${escapeHtml(r.bestTest)}</td></tr>`;
+  });
+  html+=`</tbody></table>`;
+  document.getElementById('students-content').innerHTML=html;
+  updateSyncStatus();
+}
+
+function clearStudentData(){ confirmClearStudentData(); }
+
+function saveSettings(){
+  state.settings.duration=parseInt(document.getElementById('set-duration').value)||180;
+  // sync price from both inputs
+  const priceDisp=parseInt(document.getElementById('set-price-display')?.value)||30;
+  const priceMain=parseInt(document.getElementById('set-amount')?.value)||30;
+  state.settings.pay_amount=priceDisp||priceMain;
+  state.settings.price=state.settings.pay_amount;
+  saveAll(); toast('✅ General settings saved');
+}
+
+// ── RAZORPAY ADMIN CONTROLS ──
+function loadRazorpaySettings(){
+  try{
+    const rzp=JSON.parse(localStorage.getItem('rzp_admin_config')||'{}');
+    if(rzp.keyId){
+      document.getElementById('rzp-key-id').value=rzp.keyId||'';
+      document.getElementById('rzp-key-secret').value=rzp.keySecret||'';
+      document.getElementById('rzp-mode').value=rzp.mode||'test';
+      document.getElementById('set-amount').value=rzp.amount||30;
+      document.getElementById('set-price-display') && (document.getElementById('set-price-display').value=rzp.amount||30);
+      showRzpCurrent(rzp);
+    }
+  }catch(e){}
+}
+
+function saveRazorpaySettings(){
+  const keyId=document.getElementById('rzp-key-id').value.trim();
+  const keySecret=document.getElementById('rzp-key-secret').value.trim();
+  const mode=document.getElementById('rzp-mode').value;
+  const amount=parseInt(document.getElementById('set-amount').value)||30;
+  if(!keyId){ toast('⚠ Enter your Razorpay Key ID'); return; }
+  if(!keyId.startsWith('rzp_')){ showRzpStatus('error','⚠ Key ID should start with rzp_test_ or rzp_live_'); return; }
+  if(mode==='live'&&keyId.startsWith('rzp_test_')){ showRzpStatus('warn','⚠ You selected Live mode but entered a Test key. Please check.'); }
+  if(mode==='test'&&keyId.startsWith('rzp_live_')){ showRzpStatus('warn','⚠ You selected Test mode but entered a Live key. Please check.'); }
+  const cfg={keyId,keySecret,mode,amount,savedAt:new Date().toISOString()};
+  localStorage.setItem('rzp_admin_config',JSON.stringify(cfg));
+  // Push key to student-readable storage so student file picks it up
+  state.settings.pay_amount=amount;
+  state.settings.price=amount;
+  state.settings.rzp_key_id=keyId;
+  state.settings.rzp_mode=mode;
+  saveAll();
+  showRzpCurrent(cfg);
+  showRzpStatus('ok','✅ Razorpay settings saved & synced to student app!');
+  document.getElementById('rzp-saved-indicator').textContent='Last saved: '+new Date().toLocaleTimeString();
+  toast('✅ Razorpay configured! Students can now pay via Razorpay.');
+}
+
+function showRzpCurrent(cfg){
+  if(!cfg||!cfg.keyId)return;
+  const box=document.getElementById('rzp-current');
+  const keyEl=document.getElementById('rzp-current-key');
+  const modeEl=document.getElementById('rzp-current-mode');
+  box.style.display='block';
+  // Mask key: show first 12 + last 4 chars
+  const k=cfg.keyId;
+  keyEl.textContent=k.length>16?k.substring(0,12)+'••••'+k.slice(-4):k;
+  modeEl.textContent=cfg.mode==='live'?'🚀 LIVE':'🧪 TEST';
+  modeEl.style.background=cfg.mode==='live'?'#e8f5e9':'#fff3e0';
+  modeEl.style.color=cfg.mode==='live'?'var(--ok)':'#e65100';
+}
+
+function showRzpStatus(type,msg){
+  const box=document.getElementById('rzp-status-box');
+  const colors={ok:['#e8f5e9','#1b5e20','#a5d6a7'],warn:['#fff8e1','#5d4037','#ffe082'],error:['#ffebee','#b71c1c','#ef9a9a']};
+  const [bg,txt,bdr]=colors[type]||colors.ok;
+  box.style.cssText=`display:block;background:${bg};border:1.5px solid ${bdr};color:${txt};border-radius:8px;padding:10px 14px;font-size:13px;margin-bottom:12px`;
+  box.textContent=msg;
+}
+
+function toggleSecretVis(){
+  const inp=document.getElementById('rzp-key-secret');
+  const btn=document.getElementById('rzp-eye-btn');
+  if(inp.type==='password'){inp.type='text';btn.textContent='🙈';}
+  else{inp.type='password';btn.textContent='👁';}
+}
+
+function testRazorpayKey(){
+  const keyId=document.getElementById('rzp-key-id').value.trim();
+  if(!keyId){showRzpStatus('error','Enter a Key ID first.');return;}
+  if(!keyId.startsWith('rzp_test_')&&!keyId.startsWith('rzp_live_')){
+    showRzpStatus('error','⚠ Invalid format. Key ID must start with rzp_test_ or rzp_live_');return;
+  }
+  const isTest=keyId.startsWith('rzp_test_');
+  const isLive=keyId.startsWith('rzp_live_');
+  // We can't call Razorpay API directly (CORS), so just validate format
+  if(keyId.length<25){showRzpStatus('error','⚠ Key ID looks too short. Please double-check.');return;}
+  showRzpStatus('ok',`✅ Key format looks valid (${isLive?'🚀 LIVE key':'🧪 TEST key'}). Save to apply.`);
+}
+// changePassword defined below in security engine
+// ── CONTACT SETTINGS ──
+function loadContactSettings(){
+  try{
+    const wa=document.getElementById('contact-wa');
+    const tg=document.getElementById('contact-tg');
+    const waMsg=document.getElementById('contact-wa-msg');
+    const heading=document.getElementById('contact-heading');
+    if(state.settings.contact){
+      if(wa) wa.value=state.settings.contact.wa||'';
+      if(tg) tg.value=state.settings.contact.tg||'';
+      if(waMsg) waMsg.value=state.settings.contact.waMsg||'Hi, I need help with PrepXpert';
+      if(heading) heading.value=state.settings.contact.heading||'Need Help? Contact Us!';
+    }
+  }catch(e){}
+}
+function saveContactSettings(){
+  const wa=(document.getElementById('contact-wa').value||'').trim().replace(/\D/g,'');
+  const tg=(document.getElementById('contact-tg').value||'').trim().replace(/^@/,'');
+  const waMsg=(document.getElementById('contact-wa-msg').value||'').trim();
+  const heading=(document.getElementById('contact-heading').value||'').trim()||'Need Help? Contact Us!';
+  if(!wa&&!tg){toast('⚠ Enter at least one contact (WhatsApp or Telegram)');return;}
+  state.settings.contact={wa,tg,waMsg,heading};
+  saveAll();
+  document.getElementById('contact-saved-indicator').textContent='Last saved: '+new Date().toLocaleTimeString();
+  toast('✅ Contact settings saved & synced to student app!');
+  previewContactSettings();
+}
+function previewContactSettings(){
+  const wa=(document.getElementById('contact-wa').value||'').trim().replace(/\D/g,'');
+  const tg=(document.getElementById('contact-tg').value||'').trim().replace(/^@/,'');
+  const waMsg=encodeURIComponent((document.getElementById('contact-wa-msg').value||'Hi, I need help with PrepXpert').trim());
+  const box=document.getElementById('contact-preview');
+  const inner=document.getElementById('contact-preview-inner');
+  let html='';
+  if(wa) html+=`<a href="https://wa.me/${wa}?text=${waMsg}" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#25D366;color:#fff;padding:12px 20px;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none">💬 WhatsApp</a>`;
+  if(tg){
+    const tgHref=/^\d+$/.test(tg)?`https://t.me/+${tg}`:`https://t.me/${tg}`;
+    html+=`<a href="${tgHref}" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#229ED9;color:#fff;padding:12px 20px;border-radius:10px;font-weight:700;font-size:14px;text-decoration:none">✈️ Telegram</a>`;
+  }
+  inner.innerHTML=html||'<span style="color:var(--muted);font-size:13px">Enter numbers above to preview</span>';
+  box.style.display='block';
+}
+
+function exportData(){ let blob=new Blob([JSON.stringify({state,studentData},null,2)],{type:'application/json'}); let a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download=`mhtcet_backup_${Date.now()}.json`; a.click(); }
+function importBackup(){ document.getElementById('import-file').click(); }
+function handleImportFile(inp){ if(!inp.files[0])return; let r=new FileReader(); r.onload=e=>{ try{ let d=JSON.parse(e.target.result); if(d.state)state=d.state; if(d.studentData)studentData=d.studentData; state.tests.forEach(t=>{if(!t.qbank)t.qbank={0:[],1:[],2:[]};if(!t.stream)t.stream='pcm';}); saveAll(); renderDashboard(); populateSelects(); renderTestsTable(); toast('Import success'); }catch(err){toast('Invalid file');} }; r.readAsText(inp.files[0]); }
+
+function updateNewTestModal(){
+  const s=document.getElementById('nt-stream').value;
+  const info=document.getElementById('nt-stream-info');
+  const thirdLbl=document.getElementById('nt-third-lbl');
+  const thirdInp=document.getElementById('nt-third-topics');
+  if(s==='pcm'){
+    info.textContent='50 Physics + 50 Chemistry + 50 Mathematics · 200 Marks';
+    thirdLbl.textContent='📐 Mathematics Topics';
+    thirdInp.placeholder='e.g. Algebra, Calculus, Trigonometry';
+  } else if(s==='pcb'){
+    info.textContent='50 Physics + 50 Chemistry + 100 Biology · 200 Marks';
+    thirdLbl.textContent='🧬 Biology Topics';
+    thirdInp.placeholder='e.g. Cell Biology, Genetics, Ecology';
+  } else if(s==='jee'){
+    info.textContent='30 Physics + 30 Chemistry + 30 Mathematics · 360 Marks · Last 5 Numerical per subject';
+    thirdLbl.textContent='📐 Mathematics Topics';
+    thirdInp.placeholder='e.g. Calculus, Algebra, Coordinate Geometry';
+  } else {
+    info.textContent='45 Physics + 45 Chemistry + 90 Biology · 720 Marks · Negative Marking (-1 per wrong)';
+    thirdLbl.textContent='🧬 Biology Topics';
+    thirdInp.placeholder='e.g. Human Physiology, Genetics, Plant Kingdom';
+  }
+}
+
+function addNewTest(){
+  let name=document.getElementById('nt-name').value.trim();
+  if(!name){toast('Enter name');return;}
+  let stream=document.getElementById('nt-stream').value;
+  let free=document.getElementById('nt-type').value==='1';
+  let desc=document.getElementById('nt-desc').value.trim();
+  let streamDesc=stream==='neet'?'NEET Mock — 180Qs, 720 marks, -1 marking':stream==='jee'?'JEE Mock — 90Qs (Last 5 Numerical), 360 marks, -1 MCQ marking':stream.toUpperCase()+' test';
+  let phyTopics=document.getElementById('nt-phy-topics').value.trim();
+  let cheTopics=document.getElementById('nt-che-topics').value.trim();
+  let thirdTopics=document.getElementById('nt-third-topics').value.trim();
+  let newId=state.tests.length?Math.max(...state.tests.map(t=>t.id||0))+1:0;
+  state.tests.push({id:newId,name,stream,active:false,free,desc:desc||streamDesc,topics:{phy:phyTopics,che:cheTopics,third:thirdTopics},qbank:{0:[],1:[],2:[]}});
+  closeModal('new-test-modal');
+  saveAll(); renderTestsTable(); populateSelects(); renderDashboard();
+  toast(`Added ${name} [${stream.toUpperCase()}]`);
+}
+
+function openNewTestModal(){
+  document.getElementById('nt-name').value='';
+  document.getElementById('nt-desc').value='';
+  document.getElementById('nt-phy-topics').value='';
+  document.getElementById('nt-che-topics').value='';
+  document.getElementById('nt-third-topics').value='';
+  document.getElementById('nt-stream').value='pcm';
+  document.getElementById('nt-type').value='1';
+  updateNewTestModal();
+  document.getElementById('new-test-modal').classList.add('on');
+}
+
+function closeModal(id){ document.getElementById(id).classList.remove('on'); }
+
+
+function navTo(page,el){
+  console.log("👉 page clicked:", page);  // 🔥 ADD THIS
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
+  document.getElementById(`page-${page}`)?.classList.add('on');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('on'));
+  if(el)el.classList.add('on');
+  let titles={dashboard:'Dashboard',bulk150:'PCM/PCB Bulk Import',bulkneet:'NEET Bulk Import',bulkjee:'JEE Bulk Import',tests:'Manage Tests',questions:'Question Bank + Images',anskey:'Answer Key',students:'Students & Ranking',settings:'Settings'};
+  document.getElementById('page-title').textContent=titles[page]||page;
+  if(page==='dashboard')renderDashboard();
+  if(page==='tests')renderTestsTable();
+  if(page === 'students') loadScoresFromDB();
+  if(page==='questions'){populateSelects();loadQuestionsForImageManage();}
+  if(page==='bulk150')populateSelects();
+  if(page==='bulkneet')populateSelects();
+  if(page==='bulkjee')populateSelects();
+  if(page==='settings'){populateSelects();loadRazorpaySettings();loadContactSettings();}
+}
+
+// ═══════════════════════ SECURITY ENGINE ═══════════════════════
+
+// --- Anti-DevTools ---
+ /*function(){
+  // Block right-click everywhere
+  document.addEventListener('contextmenu', e => e.preventDefault());
+  // Block common DevTools shortcuts
+  document.addEventListener('keydown', e => {
+    if(e.key==='F12') { e.preventDefault(); return false; }
+    if(e.ctrlKey && e.shiftKey && ['i','j','c','k','s','u'].includes(e.key.toLowerCase())) { e.preventDefault(); return false; }
+    if(e.ctrlKey && ['u','s'].includes(e.key.toLowerCase())) { e.preventDefault(); return false; }
+    if(e.ctrlKey && e.key==='p') { e.preventDefault(); return false; }
+  });*/
+  // Detect DevTools open (size-based, desktop only)
+  const _isMob=/Mobi|Android|iPhone|iPad|iPod/i.test(navigator.userAgent)||('ontouchstart' in window);
+  let devOpen=false;
+  if(!_isMob){
+    //setInterval(()=>{
+      //if(window.outerWidth-window.innerWidth>160||window.outerHeight-window.innerHeight>160){
+        //if(!devOpen){devOpen=true;document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;background:#1a237e;color:#fff;font-size:22px;font-weight:700;flex-direction:column;gap:12px"><div>🔒 Access Denied</div><div style="font-size:13px;font-weight:400;color:rgba(255,255,255,.6)">Close developer tools to continue.</div></div>';}
+      } else { if(devOpen) location.reload(); }
+    800;
+  
+  // Block copy/paste of page content
+  document.addEventListener('copy', e => { e.clipboardData.setData('text/plain',''); e.preventDefault(); });
+  document.addEventListener('cut',  e => { e.clipboardData.setData('text/plain',''); e.preventDefault(); });
+  // Disable drag
+  document.addEventListener('dragstart', e => e.preventDefault());
+  // Disable print
+  window.addEventListener('beforeprint', e => { e.preventDefault(); window.stop(); });
+
+
+// --- SHA-256 hash (crypto API) ---
+async function sha256(msg){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+}
+
+// --- Brute force lockout state ---
+const MAX_ATTEMPTS = 5;
+const LOCKOUT_MS   = 15 * 60 * 1000; // 15 minutes
+function getLockoutState(){
+  try{ return JSON.parse(localStorage.getItem('_admin_lock')||'{}'); }catch(e){ return {}; }
+}
+function saveLockoutState(s){ localStorage.setItem('_admin_lock', JSON.stringify(s)); }
+
+async function verifyAdminPass(){
+  const lock = getLockoutState();
+  const now  = Date.now();
+  // Check lockout
+  if(lock.until && now < lock.until){
+    const mins = Math.ceil((lock.until - now)/60000);
+    document.getElementById('ag-lockout').style.display='block';
+    document.getElementById('ag-lockout').textContent=`Too many attempts. Try again in ${mins} minute(s).`;
+    document.getElementById('ag-btn').disabled = true;
+    return;
+  }
+  const inp = document.getElementById('ag-pass').value;
+  if(!inp){ document.getElementById('ag-err').textContent='Enter password.'; return; }
+
+  // Get stored hash — default is hash of 'Admin@PrepXpert#9' (first-run default)
+  let storedHash = localStorage.getItem('_admin_ph');
+  if(!storedHash){
+    // First run: set default password hash
+    storedHash = await sha256('Admin@PrepXpert#9');
+    localStorage.setItem('_admin_ph', storedHash);
+    // Remove old plain-text password if any
+    localStorage.removeItem('mhtcet_admin_pass');
+  }
+  const inpHash = await sha256(inp);
+
+  if(inpHash !== storedHash){
+    const attempts = (lock.attempts||0) + 1;
+    const newLock = { attempts };
+    if(attempts >= MAX_ATTEMPTS){
+      newLock.until = now + LOCKOUT_MS;
+      document.getElementById('ag-lockout').style.display='block';
+      document.getElementById('ag-lockout').textContent=`Locked for 15 minutes after ${MAX_ATTEMPTS} failed attempts.`;
+      document.getElementById('ag-btn').disabled=true;
+    }
+    saveLockoutState(newLock);
+    document.getElementById('ag-err').textContent=`Wrong password. (${attempts}/${MAX_ATTEMPTS} attempts)`;
+    document.getElementById('ag-pass').value='';
+    return;
+  }
+  // Correct — reset lockout
+  saveLockoutState({});
+  // Store session with timestamp
+  localStorage.setItem('_admin_sess', JSON.stringify({ts: Date.now()}));
+  document.getElementById('admin-gate').style.display='none';
+  document.getElementById('admin-layout').style.display='flex';
+  loadState(); renderDashboard(); populateSelects(); saveAll();
+}
+
+// Upgrade changePassword to use SHA-256
+async function changePassword(){
+  let np=document.getElementById('new-pass').value;
+  let cp=document.getElementById('confirm-pass').value;
+  if(np.length<8){toast('Min 8 characters required');return;}
+  if(!/[A-Z]/.test(np)){toast('Must have at least 1 uppercase letter');return;}
+  if(!/[0-9]/.test(np)){toast('Must have at least 1 number');return;}
+  if(np!==cp){toast('Passwords do not match');return;}
+  const h = await sha256(np);
+  localStorage.setItem('_admin_ph', h);
+  localStorage.removeItem('mhtcet_admin_pass'); // remove old plain-text
+  toast('✅ Password updated securely');
+}
+
+(function(){
+  // Check existing session (4hr expiry)
+  try{
+    const sess = JSON.parse(localStorage.getItem('_admin_sess')||'{}');
+    if(sess.ts && Date.now()-sess.ts < 4*3600000){
+      document.getElementById('admin-gate').style.display='none';
+      document.getElementById('admin-layout').style.display='flex';
+      loadState(); renderDashboard(); populateSelects(); saveAll();
+      return;
+    }
+  }catch(e){}
+  // Check lockout on load
+  const lock = getLockoutState();
+  if(lock.until && Date.now() < lock.until){
+    const mins = Math.ceil((lock.until - Date.now())/60000);
+    document.getElementById('ag-lockout').style.display='block';
+    document.getElementById('ag-lockout').textContent=`Too many failed attempts. Try again in ${mins} minute(s).`;
+    document.getElementById('ag-btn').disabled=true;
+  }
+  loadState();
+  document.getElementById('ag-pass')?.focus();
+})();
+</script>
+
+<script>
+// ============================================================
+// 🎓 STUDENTS & RANKING — Improved Version
+// ============================================================
+let allData = [];
+
+// ✅ Load scores from DB with loading state
+function loadScoresFromDB() {
+  const loadingEl = document.getElementById('ranking-loading');
+  const rankingEl = document.getElementById('ranking');
+  const refreshBtn = document.getElementById('refresh-btn');
+
+  if (loadingEl) { loadingEl.style.display = 'block'; }
+  if (rankingEl) { rankingEl.style.opacity = '0.4'; }
+  if (refreshBtn) { refreshBtn.disabled = true; refreshBtn.textContent = '⏳ Loading...'; }
+
+  if (rankingEl) rankingEl.innerHTML = '<div style="text-align:center;padding:30px;color:var(--muted)">⏳ Connecting to server… (may take up to 30s on first load)</div>';
+
+  fetchWithRetry(BASE_URL + "/results")
+    .then(res => {
+      return res.json();
+    })
+    .then(scores => {
+      allData = scores;
+      window.allData = scores;
+      // Reset search/filter on fresh load
+      const searchEl = document.getElementById('search-student');
+      if (searchEl) searchEl.value = '';
+      const filterEl = document.getElementById('filter-type');
+      if (filterEl) filterEl.value = 'ALL';
+      renderRanking(scores);
+    })
+    .catch(err => {
+      console.error("❌ Error loading scores:", err);
+      if (rankingEl) rankingEl.innerHTML = `
+        <div style="text-align:center;padding:40px;color:var(--err)">
+          ⚠️ Could not connect to backend server after multiple retries.<br>
+          <small style="color:var(--muted)">Backend URL: <code style="font-size:11px">https://prepxpert-backend.onrender.com</code><br>Check your Render dashboard to make sure the service is deployed and running.</small><br>
+          <button class="btn btn-ghost btn-sm" style="margin-top:12px" onclick="loadScoresFromDB()">Retry</button>
+        </div>`;
+    })
+    .finally(() => {
+      if (loadingEl) { loadingEl.style.display = 'none'; }
+      if (rankingEl) { rankingEl.style.opacity = '1'; }
+      if (refreshBtn) { refreshBtn.disabled = false; refreshBtn.textContent = '🔄 Refresh'; }
+    });
+}
+
+// ✅ Apply search + filter without re-fetching
+function applyFilters() {
+  const query = (document.getElementById('search-student')?.value || '').trim().toLowerCase();
+  const typeFilter = (document.getElementById('filter-type')?.value || 'ALL').toUpperCase();
+
+  let filtered = allData.filter(s => {
+    const matchType = typeFilter === 'ALL' || (s.type || '').toUpperCase() === typeFilter;
+    const matchName = !query || (s.name || '').toLowerCase().includes(query);
+    return matchType && matchName;
+  });
+  renderRanking(filtered);
+}
+
+// ✅ Render ranking tabs
+function renderRanking(data) {
+  const container = document.getElementById("ranking");
+  if (!container) return;
+
+  if (!data || !Array.isArray(data)) {
+    container.innerHTML = '<p style="color:gray;padding:20px">No data.</p>';
+    return;
+  }
+
+  const pcm  = data.filter(s => (s.type || '').toUpperCase() === 'PCM');
+  const pcb  = data.filter(s => (s.type || '').toUpperCase() === 'PCB');
+  const neet = data.filter(s => (s.type || '').toUpperCase() === 'NEET');
+  const jee  = data.filter(s => (s.type || '').toUpperCase() === 'JEE');
+
+  container.innerHTML = `
+    <div class="tab-buttons">
+      <button onclick="showTab('pcm', this)" class="active-tab">🏆 PCM (${pcm.length})</button>
+      <button onclick="showTab('pcb', this)">🧬 PCB (${pcb.length})</button>
+      <button onclick="showTab('neet', this)">🩺 NEET (${neet.length})</button>
+      <button onclick="showTab('jee', this)">⚙️ JEE (${jee.length})</button>
+    </div>
+    <div id="pcmTab"  class="tab-content" style="display:block"></div>
+    <div id="pcbTab"  class="tab-content" style="display:none"></div>
+    <div id="neetTab" class="tab-content" style="display:none"></div>
+    <div id="jeeTab"  class="tab-content" style="display:none"></div>
+  `;
+
+  renderTable("pcmTab",  pcm);
+  renderTable("pcbTab",  pcb);
+  renderTable("neetTab", neet);
+  renderTable("jeeTab",  jee);
+
+  // Keep active tab visible after re-render
+  const firstBtn = document.querySelector('.tab-buttons button:first-child');
+  if (firstBtn) firstBtn.classList.add('active-tab');
+}
+
+// ✅ Render individual table with proper ranking (handles ties)
+function renderTable(id, data) {
+  const el = document.getElementById(id);
+  if (!el) return;
+
+  if (!data.length) {
+    el.innerHTML = "<p style='color:gray;padding:20px;text-align:center;'>No data available for this category.</p>";
+    return;
+  }
+
+  // Sort by score descending, then by date (oldest first) for tie-breaking
+  data.sort((a, b) => b.score !== a.score ? b.score - a.score : new Date(a.date) - new Date(b.date));
+
+  // ✅ Proper tie handling: same score = same rank
+  let html = `
+    <div class="table-card" style="overflow-x:auto">
+      <table class="modern-table" style="min-width:480px">
+        <tr>
+          <th>🏆 Rank</th>
+          <th>👤 Name</th>
+          <th>📊 Score</th>
+          <th>📈 %</th>
+          <th>📅 Date</th>
+        </tr>
+  `;
+
+  let displayRank = 1;
+  data.forEach((s, i) => {
+    if (i > 0 && s.score !== data[i - 1].score) {
+      displayRank = i + 1; // Gap in rank for ties
+    }
+    const rank = displayRank;
+
+    let rankClass = 'rank-other';
+    let rowStyle = '';
+    if (rank === 1) { rankClass = 'rank-1'; rowStyle = 'background:#fffde7;'; }
+    else if (rank === 2) { rankClass = 'rank-2'; rowStyle = 'background:#f5f5f5;'; }
+    else if (rank === 3) { rankClass = 'rank-3'; rowStyle = 'background:#fff8f2;'; }
+
+    const pct = s.total ? Math.round((s.score / s.total) * 100) : 0;
+
+    const dateStr = s.date ? (() => {
+      try { return new Date(s.date).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }); }
+      catch(e) { return s.date; }
+    })() : 'N/A';
+
+    html += `
+      <tr style="${rowStyle}">
+        <td><span class="rank-badge ${rankClass}">#${rank}</span></td>
+        <td>${escapeHtml(s.name || 'Unknown')}</td>
+        <td class="score">${s.score}/${s.total}</td>
+        <td style="font-weight:600;color:${pct >= 80 ? '#1b5e20' : pct >= 50 ? '#e65100' : '#b71c1c'}">${pct}%</td>
+        <td style="font-size:11px;color:#666">${dateStr}</td>
+      </tr>
+    `;
+  });
+
+  html += `</table></div>`;
+  el.innerHTML = html;
+}
+
+// ✅ Tab switcher
+function showTab(type, btn) {
+  document.querySelectorAll('.tab-content').forEach(div => div.style.display = 'none');
+  document.querySelectorAll('.tab-buttons button').forEach(b => b.classList.remove('active-tab'));
+  const tab = document.getElementById(type + 'Tab');
+  if (tab) tab.style.display = 'block';
+  if (btn) btn.classList.add('active-tab');
+}
+
+// ✅ Clear all student data with proper confirmation
+function confirmClearStudentData() {
+  if (!confirm('⚠️ Are you sure you want to DELETE ALL student results?\n\nThis action CANNOT be undone!')) return;
+  if (!confirm('🔴 FINAL CHECK: This will permanently delete ALL ranking data from the database. Continue?')) return;
+
+  fetch(BASE_URL + '/clear-results', { method: 'GET' })
+    .then(res => {
+      if (!res.ok) throw new Error('Server error');
+      return res.json();
+    })
+    .then(() => {
+      allData = [];
+      window.allData = [];
+      renderRanking([]);
+      toast('✅ All student results cleared from database.');
+    })
+    .catch(err => {
+      toast('❌ Failed to clear results. Check server connection.');
+      console.error(err);
+    });
+}
+
+// Keep old clearStudentData for backward compat (local only)
+function clearStudentData() {
+  confirmClearStudentData();
+}
+
+// ✅ Export to Excel with proper rank numbers
+function exportToExcel() {
+  if (!window.allData || !window.allData.length) {
+    alert("No data to export ❌");
+    return;
+  }
+
+  const pcm  = allData.filter(s => (s.type || '').toUpperCase() === 'PCM').sort((a, b) => b.score - a.score);
+  const pcb  = allData.filter(s => (s.type || '').toUpperCase() === 'PCB').sort((a, b) => b.score - a.score);
+  const neet = allData.filter(s => (s.type || '').toUpperCase() === 'NEET').sort((a, b) => b.score - a.score);
+  const jee  = allData.filter(s => (s.type || '').toUpperCase() === 'JEE').sort((a, b) => b.score - a.score);
+
+  const formatData = (data) => {
+    let displayRank = 1;
+    return data.map((s, i) => {
+      if (i > 0 && s.score !== data[i - 1].score) displayRank = i + 1;
+      const pct = s.total ? Math.round((s.score / s.total) * 100) : 0;
+      const dateStr = s.date ? (() => { try { return new Date(s.date).toLocaleString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' }); } catch(e) { return s.date; } })() : 'N/A';
+      return {
+        Rank: displayRank,
+        Name: s.name || 'Unknown',
+        Type: s.type || '-',
+        Score: `${s.score}/${s.total}`,
+        Percentage: pct + '%',
+        Date: dateStr
+      };
+    });
+  };
+
+  const wb = XLSX.utils.book_new();
+  if (pcm.length)  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(formatData(pcm)),  'PCM');
+  if (pcb.length)  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(formatData(pcb)),  'PCB');
+  if (neet.length) XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(formatData(neet)), 'NEET');
+  if (jee.length)  XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(formatData(jee)),  'JEE');
+
+  if (!wb.SheetNames.length) { alert('No data to export.'); return; }
+
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
+  XLSX.writeFile(wb, `PrepXpert_Rankings_${timestamp}.xlsx`);
+  alert(`✅ Exported!\nPCM: ${pcm.length} | PCB: ${pcb.length} | NEET: ${neet.length} | JEE: ${jee.length} records`);
+}
+
+
+// (ranking functions defined above — this block intentionally left empty to avoid duplicates)
+
+</script>
+</body>
+</html>
