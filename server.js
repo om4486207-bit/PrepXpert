@@ -15,6 +15,7 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps, Postman, or same-origin)
     if (!origin) return callback(null, true);
     if (allowedOrigins.includes(origin)) return callback(null, true);
     console.warn("⚠️ CORS blocked origin:", origin);
@@ -25,7 +26,7 @@ app.use(cors({
   credentials: true
 }));
 
-// ✅ FIXED: Changed from "/*" to "*" to prevent PathError
+// Handle preflight requests
 app.options("*", cors());
 
 app.use(express.json({ limit: "10mb" }));
@@ -34,19 +35,23 @@ app.use(express.urlencoded({ extended: true }));
 // =========================
 // 📦 MONGODB CONNECTION
 // =========================
-// ✅ FIXED: Properly use environment variable OR fallback to hardcoded URI
-const MONGODB_URI = process.env.MONGODB_URI || "mongodb+srv://admin:Omi123@cluster0.1kyleiv.mongodb.net/prepxpert?retryWrites=true&w=majority";
+// ✅ CRITICAL: Use environment variable - never hardcode credentials
+const MONGODB_URI = process.env.MONGODB_URI;
 
-if (!MONGODB_URI || MONGODB_URI.includes("undefined")) {
-  console.error("❌ MONGODB_URI is not properly configured!");
-  console.error("Current value:", MONGODB_URI);
+if (!MONGODB_URI) {
+  console.error("❌ MONGODB_URI environment variable is not set!");
+  console.error("Please configure it in Render dashboard: Settings > Environment");
   process.exit(1);
 }
 
 console.log("🔄 Attempting MongoDB connection...");
-console.log("📍 Connection string preview:", MONGODB_URI.substring(0, 30) + "...");
+console.log("📍 Using environment variable for connection");
 
-mongoose.connect(MONGODB_URI)
+// Improved connection options for better reliability
+mongoose.connect(MONGODB_URI, {
+  serverSelectionTimeoutMS: 5000,
+  socketTimeoutMS: 45000,
+})
   .then(() => {
     console.log("✅ MongoDB Connected Successfully");
     console.log("📦 Database:", mongoose.connection.name);
@@ -54,16 +59,21 @@ mongoose.connect(MONGODB_URI)
   .catch((err) => {
     console.error("❌ MongoDB Connection Error:", err.message);
     console.error("Full error:", err);
-    process.exit(1);
+    // Don't exit immediately - let Render retry
+    console.error("⚠️ Will retry connection...");
   });
 
 // Handle MongoDB connection events
 mongoose.connection.on('disconnected', () => {
-  console.warn("⚠️ MongoDB disconnected. Attempting to reconnect...");
+  console.warn("⚠️ MongoDB disconnected. Will attempt to reconnect...");
 });
 
 mongoose.connection.on('error', (err) => {
   console.error("❌ MongoDB error:", err.message);
+});
+
+mongoose.connection.on('reconnected', () => {
+  console.log("✅ MongoDB reconnected");
 });
 
 // =========================
@@ -90,15 +100,22 @@ app.get("/", (req, res) => {
     message: "PrepXpert Backend API 🚀", 
     status: "healthy", 
     timestamp: new Date().toISOString(),
-    mongodb: mongoose.connection.readyState === 1 ? "connected" : "disconnected"
+    mongodb: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+    env: process.env.NODE_ENV || "development"
   });
 });
 
 app.get("/health", (req, res) => {
-  res.json({ 
-    status: "ok", 
+  const dbStatus = mongoose.connection.readyState;
+  const isHealthy = dbStatus === 1;
+  
+  res.status(isHealthy ? 200 : 503).json({ 
+    status: isHealthy ? "ok" : "degraded", 
     uptime: process.uptime(),
-    mongodb: mongoose.connection.readyState === 1 ? "connected" : "disconnected",
+    mongodb: {
+      status: dbStatus === 1 ? "connected" : "disconnected",
+      readyState: dbStatus
+    },
     timestamp: new Date().toISOString()
   });
 });
@@ -247,24 +264,22 @@ app.use((req, res) => {
 // =========================
 const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, '0.0.0.0', () => {
   console.log("════════════════════════════════════════════");
   console.log(`🚀 PrepXpert Server running on port ${PORT}`);
   console.log(`📍 Environment: ${process.env.NODE_ENV || "development"}`);
   console.log(`🌐 MongoDB: ${mongoose.connection.readyState === 1 ? "✅ Connected" : "⏳ Connecting..."}`);
   console.log("════════════════════════════════════════════");
+});
 
-  // ✅ Keep Render free-tier alive — ping every 14 minutes
-  const https = require("https");
-  const SELF_URL = process.env.RENDER_EXTERNAL_URL || "https://prepxpert-backend.onrender.com";
-  
-  setInterval(() => {
-    https.get(SELF_URL + "/health", (res) => {
-      console.log(`🏓 Keep-alive ping: ${res.statusCode} at ${new Date().toISOString()}`);
-    }).on("error", (err) => {
-      console.warn("⚠️ Keep-alive ping failed:", err.message);
+// Graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM signal received: closing HTTP server');
+  server.close(() => {
+    console.log('HTTP server closed');
+    mongoose.connection.close(false, () => {
+      console.log('MongoDB connection closed');
+      process.exit(0);
     });
-  }, 14 * 60 * 1000); // 14 minutes
-  
-  console.log(`⏰ Keep-alive pings scheduled every 14 minutes to ${SELF_URL}`);
+  });
 });
