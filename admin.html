@@ -763,20 +763,14 @@ function saveAll(){  let questions = [
   { question: "Test Question 1" }
 ];
   localStorage.setItem('mhtcet_admin_data', JSON.stringify({tests:state.tests, settings:state.settings}));
-  fetch(BASE_URL + "/add-questions", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify(state.tests)
-})
-.then(res => res.text())
-.then(data => {
-  alert("Saved to DB ✅");
-})
-.catch(err => {
-  alert("Error saving ❌");
-});
+  fetchWithRetry(BASE_URL + "/add-questions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(state.tests)
+  })
+  .then(res => res.json())
+  .then(() => { toast('✅ Saved to DB'); })
+  .catch(() => { toast('⚠️ DB save failed — server may be waking up, retry in 30s'); });
   pushToStudent();
   localStorage.setItem('mhtcet_users', JSON.stringify(studentData.users));
   
@@ -1058,13 +1052,12 @@ function importJeeSections(){
   mat.forEach(q=>{ if(t.qbank[2].length<30)t.qbank[2].push({...q}); });
   const allQuestions = [...phy, ...che, ...mat];
 
-fetch(BASE_URL + "/add-questions", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify(allQuestions)
-});saveAll(); renderDashboard();
+  fetchWithRetry(BASE_URL + "/add-questions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(allQuestions)
+  }).catch(() => toast('⚠️ DB upload failed — server may be waking up'));
+  saveAll(); renderDashboard();
   let pNum=phy.filter(q=>q.isNumerical).length,cNum=che.filter(q=>q.isNumerical).length,mNum=mat.filter(q=>q.isNumerical).length;
   toast(`✅ JEE Import: ${phy.length} Phy (${pNum} num), ${che.length} Chem (${cNum} num), ${mat.length} Maths (${mNum} num)`);
 }
@@ -1083,13 +1076,12 @@ function importNeetSections(){
   bio.forEach(q=>{ if(t.qbank[2].length<90)t.qbank[2].push({...q}); });
   const allQuestions = [...phy, ...che, ...bio];
 
-fetch(BASE_URL + "/add-questions", {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/json"
-  },
-  body: JSON.stringify(allQuestions)
-});saveAll(); renderDashboard();
+  fetchWithRetry(BASE_URL + "/add-questions", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(allQuestions)
+  }).catch(() => toast('⚠️ DB upload failed — server may be waking up'));
+  saveAll(); renderDashboard();
   toast(`✅ NEET Import: ${phy.length} Phy, ${che.length} Chem, ${bio.length} Bio`);
 }
 
@@ -1788,7 +1780,7 @@ function confirmClearStudentData() {
   if (!confirm('⚠️ Are you sure you want to DELETE ALL student results?\n\nThis action CANNOT be undone!')) return;
   if (!confirm('🔴 FINAL CHECK: This will permanently delete ALL ranking data from the database. Continue?')) return;
 
-  fetch(BASE_URL + '/clear-results', { method: 'GET' })
+  fetchWithRetry(BASE_URL + '/clear-results', { method: 'GET' })
     .then(res => {
       if (!res.ok) throw new Error('Server error');
       return res.json();
