@@ -148,13 +148,23 @@ app.post("/add-questions", async (req, res) => {
   }
 });
 
-app.get("/clear-questions", async (req, res) => {
+app.delete("/clear-questions", async (req, res) => {
   try {
     const result = await Question.deleteMany({});
     console.log(`🗑️ Deleted ${result.deletedCount} questions`);
     res.json({ success: true, message: "All questions deleted ✅", deletedCount: result.deletedCount });
   } catch (error) {
     console.error("❌ Error clearing questions:", error);
+    res.status(500).json({ error: "Failed to clear questions", message: error.message });
+  }
+});
+
+// Keep legacy GET route for backwards compatibility
+app.get("/clear-questions", async (req, res) => {
+  try {
+    const result = await Question.deleteMany({});
+    res.json({ success: true, message: "All questions deleted ✅", deletedCount: result.deletedCount });
+  } catch (error) {
     res.status(500).json({ error: "Failed to clear questions", message: error.message });
   }
 });
@@ -206,13 +216,23 @@ app.get("/get-results", async (req, res) => {
   }
 });
 
-app.get("/clear-results", async (req, res) => {
+app.delete("/clear-results", async (req, res) => {
   try {
     const result = await Result.deleteMany({});
     console.log(`🗑️ Deleted ${result.deletedCount} results`);
     res.json({ success: true, message: "All results deleted ✅", deletedCount: result.deletedCount });
   } catch (error) {
     console.error("❌ Error clearing results:", error);
+    res.status(500).json({ error: "Failed to clear results", message: error.message });
+  }
+});
+
+// Keep legacy GET route for backwards compatibility
+app.get("/clear-results", async (req, res) => {
+  try {
+    const result = await Result.deleteMany({});
+    res.json({ success: true, message: "All results deleted ✅", deletedCount: result.deletedCount });
+  } catch (error) {
     res.status(500).json({ error: "Failed to clear results", message: error.message });
   }
 });
